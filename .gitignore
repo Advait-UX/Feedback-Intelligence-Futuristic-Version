@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+Thumbs.db
+
+# Figma binary files (large — use Figma links instead)
+*.fig
+
+# Node
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Env / local
+*.local
+.env

@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NiCE CXone · Admin</title>
+<style>
+/* ── Reset ───────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100vh;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;font-weight:400;line-height:20px;-webkit-font-smoothing:antialiased}
+button,input,select,textarea,table,th,td{font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit}
+button{border:none;background:none;padding:0;cursor:pointer}
+
+/* ── Lyra color tokens ───────────────────────────────────────── */
+:root{
+  --lyra-brand-50:#e9f1fc;
+  --lyra-brand-500:#3d81e7;
+  --lyra-brand-600:#166cca;
+  --lyra-brand-700:#185ba4;
+  --lyra-slate-100:#f5f7f9;
+  --lyra-slate-200:#eef0f2;
+  --lyra-slate-300:#d2d8db;
+  --lyra-slate-400:#a8b3bb;
+  --lyra-slate-500:#82959e;
+  --lyra-slate-600:#526b7a;
+  --lyra-slate-700:#3f5e69;
+  --lyra-slate-900:#1d2630;
+  --lyra-white:#ffffff;
+  --lyra-green-500:#278a33;
+  --lyra-green-700:#1c5e25;
+  --lyra-orange-500:#ec7000;
+  --lyra-orange-600:#c45d00;
+
+  --canvas: rgb(243,245,246);
+
+  --color-fg-default:rgba(0,0,0,0.80);
+  --color-fg-secondary:rgba(0,0,0,0.56);
+  --color-fg-active-strong:#185ba4;
+  --color-bg-active-moderate:#d3e6fd;
+  --color-state-bg-hover:rgba(0,0,0,0.04);
+  --color-state-bg-pressed:rgba(0,0,0,0.08);
+  --color-border-subtle:rgba(0,0,0,0.10);
+  --color-border-soft:rgba(0,0,0,0.16);
+
+  --radius-xs:4px;
+  --radius-sm:6px;
+  --radius-md:8px;
+  --radius-lg:12px;
+  --shadow-sm:0px 2px 6px 0px rgba(0,0,0,0.04);
+}
+
+/* ── App grid ────────────────────────────────────────────────── */
+.app{
+  display:grid;
+  grid-template-rows:56px 1fr;
+  grid-template-columns:256px 1fr;
+  grid-template-areas:"header header" "nav main";
+  height:100vh;
+  background:var(--canvas);
+}
+
+/* ── Topbar ──────────────────────────────────────────────────── */
+.topbar{
+  grid-area:header;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 8px;
+  background:var(--canvas);
+}
+.app-title{
+  display:flex;align-items:center;gap:4px;
+  height:40px;padding:0 8px;
+  border-radius:var(--radius-md);
+  font-size:16px;font-weight:500;line-height:24px;letter-spacing:-0.16px;
+  color:var(--color-fg-default);cursor:pointer;white-space:nowrap;
+}
+.app-title:hover{background:var(--color-state-bg-hover)}
+.brand-mark{width:24px;height:24px;display:flex;align-items:center;justify-content:center;margin-right:4px;color:var(--lyra-brand-500)}
+.chev{width:12px;height:12px;opacity:0.7}
+.topbar-utilities{display:flex;align-items:center;gap:8px}
+.hdr-icon-group{display:flex;align-items:center}
+.hdr-icon{width:40px;height:40px;border-radius:var(--radius-md);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-fg-default);position:relative}
+.hdr-icon:hover{background:var(--color-state-bg-hover)}
+.hdr-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.dot-badge{position:absolute;top:2px;right:2px;background:#b62c2c;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid rgba(255,255,255,0.9)}
+.hdr-avatar{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 8px;border-radius:var(--radius-md);cursor:pointer}
+.hdr-avatar:hover{background:var(--color-state-bg-hover)}
+.ava{width:32px;height:32px;border-radius:20px;background:var(--lyra-slate-600);color:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500}
+
+/* ── Left nav ────────────────────────────────────────────────── */
+.nav{
+  grid-area:nav;
+  background:var(--canvas);
+  display:flex;flex-direction:column;
+  position:relative;
+  overflow:hidden;
+}
+.nav-scroll{
+  flex:1;overflow-y:auto;
+  padding:8px 12px 20px;
+  display:flex;flex-direction:column;gap:0;
+}
+
+/* Nav item (flat, with icon) */
+.nav-item{
+  position:relative;
+  display:flex;align-items:center;
+  gap:8px;
+  height:36px;
+  padding:0 10px;
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  font-weight:400;
+  color:var(--color-fg-default);
+  white-space:nowrap;
+  overflow:hidden;
+}
+.nav-item:hover{background:var(--color-state-bg-hover)}
+.nav-item.active{
+  background:var(--color-bg-active-moderate);
+  color:var(--color-fg-active-strong);
+  font-weight:500;
+}
+/* 2px left accent bar */
+.nav-item.active::before{
+  content:"";
+  position:absolute;
+  left:0;top:10px;bottom:10px;
+  width:2px;
+  background:var(--color-fg-active-strong);
+  border-radius:2px;
+}
+.nav-item .ico{
+  width:16px;height:16px;flex-shrink:0;
+  stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+  color:var(--color-fg-secondary);
+}
+.nav-item.active .ico{color:var(--color-fg-active-strong)}
+
+/* Nav group (collapsible parent) */
+.nav-group-header{
+  position:relative;
+  display:flex;align-items:center;
+  gap:8px;
+  height:36px;
+  padding:0 10px;
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  font-weight:400;
+  color:var(--color-fg-default);
+}
+.nav-group-header:hover{background:var(--color-state-bg-hover)}
+.nav-group-header .ico{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--color-fg-secondary)}
+.nav-group-header .chev-right{width:14px;height:14px;margin-left:auto;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--color-fg-secondary);transition:transform .15s}
+.nav-group-header.open .chev-right{transform:rotate(90deg)}
+
+/* Nav children */
+.nav-children{display:flex;flex-direction:column;overflow:hidden;max-height:0;transition:max-height .2s ease}
+.nav-children.open{max-height:300px}
+.nav-leaf{
+  position:relative;
+  display:flex;align-items:center;
+  height:32px;
+  padding:0 8px 0 34px;
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  color:var(--color-fg-secondary);
+  font-weight:400;
+}
+.nav-leaf:hover{background:var(--color-state-bg-hover);color:var(--color-fg-default)}
+.nav-leaf.active{background:var(--color-bg-active-moderate);color:var(--color-fg-active-strong);font-weight:500}
+.nav-leaf::before{content:"";position:absolute;left:17px;top:0;bottom:0;width:1px;background:var(--color-border-subtle)}
+.nav-leaf.active::before{background:transparent}
+
+/* Divider */
+.nav-divider{height:1px;background:var(--color-border-subtle);margin:6px 0}
+
+/* Collapse toggle */
+.nav-collapse{position:absolute;top:20px;right:-12px;width:24px;height:24px;background:#fff;border:1px solid var(--color-border-subtle);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;box-shadow:0 1px 2px rgba(0,0,0,0.08)}
+.nav-collapse svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Main area ───────────────────────────────────────────────── */
+.main{
+  grid-area:main;
+  background:var(--canvas);
+  padding:8px 12px 12px 0;
+  display:flex;flex-direction:column;
+}
+.pane{
+  background:#fff;
+  border:1px solid var(--color-border-subtle);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
+  flex:1;min-height:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.pane-head{
+  display:flex;align-items:center;
+  min-height:72px;
+  padding:16px 32px;
+  gap:16px;
+  border-bottom:1px solid var(--color-border-subtle);
+}
+.pane-head h1{font-size:20px;font-weight:600;line-height:24px;letter-spacing:-0.01rem;margin:0;color:var(--color-fg-default);flex:1}
+.head-actions{display:flex;gap:8px;align-items:center}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:80px;padding:0 16px;background:#fff;border:1px solid var(--color-border-soft);border-radius:var(--radius-md);font-weight:500;color:var(--lyra-slate-600);cursor:pointer}
+.btn:hover{background:var(--color-state-bg-hover)}
+.btn.primary{background:var(--lyra-brand-600);color:#fff;border-color:var(--lyra-brand-600)}
+.btn.primary:hover{background:var(--lyra-brand-700);border-color:var(--lyra-brand-700)}
+
+/* Toolbar */
+.emp-toolbar{display:flex;align-items:center;gap:8px;padding:12px 24px;border-bottom:1px solid var(--color-border-subtle)}
+.emp-count{font-size:13px;color:var(--color-fg-secondary)}
+.emp-sep{width:1px;height:16px;background:var(--color-border-subtle)}
+.emp-selected{font-size:13px;color:var(--color-fg-secondary)}
+.search-wrap{position:relative;height:32px;width:220px}
+.search-wrap svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--lyra-slate-500);fill:none;stroke-width:1.8;pointer-events:none}
+.search-wrap input{width:100%;height:32px;padding:0 10px 0 28px;background:#fff;border:1px solid var(--color-border-soft);border-radius:var(--radius-md);font-size:13px;color:var(--color-fg-default);outline:none}
+.search-wrap input::placeholder{color:var(--color-fg-secondary)}
+.search-wrap input:focus{border-color:var(--lyra-brand-500)}
+.filter-btn{width:32px;height:32px;border-radius:var(--radius-md);border:1px solid var(--color-border-soft);background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-fg-secondary)}
+.filter-btn:hover{background:var(--color-state-bg-hover)}
+.filter-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+.all-chip{margin-left:auto;display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 10px;border:1px solid var(--color-border-soft);border-radius:var(--radius-md);background:#fff;font-size:13px;font-weight:500;color:var(--color-fg-default);cursor:pointer}
+.all-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Table */
+.table-wrap{flex:1;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{text-align:left;padding:10px 16px;background:#fff;border-bottom:1px solid var(--color-border-soft);font-size:11px;font-weight:500;color:var(--color-fg-secondary);letter-spacing:0.03em;text-transform:uppercase;white-space:nowrap;vertical-align:middle}
+tbody td{padding:8px 16px;border-bottom:1px solid var(--color-border-subtle);vertical-align:middle;color:var(--color-fg-default)}
+tbody tr:hover td{background:var(--color-state-bg-hover)}
+
+/* Checkbox */
+.cb{width:16px;height:16px;border:1.5px solid var(--color-border-soft);border-radius:3px;background:#fff;flex-shrink:0}
+
+/* Employee name */
+.emp-cell{display:flex;align-items:center;gap:10px}
+.emp-avatar{width:28px;height:28px;border-radius:50%;background:var(--lyra-slate-200);color:var(--lyra-slate-700);font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.emp-name{font-weight:500}
+
+/* Status */
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:13px}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.status-active .status-dot{background:var(--lyra-green-500)}
+.status-pending .status-dot{background:var(--lyra-orange-500)}
+.status-active{color:var(--lyra-green-700)}
+.status-pending{color:var(--lyra-orange-600)}
+
+/* Kebab */
+.dot3{width:28px;height:28px;border-radius:var(--radius-sm);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--lyra-slate-400)}
+.dot3:hover{background:rgba(0,0,0,0.05);color:var(--lyra-slate-700)}
+.dot3 svg{width:16px;height:16px;fill:currentColor}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState } = React;
+
+/* ── Icons ──────────────────────────────────────────────────────── */
+function Ico({ d, ...p }) {
+  return (
+    <svg className="ico" viewBox="0 0 24 24" {...p}>
+      <path d={d}/>
+    </svg>
+  );
+}
+
+const ICONS = {
+  employees:    "M20 21a8 8 0 1 0-16 0 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+  wemSkills:    "M12 3 4 6v6c0 4.5 3.5 8 8 9 4.5-1 8-4.5 8-9V6z",
+  groups:       "M17 21a5 5 0 0 0-10 0 M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M23 21a5 5 0 0 0-5-5M18 9a3 3 0 1 0-2-5.2 M1 21a5 5 0 0 1 5-5M6 9a3 3 0 1 1 2-5.2",
+  templates:    "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M9 13h6 M9 17h4",
+  teams:        "M12 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z M3 20a9 9 0 0 1 18 0 M7 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4z M17 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4z M4 20a5 5 0 0 1 5-5 M15 15a5 5 0 0 1 5 5",
+  scheduling:   "M8 2v4 M16 2v4 M3 8h18 M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z M12 13a2 2 0 1 0 0 4 2 2 0 0 0 0-4z",
+  locations:    "M12 2a7 7 0 0 1 7 7c0 4.5-7 13-7 13S5 13.5 5 9a7 7 0 0 1 7-7z M12 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  recording:    "M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z M19 10v2a7 7 0 0 1-14 0v-2 M12 19v4 M8 23h8",
+  tenant:       "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z M19.1 12a7 7 0 0 0-.1-1.2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.5a7 7 0 0 0-2.1 1.2l-2.5-1-2 3.5L5.1 10.8A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2.1 1.6 2 3.5 2.5-1a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.5a7 7 0 0 0 2.1-1.2l2.5 1 2-3.5-2.1-1.6c.1-.4.1-.8.1-1.2z",
+  security:     "M12 2l7 3v5c0 5-3.5 9.3-7 10.7C8.5 19.3 5 15 5 10V5z",
+};
+
+/* ── Brand mark ─────────────────────────────────────────────────── */
+function LyraSmile() {
+  const [err, setErr] = useState(false);
+  const src = "https://www.figma.com/api/mcp/asset/23309042-4af8-493a-abdb-6b9c4cd978d6";
+  if (!err) return <img src={src} alt="" width="22" height="22" style={{display:"block"}} onError={() => setErr(true)}/>;
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+      <circle cx="5" cy="6" r="2.2"/>
+      <circle cx="10.5" cy="6" r="2.2"/>
+      <path d="M2.5 11 C 4 17.5,10 20.5,16 18 C 19.5 16.5,22 13,22.5 9"
+        fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+/* ── Topbar ─────────────────────────────────────────────────────── */
+function Topbar() {
+  return (
+    <div className="topbar">
+      <div className="app-title">
+        <div className="brand-mark"><LyraSmile/></div>
+        <span>Admin</span>
+        <svg className="chev" viewBox="0 0 16 16">
+          <path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+      <div className="topbar-utilities">
+        <div className="hdr-icon-group">
+          <div className="hdr-icon" title="Help">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 1.5-2 2.2-2.5 3.2"/><circle cx="12" cy="16.5" r=".6" fill="currentColor"/></svg>
+          </div>
+          <div className="hdr-icon" title="Notifications">
+            <svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2.5 7 2.5 7H3.5S6 14 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+            <span className="dot-badge">5</span>
+          </div>
+        </div>
+        <div className="hdr-avatar">
+          <div className="ava">JS</div>
+          <svg className="chev" viewBox="0 0 16 16">
+            <path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Nav ────────────────────────────────────────────────────────── */
+const FLAT_ITEMS = [
+  { id: "employees",  label: "Employees",         icon: ICONS.employees },
+  { id: "wemSkills",  label: "WEM Skills",         icon: ICONS.wemSkills },
+  { id: "groups",     label: "Groups",             icon: ICONS.groups },
+  { id: "templates",  label: "Employee Templates", icon: ICONS.templates },
+  { id: "teams",      label: "Teams",              icon: ICONS.teams },
+  { id: "scheduling", label: "Scheduling Unit",    icon: ICONS.scheduling },
+];
+
+const GROUPS = [
+  { id: "locations", label: "Locations",           icon: ICONS.locations,  children: ["Location Definitions"] },
+  { id: "recording", label: "Recording",           icon: ICONS.recording,  children: ["Business Data", "Recording Policies", "Real Time AI Policies", "Third Party Systems", "ScreenAgent Manager"] },
+  { id: "tenant",    label: "Tenant Configuration",icon: ICONS.tenant,     children: ["Account Settings", "Data Share", "Bulk Upload Portal", "Hierarchies"] },
+  { id: "security",  label: "Security Settings",   icon: ICONS.security,   children: ["Roles and Permissions", "Login Authenticator", "Views"] },
+];
+
+function LeftNav({ active, onSelect }) {
+  const [open, setOpen] = useState({ locations: true, recording: true, tenant: true, security: true });
+
+  return (
+    <div className="nav">
+      <div className="nav-collapse" title="Collapse">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </div>
+
+      <div className="nav-scroll">
+        {FLAT_ITEMS.map(item => (
+          <div key={item.id}
+            className={"nav-item" + (active === item.id ? " active" : "")}
+            onClick={() => onSelect(item.id)}>
+            <svg className="ico" viewBox="0 0 24 24">
+              <path d={item.icon}/>
+            </svg>
+            {item.label}
+          </div>
+        ))}
+
+        <div className="nav-divider"/>
+
+        {GROUPS.map(g => (
+          <div key={g.id}>
+            <div className={"nav-group-header" + (open[g.id] ? " open" : "")}
+              onClick={() => setOpen(p => ({ ...p, [g.id]: !p[g.id] }))}>
+              <svg className="ico" viewBox="0 0 24 24"><path d={g.icon}/></svg>
+              {g.label}
+              <svg className="chev-right" viewBox="0 0 24 24">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div className={"nav-children" + (open[g.id] ? " open" : "")}>
+              {g.children.map(child => (
+                <div key={child}
+                  className={"nav-leaf" + (active === child ? " active" : "")}
+                  onClick={() => onSelect(child)}>
+                  {child}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Employees table ────────────────────────────────────────────── */
+const EMPLOYEES = [
+  { initials:"AB", name:"Aaron Bennett",    role:"Admin",         email:"aaron.bennett@trevalcompany.com",    su:"East Coast SU",       va:"False", state:"Active" },
+  { initials:"AC", name:"Abigail Carter",   role:"Admin",         email:"abigail.carter@trevalcompany.com",   su:"East Coast SU",       va:"False", state:"Active" },
+  { initials:"AM", name:"Adam Mitchell",    role:"Manager",       email:"adam.mitchell@trevalcompany.com",    su:"VP Central Time SU",  va:"False", state:"Active" },
+  { initials:"AT", name:"Allison Turner",   role:"Administrator", email:"allison.turner@trevalcompany.com",   su:"Pacific SU",          va:"True",  state:"Pending" },
+  { initials:"AR", name:"Amanda Reed",      role:"Administrator", email:"amanda.reed@trevalcompany.com",      su:"Pacific SU",          va:"False", state:"Active" },
+  { initials:"AS", name:"Adam Smith",       role:"Agent",         email:"adam.smith@trevalcompany.com",       su:"Pacific SU",          va:"False", state:"Active" },
+  { initials:"AC", name:"Andrea Collins",   role:"Admin",         email:"andrea.collins@trevalcompany.com",   su:"Pacific SU",          va:"False", state:"Active" },
+  { initials:"AK", name:"Andrew King",      role:"Administrator", email:"andrew.king@trevalcompany.com",      su:"Mountain SU",         va:"False", state:"Pending" },
+  { initials:"AR", name:"Anthony Russell",  role:"Manager",       email:"anthony.russell@trevalcompany.com",  su:"VP Central Time SU",  va:"False", state:"Active" },
+  { initials:"AP", name:"Ashley Parker",    role:"Administrator", email:"ashley.parker@trevalcompany.com",    su:"Mountain SU",         va:"False", state:"Active" },
+  { initials:"AH", name:"Austin Hayes",     role:"Admin",         email:"austin.hayes@trevalcompany.com",     su:"East Coast SU",       va:"False", state:"Active" },
+  { initials:"BB", name:"Benjamin Brooks",  role:"Administrator", email:"benjamin.brooks@trevalcompany.com",  su:"VP Central Time SU",  va:"False", state:"Active" },
+  { initials:"BC", name:"Brittany Coleman", role:"Administrator", email:"brittany.coleman@trevalcompany.com", su:"VP Central Time SU",  va:"False", state:"Active" },
+  { initials:"CM", name:"Caleb Morgan",     role:"Administrator", email:"caleb.morgan@trevalcompany.com",     su:"Pacific SU",          va:"False", state:"Active" },
+];
+
+function App() {
+  const [active, setActive] = useState("employees");
+  return (
+    <div className="app">
+      <Topbar/>
+      <LeftNav active={active} onSelect={setActive}/>
+      <main className="main">
+        <div className="pane">
+          <div className="pane-head">
+            <h1>Employees</h1>
+            <div className="head-actions">
+              <button className="btn">Import Employees</button>
+              <button className="btn primary">Create Employee</button>
+            </div>
+          </div>
+
+          <div className="emp-toolbar">
+            <span className="emp-count">142 employees</span>
+            <div className="emp-sep"/>
+            <span className="emp-selected">0 Selected</span>
+            <div className="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" placeholder="Start typing to find user"/>
+            </div>
+            <button className="filter-btn">
+              <svg viewBox="0 0 24 24"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+            </button>
+            <div className="all-chip">
+              All
+              <svg viewBox="0 0 16 16"><path d="M3.5 6 8 10.5 12.5 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
+
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style={{width:40}}><div className="cb"/></th>
+                  <th style={{minWidth:180}}>NAME ↑</th>
+                  <th style={{width:130}}>ROLE</th>
+                  <th style={{width:80}}>TYPE</th>
+                  <th style={{minWidth:220}}>USERNAME</th>
+                  <th style={{width:160}}>SCHEDULING UNIT</th>
+                  <th style={{width:110}}>VIRTUAL AGENT</th>
+                  <th style={{width:110}}>STATE</th>
+                  <th style={{width:52}}>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {EMPLOYEES.map((e, i) => (
+                  <tr key={i}>
+                    <td><div className="cb"/></td>
+                    <td>
+                      <div className="emp-cell">
+                        <span className="emp-avatar">{e.initials}</span>
+                        <span className="emp-name">{e.name}</span>
+                      </div>
+                    </td>
+                    <td>{e.role}</td>
+                    <td></td>
+                    <td style={{color:"var(--color-fg-secondary)"}}>{e.email}</td>
+                    <td>{e.su}</td>
+                    <td>{e.va}</td>
+                    <td>
+                      <span className={"status-pill status-" + e.state.toLowerCase()}>
+                        <span className="status-dot"/>
+                        {e.state}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="dot3">
+                        <svg viewBox="0 0 16 16"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
