@@ -2,6 +2,32 @@
 @import "../design-system/css/theme.css";
 @import "../design-system/css/lyra.css";
 
+/* ── Global scrollbar — hidden until hover, 3px thin, light grey ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+*::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+}
+*:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.22);
+}
+*:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+}
+
 /* Conference Flow Animations */
 @keyframes fadeUp {
   from {
