@@ -195,7 +195,26 @@ function FilterRow() {
   )
 }
 
-/* ── Shared tooltip ── */
+/* ── Shared tooltip style — Lyra overlay surface, WCAG AA ── */
+const TOOLTIP_SHELL: React.CSSProperties = {
+  background: 'var(--lyra-color-bg-surface-overlay)',
+  border: '1px solid var(--lyra-color-border-soft)',
+  borderRadius: 'var(--radius-md)',
+  boxShadow: 'var(--sol-effect-shadowlg)',
+  padding: '6px 10px',
+  whiteSpace: 'nowrap',
+  pointerEvents: 'none',
+  zIndex: 9999,
+  fontFamily: FONT,
+  lineHeight: 1.5,
+}
+const TOOLTIP_LABEL: React.CSSProperties = {
+  fontSize: 11, fontWeight: 400, color: 'var(--lyra-color-fg-secondary)',
+}
+const TOOLTIP_VALUE: React.CSSProperties = {
+  fontSize: 13, fontWeight: 600, color: 'var(--lyra-color-fg-default)',
+}
+
 function Tooltip({ text, children }: { text: string; children: React.ReactNode }) {
   const [visible, setVisible] = useState(false)
   const [pos, setPos] = useState({ x: 0, y: 0 })
@@ -203,24 +222,20 @@ function Tooltip({ text, children }: { text: string; children: React.ReactNode }
   return (
     <span
       style={{ position: 'relative', display: 'inline-flex' }}
-      onMouseEnter={e => { setVisible(true); setPos({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY }) }}
-      onMouseMove={e => setPos({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY })}
+      onMouseEnter={e => { setVisible(true); setPos({ x: e.clientX, y: e.clientY }) }}
+      onMouseMove={e => setPos({ x: e.clientX, y: e.clientY })}
       onMouseLeave={() => setVisible(false)}
     >
       {children}
       {visible && (
         <span style={{
-          position: 'absolute',
-          bottom: '100%', left: '50%', transform: 'translateX(-50%)',
-          marginBottom: 6,
-          background: 'var(--lyra-color-bg-surface-inverse)',
-          color: 'var(--lyra-color-fg-inverse)',
-          fontSize: 11, fontWeight: 500, fontFamily: FONT,
-          padding: '4px 8px', borderRadius: 'var(--radius-sm)',
-          whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
-          boxShadow: 'var(--sol-effect-shadowmd)',
+          ...TOOLTIP_SHELL,
+          position: 'fixed',
+          left: pos.x,
+          top: pos.y - 44,
+          transform: 'translateX(-50%)',
         }}>
-          {text}
+          <span style={TOOLTIP_VALUE}>{text}</span>
         </span>
       )}
     </span>
@@ -349,24 +364,11 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
           </>
         )}
       </svg>
-      {/* Tooltip — fixed to viewport so it's never clipped by any parent overflow */}
+      {/* Tooltip */}
       {hoverIdx !== null && (
-        <div style={{
-          position: 'fixed',
-          left: tooltipPos.x,
-          top: tooltipPos.y - 60,
-          transform: 'translateX(-50%)',
-          background: 'var(--lyra-color-bg-surface-overlay)',
-          border: '1px solid var(--lyra-color-border-soft)',
-          color: 'var(--lyra-color-fg-default)',
-          fontSize: 12, fontWeight: 400, fontFamily: FONT,
-          padding: '6px 10px', borderRadius: 'var(--radius-md)',
-          whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 9999,
-          boxShadow: 'var(--sol-effect-shadowlg)',
-          lineHeight: 1.5,
-        }}>
-          <div style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', marginBottom: 2 }}>{SPARK_WEEKS[hoverIdx]}</div>
-          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--lyra-color-fg-default)' }}>{tooltipLabel}{data[hoverIdx].toLocaleString()}</div>
+        <div style={{ ...TOOLTIP_SHELL, position: 'fixed', left: tooltipPos.x, top: tooltipPos.y - 60, transform: 'translateX(-50%)' }}>
+          <div style={{ ...TOOLTIP_LABEL, marginBottom: 2 }}>{SPARK_WEEKS[hoverIdx]}</div>
+          <div style={TOOLTIP_VALUE}>{tooltipLabel}{data[hoverIdx].toLocaleString()}</div>
         </div>
       )}
     </div>
@@ -435,7 +437,7 @@ function ActiveCampaignsTile({ accent, total, activeCount, breakdown }: {
   breakdown: { active: number; inactive: number; expired: number }
 }) {
   const [mounted, setMounted] = useState(false)
-  const [hoveredSeg, setHoveredSeg] = useState<{ label: string; count: number; pct: number; x: number } | null>(null)
+  const [hoveredSeg, setHoveredSeg] = useState<{ label: string; count: number; pct: number; x: number; y: number } | null>(null)
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t) }, [])
 
   const segments = [
@@ -478,12 +480,10 @@ function ActiveCampaignsTile({ accent, total, activeCount, breakdown }: {
                   flexShrink: 0, cursor: 'default',
                 }}
                 onMouseEnter={e => {
-                  const rect = (e.currentTarget.parentElement!).getBoundingClientRect()
-                  setHoveredSeg({ label: seg.label, count: seg.count, pct: Math.round((seg.count / total) * 100), x: e.clientX - rect.left })
+                  setHoveredSeg({ label: seg.label, count: seg.count, pct: Math.round((seg.count / total) * 100), x: e.clientX, y: e.clientY })
                 }}
                 onMouseMove={e => {
-                  const rect = (e.currentTarget.parentElement!).getBoundingClientRect()
-                  setHoveredSeg(prev => prev ? { ...prev, x: e.clientX - rect.left } : prev)
+                  setHoveredSeg(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : prev)
                 }}
                 onMouseLeave={() => setHoveredSeg(null)}
               />
@@ -492,18 +492,9 @@ function ActiveCampaignsTile({ accent, total, activeCount, breakdown }: {
         </div>
         {/* Stacked bar tooltip */}
         {hoveredSeg && (
-          <div style={{
-            position: 'absolute', bottom: 18, left: hoveredSeg.x,
-            transform: 'translateX(-50%)',
-            background: 'var(--lyra-color-bg-surface-inverse)',
-            color: 'var(--lyra-color-fg-inverse)',
-            fontSize: 11, fontWeight: 500, fontFamily: FONT,
-            padding: '5px 9px', borderRadius: 'var(--radius-sm)',
-            whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
-            boxShadow: 'var(--sol-effect-shadowlg)', lineHeight: 1.5,
-          }}>
-            <div style={{ fontWeight: 600 }}>{hoveredSeg.label}</div>
-            <div style={{ opacity: 0.75, fontSize: 10 }}>{hoveredSeg.count} campaigns · {hoveredSeg.pct}%</div>
+          <div style={{ ...TOOLTIP_SHELL, position: 'fixed', left: hoveredSeg.x, top: hoveredSeg.y - 52, transform: 'translateX(-50%)' }}>
+            <div style={TOOLTIP_VALUE}>{hoveredSeg.label}</div>
+            <div style={{ ...TOOLTIP_LABEL, marginTop: 2 }}>{hoveredSeg.count} campaigns · {hoveredSeg.pct}%</div>
           </div>
         )}
       </div>
@@ -533,7 +524,7 @@ function ResponseRateTile({ accent, value, target = 60, delta }: {
   delta?: { text: string; suffix?: string }
 }) {
   const [mounted, setMounted] = useState(false)
-  const [barTooltip, setBarTooltip] = useState<{ x: number } | null>(null)
+  const [barTooltip, setBarTooltip] = useState<{ x: number; y: number } | null>(null)
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t) }, [])
 
   const pct = mounted ? Math.min(value, 100) : 0
@@ -569,10 +560,7 @@ function ResponseRateTile({ accent, value, target = 60, delta }: {
         {/* Track + fill + target tick */}
         <div
           style={{ position: 'relative', width: '100%', height: 12, borderRadius: 9999, background: 'var(--lyra-color-bg-disabled)', cursor: 'default' }}
-          onMouseMove={e => {
-            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-            setBarTooltip({ x: e.clientX - rect.left })
-          }}
+          onMouseMove={e => setBarTooltip({ x: e.clientX, y: e.clientY })}
           onMouseLeave={() => setBarTooltip(null)}
         >
           {/* Fill */}
@@ -595,20 +583,9 @@ function ResponseRateTile({ accent, value, target = 60, delta }: {
 
         {/* Progress bar tooltip */}
         {barTooltip && (
-          <div style={{
-            position: 'absolute', bottom: 0, left: barTooltip.x,
-            transform: 'translateX(-50%)',
-            background: 'var(--lyra-color-bg-surface-inverse)',
-            color: 'var(--lyra-color-fg-inverse)',
-            fontSize: 11, fontWeight: 500, fontFamily: FONT,
-            padding: '5px 9px', borderRadius: 'var(--radius-sm)',
-            whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
-            boxShadow: 'var(--sol-effect-shadowlg)', lineHeight: 1.5,
-          }}>
-            <div style={{ fontWeight: 600 }}>{value}% current</div>
-            <div style={{ opacity: 0.75, fontSize: 10 }}>
-              Target {target}% · {value >= target ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}
-            </div>
+          <div style={{ ...TOOLTIP_SHELL, position: 'fixed', left: barTooltip.x, top: barTooltip.y - 52, transform: 'translateX(-50%)' }}>
+            <div style={TOOLTIP_VALUE}>{value}% current</div>
+            <div style={{ ...TOOLTIP_LABEL, marginTop: 2 }}>Target {target}% · {value >= target ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}</div>
           </div>
         )}
       </div>
@@ -859,16 +836,8 @@ function ResponseRateCell({ rate }: { rate: number }) {
           transform: 'translateX(-50%)',
         }} />
         {hovered && (
-          <div style={{
-            position: 'absolute', bottom: 10, left: `${rate / 2}%`, transform: 'translateX(-50%)',
-            background: 'var(--lyra-color-bg-surface-inverse)',
-            color: 'var(--lyra-color-fg-inverse)',
-            fontSize: 11, fontWeight: 500, fontFamily: FONT,
-            padding: '4px 8px', borderRadius: 'var(--radius-sm)',
-            whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
-            boxShadow: 'var(--sol-effect-shadowmd)',
-          }}>
-            {tooltipText}
+          <div style={{ ...TOOLTIP_SHELL, position: 'absolute', bottom: 22, left: '50%', transform: 'translateX(-50%)' }}>
+            <div style={TOOLTIP_VALUE}>{tooltipText}</div>
           </div>
         )}
       </div>
