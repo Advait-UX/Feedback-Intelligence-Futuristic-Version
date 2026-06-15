@@ -531,7 +531,7 @@ export default function App() {
             </div>
 
             {/* Title row */}
-            <div className="flex items-center justify-between mb-4 gap-4">
+            <div className="flex items-center justify-between mb-8 gap-4">
               <div>
                 <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#4f46e5] mb-1">
                   <Sparkles className="h-3 w-3" fill="#6366f1" />
@@ -562,7 +562,7 @@ export default function App() {
             </div>
 
             {/* Title row: campaign name on the left, navigation actions on the right */}
-            <div className="flex items-center justify-between mb-4 gap-4">
+            <div className="flex items-center justify-between mb-8 gap-4">
               <h1 className="text-[28px] font-semibold text-[#0f172a] leading-[1.2]">
                 {selectedCampaign ? selectedCampaign.name : 'Feedback Intelligence Dashboard'}
               </h1>

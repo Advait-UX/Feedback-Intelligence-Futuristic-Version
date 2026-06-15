@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown, Minus, ChevronDown, ChevronRight } from 'lucide-react'
 import type { Topic } from '@/lib/topics'
 
@@ -9,7 +9,7 @@ import type { Topic } from '@/lib/topics'
  * ============================================================ */
 export function TopicsTable({ topics }: { topics: Topic[] }) {
   const [openId, setOpenId] = useState<string | null>(null)
-  const sorted = useMemo(() => [...topics].sort((a, b) => b.mentions - a.mentions), [topics])
+  const sorted = useMemo(() => [...topics].sort((a, b) => (a.responseRate ?? 100) - (b.responseRate ?? 100)), [topics])
 
   if (sorted.length === 0) {
     return (
@@ -19,31 +19,37 @@ export function TopicsTable({ topics }: { topics: Topic[] }) {
     )
   }
 
+  const thStyle: React.CSSProperties = {
+    fontSize: 11, fontWeight: 500, color: '#82959e',
+    letterSpacing: '0.06em', textTransform: 'uppercase',
+    fontFamily: 'var(--font-sans)',
+  }
+
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden">
-      <table className="w-full text-[13px]">
+    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden" style={{ fontFamily: 'var(--font-sans)' }}>
+      <table className="w-full" style={{ fontSize: 14, fontFamily: 'var(--font-sans)' }}>
         <thead>
           <tr className="border-b border-[#f1f5f9]">
-            <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8] w-[40px]" />
-            <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+            <th className="px-5 py-3 text-left w-[40px]" style={thStyle} />
+            <th className="px-5 py-3 text-left" style={thStyle}>
               Intent
             </th>
-            <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+            <th className="px-5 py-3 text-left" style={thStyle}>
               Category
             </th>
-            <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+            <th className="px-5 py-3 text-right" style={thStyle}>
               Mentions
             </th>
-            <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+            <th className="px-5 py-3 text-right" style={thStyle}>
               Surveys Sent
             </th>
-            <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+            <th className="px-5 py-3 text-right" style={thStyle}>
               Responses
             </th>
-            <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8] w-[180px]">
+            <th className="px-5 py-3 text-left w-[180px]" style={thStyle}>
               Response Rate
             </th>
-            <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+            <th className="px-5 py-3 text-left" style={thStyle}>
               CSAT
             </th>
           </tr>
@@ -72,30 +78,58 @@ function TopicRow({
   expanded: boolean
   onToggle: () => void
 }) {
+  const [hovered, setHovered] = useState(false)
+  const rowBg = expanded
+    ? 'var(--lyra-color-bg-active-subtle)'
+    : hovered ? 'var(--lyra-color-state-bg-hover-opacity)' : 'transparent'
+
   return (
     <>
       <tr
         onClick={onToggle}
-        className="border-b border-[#f1f5f9] hover:bg-[#f8fafc] cursor-pointer transition-colors"
+        className="cursor-pointer"
+        style={{
+          borderBottom: expanded ? 'none' : '1px solid var(--lyra-color-border-subtle)',
+          background: rowBg,
+          boxShadow: expanded ? 'inset 3px 0 0 var(--lyra-brand-600)' : 'none',
+          transition: 'background 0.15s, box-shadow 0.15s',
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         <td className="px-5 py-3.5">
-          {expanded ? (
-            <ChevronDown className="h-4 w-4 text-[#64748b]" />
-          ) : (
-            <ChevronRight className="h-4 w-4 text-[#94a3b8]" />
-          )}
+          <div style={{
+            width: 22, height: 22, borderRadius: 6,
+            background: expanded ? 'var(--lyra-brand-700)' : 'var(--lyra-slate-200)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.18s, transform 0.18s',
+            transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+            flexShrink: 0,
+          }}>
+            <ChevronDown
+              className="h-3.5 w-3.5"
+              style={{ color: expanded ? '#ffffff' : 'var(--lyra-slate-500)', transition: 'color 0.18s' }}
+            />
+          </div>
         </td>
         <td className="px-5 py-3.5">
-          <div className="text-[13px] font-medium text-[#0f172a]">{topic.name}</div>
+          <div style={{
+            fontSize: 14, fontWeight: expanded ? 600 : 500,
+            color: expanded ? 'var(--lyra-color-fg-active-strong)' : 'var(--lyra-color-fg-default)',
+            transition: 'color 0.18s',
+            fontFamily: 'var(--lyra-font-sans)',
+          }}>
+            {topic.name}
+          </div>
         </td>
-        <td className="px-5 py-3.5 text-[#475569]">{topic.category}</td>
-        <td className="px-5 py-3.5 text-right text-[#0f172a] tabular-nums">
+        <td className="px-5 py-3.5" style={{ fontSize: 14, color: 'var(--lyra-color-fg-secondary)', fontFamily: 'var(--lyra-font-sans)' }}>{topic.category}</td>
+        <td className="px-5 py-3.5 text-right" style={{ fontSize: 14, color: 'var(--lyra-color-fg-default)', fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--lyra-font-sans)' }}>
           {topic.mentions.toLocaleString()}
         </td>
-        <td className="px-5 py-3.5 text-right text-[#0f172a] tabular-nums">
+        <td className="px-5 py-3.5 text-right" style={{ fontSize: 14, color: 'var(--lyra-color-fg-default)', fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--lyra-font-sans)' }}>
           {topic.surveysSent.toLocaleString()}
         </td>
-        <td className="px-5 py-3.5 text-right text-[#0f172a] tabular-nums">
+        <td className="px-5 py-3.5 text-right" style={{ fontSize: 14, color: 'var(--lyra-color-fg-default)', fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--lyra-font-sans)' }}>
           {topic.responses.toLocaleString()}
         </td>
         <td className="px-5 py-3.5">
@@ -106,9 +140,22 @@ function TopicRow({
         </td>
       </tr>
       {expanded && (
-        <tr className="border-b border-[#f1f5f9] bg-[#fafbfc]">
-          <td colSpan={8} className="px-5 py-5">
-            <TopicTrendPanel topic={topic} />
+        <tr style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
+          <td colSpan={8} style={{ padding: 0, background: 'var(--lyra-color-bg-active-subtle)' }}>
+            <div style={{
+              margin: '0 20px 20px 20px',
+              background: 'var(--lyra-color-bg-surface-base)',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--lyra-color-border-soft)',
+              boxShadow: 'var(--sol-effect-shadowmd)',
+              overflow: 'hidden',
+            }}>
+              {/* Brand accent strip */}
+              <div style={{ height: 3, background: 'linear-gradient(90deg, var(--lyra-brand-600) 0%, var(--lyra-brand-400) 100%)' }} />
+              <div style={{ padding: '20px 24px 24px' }}>
+                <TopicTrendPanel topic={topic} />
+              </div>
+            </div>
           </td>
         </tr>
       )}
@@ -116,16 +163,54 @@ function TopicRow({
   )
 }
 
-/* ---------- Response rate cell (% + colored bar) ---------- */
+/* ---------- Response rate cell — mirrors dashboard ResponseRateCell exactly ---------- */
 function ResponseRateCell({ rate }: { rate: number }) {
-  const color = rate >= 60 ? '#16a34a' : rate >= 45 ? '#0f172a' : '#dc2626'
+  const [animWidth, setAnimWidth] = useState(0)
+  const [hovered, setHovered] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setAnimWidth(rate), 60); return () => clearTimeout(t) }, [rate])
+
+  const TARGET = 60
+  const color = rate > 60 ? 'var(--lyra-color-status-success-strong)' : rate >= 30 ? 'var(--lyra-color-status-warning-strong)' : 'var(--lyra-color-status-critical-strong)'
+  const gap = TARGET - rate
+  const tooltipText = gap > 0
+    ? `${rate}% · ${gap}pp below ${TARGET}% target`
+    : `${rate}% · ${Math.abs(gap)}pp above ${TARGET}% target`
+
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-[13px] font-semibold tabular-nums" style={{ color }}>
+    <div className="flex items-center gap-2" style={{ fontFamily: 'var(--font-sans)' }}>
+      <span style={{ fontSize: 14, fontWeight: 600, color, fontVariantNumeric: 'tabular-nums', minWidth: 38, fontFamily: 'var(--lyra-font-sans)' }}>
         {rate}%
       </span>
-      <div className="flex-1 h-1.5 bg-[#f1f5f9] rounded-full overflow-hidden">
-        <div className="h-full rounded-full" style={{ width: `${rate}%`, backgroundColor: color }} />
+      <div
+        className="flex-1"
+        style={{ height: 4, background: '#e2e8f0', borderRadius: 9999, overflow: 'visible', position: 'relative', cursor: 'pointer' }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <div style={{
+          height: '100%', width: `${animWidth}%`,
+          background: color, borderRadius: 9999,
+          transition: 'width 0.9s cubic-bezier(0.4,0,0.2,1)',
+        }} />
+        {/* Target tick at 60% */}
+        <div style={{
+          position: 'absolute', top: -3, bottom: -3,
+          left: `${TARGET}%`, width: 2,
+          background: '#475569', borderRadius: 1, opacity: 0.35,
+          transform: 'translateX(-50%)',
+        }} />
+        {hovered && (
+          <div style={{
+            position: 'absolute', bottom: 10, left: `${rate / 2}%`, transform: 'translateX(-50%)',
+            background: 'var(--lyra-color-bg-surface-inverse)', color: 'var(--lyra-color-fg-inverse)',
+            fontSize: 12, fontWeight: 500, fontFamily: 'var(--font-sans)',
+            padding: '4px 8px', borderRadius: 4,
+            whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
+            boxShadow: 'var(--sol-effect-shadowlg)',
+          }}>
+            {tooltipText}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -140,22 +225,24 @@ function TrendArrow({ trend }: { trend: 'up' | 'down' | 'flat' }) {
 
 /* ---------- CSAT badge — no red, ranges from green (high) to slate (low) ---------- */
 function CsatBadge({ value }: { value: number }) {
-  // ≥75 high (green), 60–74 mid (blue), 50–59 caution (amber), <50 low (slate)
-  const tone = value >= 75 ? 'high' : value >= 60 ? 'mid' : value >= 50 ? 'caution' : 'low'
-  const bg =
-    tone === 'high' ? '#dcfce7' :
-    tone === 'mid' ? '#dbeafe' :
-    tone === 'caution' ? '#fef3c7' :
-    '#e2e8f0'
-  const text =
-    tone === 'high' ? '#15803d' :
-    tone === 'mid' ? '#1d4ed8' :
-    tone === 'caution' ? '#b45309' :
-    '#475569'
+  // ≥70 light blue · 50–69 light orange · <50 light red
+  const bg = value >= 70
+    ? 'var(--lyra-color-status-info-subtle)'
+    : value >= 50
+    ? 'var(--lyra-color-status-warning-subtle)'
+    : 'var(--lyra-color-status-critical-subtle)'
   return (
     <span
-      className="inline-flex items-center rounded-md px-2 py-0.5 text-[12px] font-semibold tabular-nums"
-      style={{ backgroundColor: bg, color: text }}
+      style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        borderRadius: 'var(--radius-sm)',
+        minWidth: 36, padding: '3px 8px',
+        fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+        fontFamily: 'var(--lyra-font-sans)',
+        backgroundColor: bg,
+        color: 'var(--lyra-color-fg-default)',
+        letterSpacing: '-0.01em',
+      }}
     >
       {value}
     </span>
@@ -166,38 +253,147 @@ function CsatBadge({ value }: { value: number }) {
 function TopicTrendPanel({ topic }: { topic: Topic }) {
   return (
     <div>
-      <div className="flex items-baseline justify-between mb-3">
-        <div>
-          <h3 className="text-[14px] font-semibold text-[#0f172a]">
-            {topic.name} <span className="text-[#94a3b8] font-medium">· {topic.category}</span>
-          </h3>
-          <p className="text-[11px] text-[#94a3b8] mt-0.5">
-            14-day trend · detection · sends · responses · response rate
-          </p>
+      {/* Header row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* Brand accent bar */}
+          <div style={{
+            width: 4, height: 32, borderRadius: 2, flexShrink: 0,
+            background: 'linear-gradient(180deg, var(--lyra-brand-600) 0%, var(--lyra-brand-400) 100%)',
+          }} />
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--lyra-color-fg-default)', letterSpacing: '-0.01em', fontFamily: 'var(--lyra-font-sans)' }}>
+                {topic.name}
+              </span>
+              <span style={{
+                fontSize: 11, fontWeight: 500, color: 'var(--lyra-color-fg-active-strong)',
+                background: 'var(--lyra-color-bg-active-subtle)',
+                border: '1px solid var(--lyra-color-bg-active-moderate)',
+                borderRadius: 'var(--radius-xs)',
+                padding: '2px 8px', fontFamily: 'var(--lyra-font-sans)',
+                letterSpacing: '0.01em',
+              }}>
+                {topic.category}
+              </span>
+            </div>
+            <p style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', marginTop: 3, lineHeight: 1.3, fontFamily: 'var(--lyra-font-sans)' }}>
+              14-day trend across detection, delivery and response
+            </p>
+          </div>
         </div>
-        <div className="text-[11px] text-[#94a3b8]">
-          CSAT <CsatBadge value={topic.csat} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: 'var(--lyra-font-sans)' }}>CSAT</span>
+          <CsatBadge value={topic.csat} />
         </div>
       </div>
       <div className="grid grid-cols-4 gap-3">
-        <TrendChart title="Detection rate" unit="%" color="#6366f1" data={topic.detectionRate} />
-        <TrendChart title="Surveys sent" unit="" color="#3b82f6" data={topic.surveysSentSeries} />
-        <TrendChart title="Responses received" unit="" color="#0ea5e9" data={topic.responsesSeries} />
-        <TrendChart title="Response rate" unit="%" color="#16a34a" data={topic.responseRateSeries} />
+        <TrendChart title="Detection rate" unit="%" data={topic.detectionRate} />
+        <TrendChart title="Surveys sent" unit="" data={topic.surveysSentSeries} />
+        <TrendChart title="Responses received" unit="" data={topic.responsesSeries} />
+        <ResponseRateTrendCard data={topic.responseRateSeries} />
       </div>
     </div>
   )
 }
 
+/* ---------- Response rate trend card — progress bar, mirrors campaign-level card ---------- */
+function ResponseRateTrendCard({ data }: { data: number[] }) {
+  const [mounted, setMounted] = useState(false)
+  const [tooltip, setTooltip] = useState<{ x: number } | null>(null)
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t) }, [])
+
+  const TARGET = 60
+  const latest = data.length ? data[data.length - 1] : 0
+  const first  = data.length ? data[0] : 0
+  const delta  = latest - first
+  const deltaColor = delta > 0 ? '#16a34a' : delta < 0 ? '#dc2626' : '#94a3b8'
+  const barColor   = latest > 60 ? 'var(--lyra-color-status-success-strong)' : latest >= 30 ? 'var(--lyra-color-status-warning-strong)' : 'var(--lyra-color-status-critical-strong)'
+  const pct        = mounted ? Math.min(latest, 100) : 0
+  const gap        = Math.abs(latest - TARGET)
+
+  return (
+    <div className="bg-white border border-[#e2e8f0] rounded-[10px] p-3" style={{ fontFamily: 'var(--font-sans)' }}>
+      {/* Header — same as TrendChart */}
+      <div className="flex items-baseline justify-between mb-1">
+        <span style={{ fontSize: 12, fontWeight: 500, color: '#82959e', letterSpacing: '0.05em', textTransform: 'uppercase' as const, fontFamily: 'var(--font-sans)' }}>Response rate</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: deltaColor, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-sans)' }}>
+          {delta > 0 ? '+' : ''}{delta.toFixed(0)}pp
+        </span>
+      </div>
+      {/* Value — same as TrendChart */}
+      <div className="flex items-baseline gap-1 mb-1">
+        <span style={{ fontSize: 20, fontWeight: 600, color: barColor, fontVariantNumeric: 'tabular-nums', lineHeight: 1, letterSpacing: '-0.01em', fontFamily: 'var(--lyra-font-sans)' }}>{latest}</span>
+        <span style={{ fontSize: 12, fontWeight: 400, color: barColor, lineHeight: 1, fontFamily: 'var(--lyra-font-sans)', opacity: 0.75 }}>%</span>
+      </div>
+      {/* Chart zone — same h-[90px] as TrendChart SVG, bar vertically centered */}
+      <div className="h-[90px]" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', gap: 6 }}>
+        {/* Labels */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+          <span style={{ fontSize: 11, color: '#82959e', fontFamily: 'var(--font-sans)' }}>0%</span>
+          <span style={{ position: 'absolute', left: `${TARGET}%`, transform: 'translateX(-50%)', fontSize: 11, color: '#82959e', whiteSpace: 'nowrap', fontFamily: 'var(--font-sans)' }}>
+            Target {TARGET}%
+          </span>
+          <span style={{ fontSize: 11, color: '#82959e', fontFamily: 'var(--font-sans)' }}>100%</span>
+        </div>
+        {/* Track + fill + tick */}
+        <div
+          style={{ position: 'relative', width: '100%', height: 12, borderRadius: 9999, background: '#e2e8f0', cursor: 'default' }}
+          onMouseMove={e => { const r = (e.currentTarget as HTMLElement).getBoundingClientRect(); setTooltip({ x: e.clientX - r.left }) }}
+          onMouseLeave={() => setTooltip(null)}
+        >
+          <div style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`,
+            borderRadius: 9999, background: barColor,
+            transition: 'width 0.9s cubic-bezier(0.4,0,0.2,1)',
+          }} />
+          <div style={{
+            position: 'absolute', top: -2, bottom: -2, left: `${TARGET}%`, transform: 'translateX(-50%)',
+            width: 2, borderRadius: 2, background: '#334155', opacity: 0.4,
+          }} />
+        </div>
+        {tooltip && (
+          <div style={{
+            position: 'absolute', bottom: 20, left: tooltip.x, transform: 'translateX(-50%)',
+            background: 'var(--lyra-color-bg-surface-inverse)', color: 'var(--lyra-color-fg-inverse)',
+            fontSize: 12, fontWeight: 500, fontFamily: 'var(--font-sans)',
+            padding: '4px 8px', borderRadius: 4,
+            whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
+            boxShadow: 'var(--sol-effect-shadowlg)', lineHeight: 1.5,
+          }}>
+            <div style={{ fontWeight: 600 }}>{latest}% current</div>
+            <div style={{ opacity: 0.7, fontSize: 11 }}>
+              Target {TARGET}% · {latest >= TARGET ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Trend palette
+const TR_UP_LINE   = '#185BA4'  // brand-700
+const TR_UP_GRAD   = '#4896EC'  // brand-400
+const TR_DOWN_LINE = '#DC2626'
+const TR_DOWN_GRAD = '#EF4444'
+const TR_FLAT_LINE = '#82959E'  // slate-500
+const TR_FLAT_GRAD = '#A8B3BB'  // slate-400
+
+function trendChartColors(first: number, last: number) {
+  const pct = Math.abs(first) > 0 ? (last - first) / Math.abs(first) : 0
+  if (pct > 0.01)  return { line: TR_UP_LINE,   grad: TR_UP_GRAD }
+  if (pct < -0.01) return { line: TR_DOWN_LINE, grad: TR_DOWN_GRAD }
+  return { line: TR_FLAT_LINE, grad: TR_FLAT_GRAD }
+}
+
 function TrendChart({
   title,
   unit,
-  color,
   data,
 }: {
   title: string
   unit: string
-  color: string
   data: number[]
 }) {
   const width = 320
@@ -217,7 +413,6 @@ function TrendChart({
 
   const path = data.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xs(i)} ${ys(v)}`).join(' ')
   const areaPath = `${path} L ${xs(data.length - 1)} ${padding.top + ch} L ${xs(0)} ${padding.top + ch} Z`
-  const gradId = `tr-${title.replace(/\W/g, '').toLowerCase()}-${color.replace('#', '')}`
 
   const latest = data[data.length - 1]
   const first = data[0]
@@ -228,42 +423,46 @@ function TrendChart({
   const headline = unit === '' ? total : latest
   const delta = latest - first
   const deltaPct = first !== 0 ? Math.round((delta / first) * 100) : 0
-  const deltaColor = delta > 0 ? '#16a34a' : delta < 0 ? '#dc2626' : '#94a3b8'
+
+  const { line: lineColor, grad: gradColor } = trendChartColors(first, latest)
+  const deltaColor = delta > 0 ? TR_UP_LINE : delta < 0 ? TR_DOWN_LINE : 'var(--lyra-slate-400)'
+  const gradId = `tr-${title.replace(/\W/g, '').toLowerCase()}`
 
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[10px] p-3">
-      <div className="flex items-baseline justify-between mb-1">
-        <span className="text-[10px] font-medium text-[#94a3b8] uppercase tracking-[0.05em]">
+    <div style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)', borderRadius: 10, padding: 12, fontFamily: 'var(--lyra-font-sans)' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+        <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--lyra-color-fg-secondary)', letterSpacing: '0.05em', textTransform: 'uppercase' as const, fontFamily: 'var(--lyra-font-sans)' }}>
           {title}
         </span>
-        <span className="text-[10px] font-semibold tabular-nums" style={{ color: deltaColor }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: deltaColor, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--lyra-font-sans)' }}>
           {delta > 0 ? '+' : ''}
           {deltaPct}%
         </span>
       </div>
-      <div className="flex items-baseline gap-1 mb-1">
-        <span className="text-[20px] font-bold text-[#0f172a] tabular-nums leading-none">
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
+        <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--lyra-color-fg-default)', fontVariantNumeric: 'tabular-nums', lineHeight: 1, letterSpacing: '-0.01em', fontFamily: 'var(--lyra-font-sans)' }}>
           {unit === '' ? headline.toLocaleString() : headline}
         </span>
-        {unit && <span className="text-[12px] text-[#64748b] leading-none">{unit}</span>}
+        {unit && <span style={{ fontSize: 12, fontWeight: 400, color: 'var(--lyra-color-fg-secondary)', lineHeight: 1, fontFamily: 'var(--lyra-font-sans)' }}>{unit}</span>}
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-[90px]" preserveAspectRatio="none">
+      <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 90 }} preserveAspectRatio="none">
         <defs>
           <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.22" />
-            <stop offset="100%" stopColor={color} stopOpacity="0" />
+            <stop offset="0%"   stopColor={gradColor} stopOpacity="0.38" />
+            <stop offset="40%"  stopColor={lineColor}  stopOpacity="0.14" />
+            <stop offset="100%" stopColor={lineColor}  stopOpacity="0" />
           </linearGradient>
         </defs>
-        <text x={padding.left - 4} y={padding.top + 4} textAnchor="end" fill="#cbd5e1" fontSize="9">
+        <text x={padding.left - 4} y={padding.top + 4} textAnchor="end" fill="#c8d0d8" fontSize="10">
           {Math.round(max)}
         </text>
-        <text x={padding.left - 4} y={padding.top + ch} textAnchor="end" fill="#cbd5e1" fontSize="9">
+        <text x={padding.left - 4} y={padding.top + ch} textAnchor="end" fill="#c8d0d8" fontSize="10">
           {Math.round(min)}
         </text>
-        <text x={padding.left} y={height - 6} textAnchor="start" fill="#94a3b8" fontSize="9">
+        <text x={padding.left} y={height - 6} textAnchor="start" fill="#a8b3bb" fontSize="10">
           Day 1
         </text>
-        <text x={width - padding.right} y={height - 6} textAnchor="end" fill="#94a3b8" fontSize="9">
+        <text x={width - padding.right} y={height - 6} textAnchor="end" fill="#a8b3bb" fontSize="10">
           Today
         </text>
         <line
@@ -271,12 +470,14 @@ function TrendChart({
           y1={padding.top + ch}
           x2={width - padding.right}
           y2={padding.top + ch}
-          stroke="#e2e8f0"
+          stroke="rgba(0,0,0,0.06)"
           strokeWidth="1"
         />
         <path d={areaPath} fill={`url(#${gradId})`} />
-        <path d={path} fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx={xs(data.length - 1)} cy={ys(latest)} r="3" fill={color} />
+        <path d={path} fill="none" stroke={lineColor} strokeWidth="2" strokeLinecap="round" />
+        {/* Glow halo behind endpoint */}
+        <circle cx={xs(data.length - 1)} cy={ys(latest)} r="6" fill={lineColor} opacity="0.15" />
+        <circle cx={xs(data.length - 1)} cy={ys(latest)} r="3" fill={lineColor} />
       </svg>
     </div>
   )

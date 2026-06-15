@@ -90,11 +90,22 @@ function SurveyRow({ survey, onSelect }: { survey: Survey; onSelect: () => void 
       <td className="px-5 py-3.5">
         <SurveyStatusPill status={survey.status} />
       </td>
-      <td className="px-5 py-3.5 text-right tabular-nums">
+      <td className="px-5 py-3.5 text-right">
         {survey.csat !== null ? (
-          <span className="text-[#0f172a] font-semibold">{survey.csat}</span>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            borderRadius: 'var(--radius-sm)', minWidth: 36, padding: '3px 8px',
+            fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+            fontFamily: 'var(--lyra-font-sans)', letterSpacing: '-0.01em',
+            backgroundColor: survey.csat >= 70
+              ? 'var(--lyra-color-status-info-subtle)'
+              : survey.csat >= 50
+              ? 'var(--lyra-color-status-warning-subtle)'
+              : 'var(--lyra-color-status-critical-subtle)',
+            color: 'var(--lyra-color-fg-default)',
+          }}>{survey.csat}</span>
         ) : (
-          <span className="text-[#cbd5e1]">—</span>
+          <span style={{ color: 'var(--lyra-color-fg-secondary)' }}>—</span>
         )}
       </td>
       <td className="px-5 py-3.5 text-[#475569]">{topTopic}</td>

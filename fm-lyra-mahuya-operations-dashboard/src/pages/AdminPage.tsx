@@ -26,11 +26,11 @@ const NAV: NavItem[] = [
   { id: 'teams',               label: 'Teams',               icon: Network },
   { id: 'scheduling-unit',     label: 'Scheduling Unit',     icon: CalendarClock },
   {
-    id: 'locations', label: 'Locations', icon: MapPin, defaultOpen: true,
+    id: 'locations', label: 'Locations', icon: MapPin, defaultOpen: false,
     children: [{ id: 'location-definitions', label: 'Location Definitions' }],
   },
   {
-    id: 'recording', label: 'Recording', icon: Mic, defaultOpen: true,
+    id: 'recording', label: 'Recording', icon: Mic, defaultOpen: false,
     children: [
       { id: 'business-data',          label: 'Business Data' },
       { id: 'recording-policies',     label: 'Recording Policies' },
@@ -40,7 +40,7 @@ const NAV: NavItem[] = [
     ],
   },
   {
-    id: 'tenant-configuration', label: 'Tenant Configuration', icon: Settings, defaultOpen: true,
+    id: 'tenant-configuration', label: 'Tenant Configuration', icon: Settings, defaultOpen: false,
     children: [
       { id: 'account-settings',   label: 'Account Settings' },
       { id: 'data-share',         label: 'Data Share' },
@@ -49,7 +49,7 @@ const NAV: NavItem[] = [
     ],
   },
   {
-    id: 'security-settings', label: 'Security Settings', icon: Shield, defaultOpen: true,
+    id: 'security-settings', label: 'Security Settings', icon: Shield, defaultOpen: false,
     children: [
       { id: 'roles-and-permissions', label: 'Roles and Permissions' },
       { id: 'login-authenticator',   label: 'Login Authenticator' },

@@ -1,6 +1,27 @@
 import { useState, useMemo, useEffect, useRef, createContext, useContext } from 'react'
 import { Sparkles, Check, X, Pencil, ChevronDown } from 'lucide-react'
 
+/* ── CSAT badge — ≥70 blue · 50–69 orange · <50 red · black text ── */
+function CsatBadge({ value }: { value: number | string }) {
+  const num = typeof value === 'string' ? parseInt(value, 10) : value
+  const bg = num >= 70
+    ? 'var(--lyra-color-status-info-subtle)'
+    : num >= 50
+    ? 'var(--lyra-color-status-warning-subtle)'
+    : 'var(--lyra-color-status-critical-subtle)'
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      borderRadius: 'var(--radius-sm)', minWidth: 36, padding: '3px 8px',
+      fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+      fontFamily: 'var(--lyra-font-sans)',
+      backgroundColor: bg, color: 'var(--lyra-color-fg-default)', letterSpacing: '-0.01em',
+    }}>
+      {value}
+    </span>
+  )
+}
+
 /* Shared visibility flag for all AI insight / recommendation blocks.
    Default false = dashboard shows data only. A transparent top-right
    toggle flips it to reveal every insight at once. */
@@ -405,11 +426,14 @@ function KpiCard({ kpi, expanded, onToggle }: { kpi: Kpi; expanded: boolean; onT
         {kpi.csat && (
           <>
             <div className="w-px h-7 bg-[#E2E8F0]" />
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-[#64748B]">CSAT</span>
-              <span className="text-[32px] font-bold leading-[1] tracking-[-0.02em] text-[#3b82f6]">{kpi.csat.current}</span>
-              <span className="text-[#94A3B8] text-base">→</span>
-              <span className="text-[32px] font-bold leading-[1] tracking-[-0.02em] text-[#8b5cf6]">{kpi.csat.target}</span>
+            <div className="flex items-center gap-2">
+              <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: 'var(--lyra-font-sans)' }}>CSAT</span>
+              <CsatBadge value={kpi.csat.current} />
+              <span style={{ color: 'var(--lyra-color-fg-secondary)', fontSize: 14, fontFamily: 'var(--lyra-font-sans)' }}>→</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#4E39A8', fontFamily: 'var(--lyra-font-sans)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Sparkles size={12} />
+                {kpi.csat.target}
+              </span>
             </div>
           </>
         )}

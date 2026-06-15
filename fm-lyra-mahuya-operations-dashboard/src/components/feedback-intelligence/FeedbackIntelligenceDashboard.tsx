@@ -6,6 +6,68 @@ import { getSurveysForCampaign } from '@/lib/surveys'
 import { TopicsTable } from './TopicsTable'
 import { SurveysList } from './SurveysList'
 
+/* ── Lyra design token aliases (keep all color/font/radius in one place) ── */
+const F = 'var(--lyra-font-sans)'
+// Foreground
+const FG         = 'var(--lyra-color-fg-default)'       // rgba(0,0,0,80%)
+const FG_SEC     = 'var(--lyra-color-fg-secondary)'     // rgba(0,0,0,60%)
+const FG_DIS     = 'var(--lyra-color-fg-disabled)'      // rgba(0,0,0,30%)
+const FG_LINK    = 'var(--lyra-color-fg-link)'          // #185BA4
+const FG_ACTIVE  = 'var(--lyra-color-fg-active-strong)' // #185BA4
+// Background
+const BG_BASE    = 'var(--lyra-color-bg-surface-base)'  // #FFF
+const BG_SHELL   = 'var(--lyra-color-bg-surface-shell)' // #F5F7F9
+const BG_HOVER   = 'var(--lyra-color-state-bg-hover-opacity)'
+// Border
+const BD_SOFT    = 'var(--lyra-color-border-soft)'
+const BD_SUBTLE  = 'var(--lyra-color-border-subtle)'
+const BD_FOCUS   = 'var(--lyra-color-border-focus-default)'
+// Status
+const S_SUC_BG   = 'var(--lyra-color-status-success-subtle)'
+const S_SUC_FG   = 'var(--lyra-color-status-success-strong)'
+const S_WARN_BG  = 'var(--lyra-color-status-warning-subtle)'
+const S_WARN_FG  = 'var(--lyra-color-status-warning-strong)'
+const S_CRIT_BG  = 'var(--lyra-color-status-critical-subtle)'
+const S_CRIT_FG  = 'var(--lyra-color-status-critical-strong)'
+// Brand
+const BRAND_600  = 'var(--lyra-brand-600)'  // #166CCA — interactive accent
+const BRAND_700  = 'var(--lyra-brand-700)'  // #185BA4
+// AI (Lyra spec: purple-700 = #4E39A8)
+const AI_BG      = 'var(--lyra-color-bg-ai)'  // rgba(143,115,227,4%)
+const AI_COLOR   = '#4E39A8'                   // --lyra-purple-700
+const AI_BORDER  = 'rgba(78,57,168,0.18)'
+// Radius
+const R_SM  = 'var(--radius-sm)'
+const R_MD  = 'var(--radius-md)'
+const R_LG  = 'var(--radius-lg)'
+const R_XL  = 'var(--radius-xl)'
+const R_FULL = 'var(--radius-full)'
+// Shadows
+const SH_SM = 'var(--sol-effect-shadowsm)'
+const SH_MD = 'var(--sol-effect-shadowmd)'
+const SH_LG = 'var(--sol-effect-shadowlg)'
+
+/* ── CSAT badge — ≥70 blue · 50–69 orange · <50 red · black text ── */
+function CsatBadge({ value }: { value: number | string | null | undefined }) {
+  if (value == null || value === '—') return <span style={{ color: FG_SEC, fontSize: 14, fontFamily: F }}>—</span>
+  const num = typeof value === 'string' ? parseInt(value, 10) : value
+  const bg = num >= 70
+    ? 'var(--lyra-color-status-info-subtle)'
+    : num >= 50
+    ? 'var(--lyra-color-status-warning-subtle)'
+    : 'var(--lyra-color-status-critical-subtle)'
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      borderRadius: R_SM, minWidth: 36, padding: '3px 8px',
+      fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums', fontFamily: F,
+      backgroundColor: bg, color: FG, letterSpacing: '-0.01em',
+    }}>
+      {value}
+    </span>
+  )
+}
+
 /* Shared visibility flag for all AI insight / recommendation blocks.
    Default false = dashboard shows data only. A transparent top-right
    toggle flips it to reveal every insight at once. */
@@ -41,7 +103,7 @@ export function FeedbackIntelligenceDashboard({
 
   return (
     <InsightsVisibleContext.Provider value={showInsights}>
-      <div className="relative space-y-4">
+      <div className="relative space-y-8">
         {/* Filter row appears with the cards (no delay) */}
         <div style={enter(0)}>
           <FilterRow />
@@ -70,7 +132,7 @@ function BottomInsightsRow() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const toggle = (i: number) => () => setOpenIndex(openIndex === i ? null : i)
   return (
-    <div className="grid grid-cols-2 gap-4 items-stretch">
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, alignItems: 'stretch' }}>
       <ByCustomerTypePanel expanded={openIndex === 0} onToggle={toggle(0)} />
       <ByChannelPanel      expanded={openIndex === 1} onToggle={toggle(1)} />
     </div>
@@ -86,12 +148,16 @@ function CampaignKpiTiles({ campaign }: { campaign?: Campaign }) {
   const respRateSeries = campaign.sparkline ?? []
   const csatSeries = campaign.csatSeries ?? []
 
+  const responseRateLatest = respRateSeries.length ? respRateSeries[respRateSeries.length - 1] : 67
+  const responseRateFirst  = respRateSeries.length ? respRateSeries[0] : 61
+  const rrDelta = responseRateLatest - responseRateFirst
+
   return (
-    <div className="grid grid-cols-4 gap-4">
-      <CampaignKpiTile title="Surveys Sent" data={sentSeries} color="#3b82f6" displayValue="sum" />
-      <CampaignKpiTile title="Responses Received" data={respSeries} color="#0ea5e9" displayValue="sum" />
-      <CampaignKpiTile title="Response Rate" data={respRateSeries} color="#16a34a" displayValue="latest" unit="%" />
-      <CampaignKpiTile title="CSAT" data={csatSeries} color="#f59e0b" displayValue="latest" />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+      <CampaignKpiTile title="Surveys Sent" data={sentSeries} displayValue="sum" />
+      <CampaignKpiTile title="Responses Received" data={respSeries} displayValue="sum" />
+      <ResponseRateKpiTile value={responseRateLatest} target={60} delta={rrDelta} />
+      <CampaignKpiTile title="CSAT" data={csatSeries} displayValue="latest" />
     </div>
   )
 }
@@ -108,26 +174,113 @@ function aggregateTopicSeries(
   )
 }
 
+/* Response Rate card — mirrors CampaignKpiTile structure exactly, replaces sparkline with progress bar */
+function ResponseRateKpiTile({ value, target, delta }: { value: number; target: number; delta: number }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t) }, [])
+  const [tooltip, setTooltip] = useState<{ x: number } | null>(null)
+
+  const pct = mounted ? Math.min(value, 100) : 0
+  const gap = Math.abs(value - target)
+  // >60 blue · 30–60 orange · <30 red — matches campaign table ResponseRateCell
+  const barColor = value > 60 ? S_SUC_FG : value >= 30 ? S_WARN_FG : S_CRIT_FG
+  const valueColor = value > 60 ? S_SUC_FG : value >= 30 ? S_WARN_FG : S_CRIT_FG
+  const deltaColor = delta > 0 ? S_SUC_FG : delta < 0 ? S_CRIT_FG : FG_SEC
+
+  return (
+    <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_MD, padding: 12, fontFamily: F }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+        <span style={{ fontSize: 12, fontWeight: 500, color: FG_SEC, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: F }}>Response Rate</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: deltaColor, fontVariantNumeric: 'tabular-nums', fontFamily: F }}>
+          {delta > 0 ? '+' : ''}{delta}pp
+        </span>
+      </div>
+      {/* Value */}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
+        <span style={{ fontSize: 24, fontWeight: 600, color: valueColor, fontVariantNumeric: 'tabular-nums', lineHeight: 1, letterSpacing: '-0.02em', fontFamily: F }}>{value}</span>
+        <span style={{ fontSize: 14, fontWeight: 400, color: valueColor, lineHeight: 1, fontFamily: F, opacity: 0.75 }}>%</span>
+      </div>
+      {/* Chart zone */}
+      <div style={{ height: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
+        {/* Labels */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', marginBottom: 6 }}>
+          <span style={{ fontSize: 11, color: FG_SEC, fontFamily: F }}>0%</span>
+          <span style={{ position: 'absolute', left: `${target}%`, transform: 'translateX(-50%)', fontSize: 11, color: FG_SEC, whiteSpace: 'nowrap', fontFamily: F }}>
+            Target {target}%
+          </span>
+          <span style={{ fontSize: 11, color: FG_SEC, fontFamily: F }}>100%</span>
+        </div>
+        {/* Track */}
+        <div
+          style={{ position: 'relative', width: '100%', height: 12, borderRadius: R_FULL, background: BD_SUBTLE, cursor: 'default' }}
+          onMouseMove={e => { const r = (e.currentTarget as HTMLElement).getBoundingClientRect(); setTooltip({ x: e.clientX - r.left }) }}
+          onMouseLeave={() => setTooltip(null)}
+        >
+          <div style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`,
+            borderRadius: R_FULL, background: barColor,
+            transition: 'width 0.9s cubic-bezier(0.4,0,0.2,1)',
+          }} />
+          <div style={{
+            position: 'absolute', top: -2, bottom: -2, left: `${target}%`, transform: 'translateX(-50%)',
+            width: 2, borderRadius: 2, background: FG, opacity: 0.35,
+          }} />
+        </div>
+        {/* Tooltip */}
+        {tooltip && (
+          <div style={{
+            position: 'absolute', bottom: 20, left: tooltip.x, transform: 'translateX(-50%)',
+            background: 'var(--lyra-color-bg-surface-inverse)', color: 'var(--lyra-color-fg-inverse)',
+            fontSize: 12, fontWeight: 500, fontFamily: F,
+            padding: '4px 8px', borderRadius: R_SM,
+            whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
+            boxShadow: SH_LG, lineHeight: 1.5,
+          }}>
+            <div style={{ fontWeight: 600 }}>{value}% current</div>
+            <div style={{ opacity: 0.7, fontSize: 11 }}>
+              Target {target}% · {value >= target ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Trend palette shared across chart components
+const CHART_UP_LINE   = '#185BA4'  // brand-700
+const CHART_UP_GRAD   = '#4896EC'  // brand-400
+const CHART_DOWN_LINE = '#DC2626'
+const CHART_DOWN_GRAD = '#EF4444'
+const CHART_FLAT_LINE = '#82959E'  // slate-500
+const CHART_FLAT_GRAD = '#A8B3BB'  // slate-400
+
+function chartTrendColors(first: number, last: number) {
+  const pct = Math.abs(first) > 0 ? (last - first) / Math.abs(first) : 0
+  if (pct > 0.01)  return { line: CHART_UP_LINE,   grad: CHART_UP_GRAD }
+  if (pct < -0.01) return { line: CHART_DOWN_LINE, grad: CHART_DOWN_GRAD }
+  return { line: CHART_FLAT_LINE, grad: CHART_FLAT_GRAD }
+}
+
 function CampaignKpiTile({
   title,
   data,
-  color,
   displayValue,
   unit = '',
 }: {
   title: string
   data: number[]
-  color: string
   displayValue: 'sum' | 'latest'
   unit?: string
 }) {
   if (!data.length) {
     return (
-      <div className="bg-white border border-[#e2e8f0] rounded-[10px] p-3">
-        <div className="text-[10px] font-medium text-[#94a3b8] uppercase tracking-[0.05em] mb-2">
+      <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_MD, padding: 12, fontFamily: F }}>
+        <div style={{ fontSize: 12, fontWeight: 500, color: FG_SEC, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8, fontFamily: F }}>
           {title}
         </div>
-        <div className="text-[12px] text-[#94a3b8]">No data</div>
+        <div style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>No data</div>
       </div>
     )
   }
@@ -149,7 +302,6 @@ function CampaignKpiTile({
 
   const path = data.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xs(i)} ${ys(v)}`).join(' ')
   const areaPath = `${path} L ${xs(data.length - 1)} ${padding.top + ch} L ${xs(0)} ${padding.top + ch} Z`
-  const gradId = `ck-${title.replace(/\W/g, '').toLowerCase()}-${color.replace('#', '')}`
 
   const latest = data[data.length - 1]
   const first = data[0]
@@ -157,55 +309,57 @@ function CampaignKpiTile({
   const headline = displayValue === 'sum' ? total : latest
   const delta = latest - first
   const deltaPct = first !== 0 ? Math.round((delta / first) * 100) : 0
-  const deltaColor = delta > 0 ? '#16a34a' : delta < 0 ? '#dc2626' : '#94a3b8'
+  const deltaColor = delta > 0 ? S_SUC_FG : delta < 0 ? S_CRIT_FG : FG_SEC
+
+  const { line: lineColor, grad: gradColor } = chartTrendColors(first, latest)
+  const gradId = `ck-${title.replace(/\W/g, '').toLowerCase()}`
 
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[10px] p-3">
-      <div className="flex items-baseline justify-between mb-1">
-        <span className="text-[10px] font-medium text-[#94a3b8] uppercase tracking-[0.05em]">
+    <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_MD, padding: 12, fontFamily: F }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+        <span style={{ fontSize: 12, fontWeight: 500, color: FG_SEC, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: F }}>
           {title}
         </span>
-        <span className="text-[10px] font-semibold tabular-nums" style={{ color: deltaColor }}>
-          {delta > 0 ? '+' : ''}
-          {deltaPct}%
+        <span style={{ fontSize: 12, fontWeight: 600, color: deltaColor, fontVariantNumeric: 'tabular-nums', fontFamily: F }}>
+          {delta > 0 ? '+' : ''}{deltaPct}%
         </span>
       </div>
-      <div className="flex items-baseline gap-1 mb-1">
-        <span className="text-[24px] font-bold text-[#0f172a] tabular-nums leading-none">
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
+        <span style={{ fontSize: 24, fontWeight: 600, color: FG, fontVariantNumeric: 'tabular-nums', lineHeight: 1, letterSpacing: '-0.02em', fontFamily: F }}>
           {displayValue === 'sum' ? headline.toLocaleString() : headline}
         </span>
-        {unit && <span className="text-[13px] text-[#64748b] leading-none">{unit}</span>}
+        {unit && <span style={{ fontSize: 14, fontWeight: 400, color: FG_SEC, lineHeight: 1, fontFamily: F }}>{unit}</span>}
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-[90px]" preserveAspectRatio="none">
+      <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 90 }} preserveAspectRatio="none">
         <defs>
           <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.22" />
-            <stop offset="100%" stopColor={color} stopOpacity="0" />
+            <stop offset="0%"   stopColor={gradColor} stopOpacity="0.38" />
+            <stop offset="40%"  stopColor={lineColor}  stopOpacity="0.14" />
+            <stop offset="100%" stopColor={lineColor}  stopOpacity="0" />
           </linearGradient>
         </defs>
-        <text x={padding.left - 4} y={padding.top + 4} textAnchor="end" fill="#cbd5e1" fontSize="9">
+        <text x={padding.left - 4} y={padding.top + 4} textAnchor="end" fill="#c8d0d8" fontSize="10">
           {Math.round(max)}
         </text>
-        <text x={padding.left - 4} y={padding.top + ch} textAnchor="end" fill="#cbd5e1" fontSize="9">
+        <text x={padding.left - 4} y={padding.top + ch} textAnchor="end" fill="#c8d0d8" fontSize="10">
           {Math.round(min)}
         </text>
-        <text x={padding.left} y={height - 6} textAnchor="start" fill="#94a3b8" fontSize="9">
+        <text x={padding.left} y={height - 6} textAnchor="start" fill="#a8b3bb" fontSize="10">
           Day 1
         </text>
-        <text x={width - padding.right} y={height - 6} textAnchor="end" fill="#94a3b8" fontSize="9">
+        <text x={width - padding.right} y={height - 6} textAnchor="end" fill="#a8b3bb" fontSize="10">
           Today
         </text>
         <line
-          x1={padding.left}
-          y1={padding.top + ch}
-          x2={width - padding.right}
-          y2={padding.top + ch}
-          stroke="#e2e8f0"
-          strokeWidth="1"
+          x1={padding.left} y1={padding.top + ch}
+          x2={width - padding.right} y2={padding.top + ch}
+          stroke="rgba(0,0,0,0.06)" strokeWidth="1"
         />
         <path d={areaPath} fill={`url(#${gradId})`} />
-        <path d={path} fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx={xs(data.length - 1)} cy={ys(latest)} r="3" fill={color} />
+        <path d={path} fill="none" stroke={lineColor} strokeWidth="2" strokeLinecap="round" />
+        {/* Glow halo behind endpoint */}
+        <circle cx={xs(data.length - 1)} cy={ys(latest)} r="6" fill={lineColor} opacity="0.15" />
+        <circle cx={xs(data.length - 1)} cy={ys(latest)} r="3" fill={lineColor} />
       </svg>
     </div>
   )
@@ -215,12 +369,12 @@ function CampaignKpiTile({
 function TopTopicsSection({ campaign }: { campaign?: Campaign }) {
   const topics = campaign?.topics ?? []
   return (
-    <section>
-      <div className="flex items-baseline justify-between mb-3">
-        <h2 className="text-[16px] font-semibold text-[#0f172a]">
+    <section style={{ fontFamily: F }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 500, color: FG, letterSpacing: '-0.01em', fontFamily: F, margin: 0 }}>
           Top intents in this campaign
         </h2>
-        <span className="text-[11px] text-[#94a3b8]">
+        <span style={{ fontSize: 12, fontWeight: 400, color: FG_SEC, fontFamily: F }}>
           Click a row for 14-day trend breakdown
         </span>
       </div>
@@ -237,7 +391,9 @@ function RecentSurveysSection({
   campaign?: Campaign
   onOpenSurvey?: (surveyId: string) => void
 }) {
-  const surveys = campaign ? getSurveysForCampaign(campaign.id) : []
+  const surveys = (campaign ? getSurveysForCampaign(campaign.id) : [])
+    .slice()
+    .sort((a, b) => new Date(b.interaction.date).getTime() - new Date(a.interaction.date).getTime())
   return (
     <SurveysList
       surveys={surveys}
@@ -272,21 +428,22 @@ function AIInsight({
     if (editing) inputRef.current?.focus()
   }, [editing])
 
-  const text = size === 'xs' ? 'text-[11px]' : 'text-[12px]'
+  const textSize = size === 'xs' ? 12 : 12
   const iconSize = size === 'xs' ? 'h-3 w-3' : 'h-3.5 w-3.5'
 
   /* -------- COLLAPSED: Done -------- */
   if (status === 'done') {
     return (
-      <div className="group rounded-[8px] bg-[#f0fdf4] border border-[#bbf7d0] px-2.5 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#16a34a] flex items-center justify-center">
-          <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group" style={{ borderRadius: R_MD, background: S_SUC_BG, border: `1px solid rgba(35,114,45,0.2)`, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 6, fontFamily: F }}>
+        <div style={{ width: 14, height: 14, flexShrink: 0, borderRadius: R_FULL, background: S_SUC_FG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#16a34a] leading-none">Done · {TODAY}</span>
-        <span className="text-[11px] text-[#166534] leading-tight flex-1 min-w-0 truncate">· {actionText}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: S_SUC_FG, letterSpacing: '0.05em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F }}>Done · {TODAY}</span>
+        <span style={{ fontSize: 12, fontWeight: 400, color: S_SUC_FG, lineHeight: 1.3, fontFamily: F, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>· {actionText}</span>
         <button
           onClick={() => setStatus('pending')}
-          className="text-[10px] font-medium text-[#16a34a] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+          style={{ fontSize: 12, fontWeight: 500, color: S_SUC_FG, fontFamily: F, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}
+          className="hover:underline opacity-0 group-hover:opacity-100 transition-opacity"
           title="Undo"
         >
           Undo
@@ -298,14 +455,15 @@ function AIInsight({
   /* -------- COLLAPSED: Dismissed -------- */
   if (status === 'dismissed') {
     return (
-      <div className="group rounded-[8px] bg-[#f8fafc] border border-[#e2e8f0] px-2.5 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#94a3b8] flex items-center justify-center">
-          <X className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group" style={{ borderRadius: R_MD, background: BG_SHELL, border: `1px solid ${BD_SOFT}`, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 6, fontFamily: F }}>
+        <div style={{ width: 14, height: 14, flexShrink: 0, borderRadius: R_FULL, background: FG_DIS, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <X className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8] leading-none flex-1">Dismissed · {TODAY}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: FG_SEC, letterSpacing: '0.05em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F, flex: 1 }}>Dismissed · {TODAY}</span>
         <button
           onClick={() => setStatus('pending')}
-          className="text-[10px] font-medium text-[#64748b] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+          style={{ fontSize: 12, fontWeight: 500, color: FG_SEC, fontFamily: F, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}
+          className="hover:underline opacity-0 group-hover:opacity-100 transition-opacity"
           title="Undo"
         >
           Undo
@@ -326,40 +484,37 @@ function AIInsight({
   const cancelEdit = () => setEditing(false)
 
   return (
-    <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] px-2.5 py-2 flex flex-col gap-1.5">
+    <div style={{ borderRadius: R_MD, background: AI_BG, border: `1px solid ${AI_BORDER}`, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 6, fontFamily: F }}>
       {/* Body */}
-      <div className="flex items-start gap-1.5">
-        <Sparkles className={`${iconSize} text-[#6366f1] flex-shrink-0 mt-px`} fill="#6366f1" />
-        <p className={`${text} text-[#1e3a8a] leading-[1.45] flex-1 min-w-0`}>
-          {header && <strong>{header} · </strong>}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+        <Sparkles className={iconSize} style={{ color: AI_COLOR, flexShrink: 0, marginTop: 1 }} fill={AI_COLOR} />
+        <p style={{ fontSize: textSize, color: FG, lineHeight: 1.45, fontFamily: F, flex: 1, minWidth: 0, margin: 0 }}>
+          {header && <strong style={{ fontWeight: 600, color: AI_COLOR }}>{header} · </strong>}
           {children}
         </p>
       </div>
 
       {/* Accordion: Recommended action */}
       {action && (
-        <div className="pt-1.5 border-t border-[#dbeafe] flex flex-col gap-1.5">
-          {/* Accordion trigger */}
+        <div style={{ paddingTop: 6, borderTop: `1px solid ${AI_BORDER}`, display: 'flex', flexDirection: 'column', gap: 6 }}>
           <button
             onClick={() => setExpanded(v => !v)}
-            className="flex items-center gap-1 text-left outline-none focus:outline-none group"
+            style={{ display: 'flex', alignItems: 'center', gap: 4, textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
             <ChevronDown
-              className={`h-3 w-3 text-[#6366f1] flex-shrink-0 transition-transform duration-200 ${
-                expanded ? 'rotate-0' : '-rotate-90'
-              }`}
+              className="h-3 w-3"
+              style={{ color: AI_COLOR, flexShrink: 0, transition: 'transform 0.2s', transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}
               strokeWidth={2.5}
             />
-            <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6366f1] leading-none group-hover:text-[#4f46e5] transition-colors">
+            <span style={{ fontSize: 12, fontWeight: 600, color: AI_COLOR, letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F }}>
               Recommended action
             </span>
           </button>
 
-          {/* Accordion content */}
           {expanded && (
-            <div className="flex flex-col gap-1.5 pl-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingLeft: 16, fontFamily: F }}>
               {editing ? (
-                <div className="flex items-center gap-1">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <input
                     ref={inputRef}
                     value={draft}
@@ -368,47 +523,37 @@ function AIInsight({
                       if (e.key === 'Enter') saveEdit()
                       if (e.key === 'Escape') cancelEdit()
                     }}
-                    className="flex-1 min-w-0 text-[11px] text-[#1e3a8a] bg-white border border-[#c7d2fe] rounded-[4px] px-1.5 py-1 outline-none focus:border-[#6366f1]"
+                    style={{ fontSize: 12, color: FG, fontFamily: F, flex: 1, minWidth: 0, background: BG_BASE, border: `1px solid ${AI_BORDER}`, borderRadius: R_SM, padding: '4px 6px', outline: 'none' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = BD_FOCUS; e.currentTarget.style.boxShadow = `0 0 0 2px rgba(78,57,168,0.15)` }}
+                    onBlur={e => { e.currentTarget.style.borderColor = AI_BORDER; e.currentTarget.style.boxShadow = '' }}
                   />
-                  <button
-                    onClick={saveEdit}
-                    title="Save"
-                    className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-[#6366f1] hover:bg-[#4f46e5] flex items-center justify-center transition-colors outline-none focus:outline-none"
-                  >
-                    <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+                  <button onClick={saveEdit} title="Save" aria-label="Save" style={{ width: 20, height: 20, flexShrink: 0, borderRadius: R_SM, background: AI_COLOR, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
                   </button>
-                  <button
-                    onClick={cancelEdit}
-                    title="Cancel"
-                    className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-white border border-[#c7d2fe] hover:border-[#94a3b8] flex items-center justify-center transition-colors outline-none focus:outline-none"
-                  >
-                    <X className="h-2.5 w-2.5 text-[#64748b]" strokeWidth={3} />
+                  <button onClick={cancelEdit} title="Cancel" aria-label="Cancel" style={{ width: 20, height: 20, flexShrink: 0, borderRadius: R_SM, background: BG_BASE, border: `1px solid ${AI_BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    <X className="h-2.5 w-2.5" style={{ color: FG_SEC }} strokeWidth={3} />
                   </button>
                 </div>
               ) : (
-                <div className="flex items-start gap-1.5">
-                  <p className="text-[11px] text-[#1e3a8a] leading-snug flex-1">{actionText}</p>
-                  <button
-                    onClick={startEdit}
-                    title="Edit action"
-                    className="text-[#6366f1] hover:text-[#4f46e5] transition-colors outline-none focus:outline-none flex-shrink-0 mt-px"
-                  >
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+                  <p style={{ fontSize: 12, color: FG, lineHeight: 1.4, fontFamily: F, flex: 1, margin: 0 }}>{actionText}</p>
+                  <button onClick={startEdit} title="Edit action" aria-label="Edit action" style={{ background: 'none', border: 'none', cursor: 'pointer', color: AI_COLOR, flexShrink: 0, marginTop: 1, padding: 0 }}>
                     <Pencil className="h-2.5 w-2.5" />
                   </button>
                 </div>
               )}
 
               {!editing && (
-                <div className="flex items-center gap-1.5">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <button
                     onClick={() => setStatus('done')}
-                    className="text-[10px] font-semibold text-white bg-[#6366f1] hover:bg-[#4f46e5] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none"
+                    style={{ fontSize: 12, fontWeight: 600, fontFamily: F, color: 'var(--lyra-color-fg-inverse)', background: AI_COLOR, border: 'none', borderRadius: R_SM, padding: '4px 8px', cursor: 'pointer' }}
                   >
                     Approve
                   </button>
                   <button
                     onClick={() => setStatus('dismissed')}
-                    className="text-[10px] font-semibold text-[#64748b] bg-white border border-[#c7d2fe] hover:bg-[#f8fafc] hover:text-[#0f172a] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none"
+                    style={{ fontSize: 12, fontWeight: 600, fontFamily: F, color: FG_SEC, background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_SM, padding: '4px 8px', cursor: 'pointer' }}
                   >
                     Dismiss
                   </button>
@@ -423,21 +568,33 @@ function AIInsight({
 }
 
 /* ---------- 1. Filter row ---------- */
+const CHEVRON_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2382959e' d='M6 8L2 4h8z'/%3E%3C/svg%3E")`
+
 function FilterRow() {
   const filters = ['Last 60 days', 'All Intents', 'All Customer Types', 'All Channels']
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         {filters.map(label => (
           <select
             key={label}
-            className="h-[32px] px-3 bg-white border border-[#e2e8f0] rounded-[8px] text-[12px] text-[#0f172a] font-medium hover:border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M6%208L2%204h8z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[center_right_10px] pr-8"
+            style={{
+              height: 32, paddingLeft: 12, paddingRight: 32,
+              background: `${BG_BASE} ${CHEVRON_SVG} no-repeat right 10px center`,
+              border: `1px solid ${BD_SOFT}`,
+              borderRadius: R_MD,
+              fontSize: 14, fontWeight: 500, color: FG,
+              fontFamily: F,
+              appearance: 'none', cursor: 'pointer', outline: 'none',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = BD_FOCUS; e.currentTarget.style.boxShadow = `0 0 0 2px rgba(24,91,164,0.15)` }}
+            onBlur={e => { e.currentTarget.style.borderColor = BD_SOFT; e.currentTarget.style.boxShadow = '' }}
           >
             <option>{label}</option>
           </select>
         ))}
       </div>
-      <div className="text-[12px] text-[#94a3b8]">May 14, 2026 · 09:14</div>
+      <div style={{ fontSize: 12, fontWeight: 400, color: FG_SEC, fontFamily: F }}>May 14, 2026 · 09:14</div>
     </div>
   )
 }
@@ -505,11 +662,11 @@ const KPIS: Kpi[] = [
     headline: (
       <>
         2 SLA breaches · 1 campaign spike to replicate
-        <span className="text-[#94A3B8] mx-1">|</span>
-        <span className="text-[#94A3B8]">CSAT </span>
-        <span className="text-[#3b82f6] font-semibold">87</span>
-        <span className="text-[#94A3B8]"> → </span>
-        <span className="text-[#8b5cf6] font-semibold">60</span>
+        <span style={{ color: FG_SEC, margin: '0 4px' }}>|</span>
+        <span style={{ color: FG_SEC }}>CSAT </span>
+        <span style={{ color: BRAND_600, fontWeight: 600 }}>87</span>
+        <span style={{ color: FG_SEC }}> → </span>
+        <span style={{ color: AI_COLOR, fontWeight: 600 }}>60</span>
       </>
     ),
     insightBullets: [
@@ -546,7 +703,7 @@ const KPIS: Kpi[] = [
 function KpiCards() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
       {KPIS.map((k, i) => (
         <KpiCard
           key={k.label}
@@ -561,91 +718,82 @@ function KpiCards() {
 
 function KpiCard({ kpi, expanded, onToggle }: { kpi: Kpi; expanded: boolean; onToggle: () => void }) {
   const insightsVisible = useContext(InsightsVisibleContext)
-  // Match the chart palette: low outliers = purple, spike = blue
   const valueColor =
-    kpi.kind === 'negative' ? '#8b5cf6' :
-    kpi.kind === 'positive' ? '#3b82f6' :
-    '#0f172a'
+    kpi.kind === 'negative' ? AI_COLOR :
+    kpi.kind === 'positive' ? BRAND_600 :
+    FG
 
   const subtitleColor =
-    kpi.kind === 'negative' ? '#8b5cf6' :
-    kpi.kind === 'positive' ? '#0f172a' :
-    '#0f172a'
+    kpi.kind === 'negative' ? AI_COLOR :
+    FG
 
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] p-4">
-      <div className="text-[10px] font-medium text-[#94a3b8] uppercase tracking-[0.5px] mb-2 leading-none">
+    <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_LG, padding: 16, fontFamily: F }}>
+      <div style={{ fontSize: 12, fontWeight: 500, color: FG_SEC, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8, lineHeight: 1, fontFamily: F }}>
         {kpi.label}
       </div>
 
-      {/* Value row — optionally extended with a secondary metric (CSAT) */}
-      <div className="flex items-center gap-4 mb-2">
-        <div
-          className="text-[32px] font-bold leading-[1] tracking-[-0.02em]"
-          style={{ color: valueColor }}
-        >
+      {/* Value row */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 }}>
+        <div style={{ fontSize: 32, fontWeight: 600, lineHeight: 1, letterSpacing: '-0.02em', color: valueColor, fontFamily: F }}>
           {kpi.value}
         </div>
         {kpi.csat && (
           <>
-            <div className="w-px h-7 bg-[#E2E8F0]" />
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-[#64748B]">CSAT</span>
-              <span className="text-[32px] font-bold leading-[1] tracking-[-0.02em] text-[#3b82f6]">{kpi.csat.current}</span>
-              <span className="text-[#94A3B8] text-base">→</span>
-              <span className="text-[32px] font-bold leading-[1] tracking-[-0.02em] text-[#8b5cf6]">{kpi.csat.target}</span>
+            <div style={{ width: 1, height: 28, background: BD_SOFT }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 400, color: FG_SEC, fontFamily: F }}>CSAT</span>
+              <CsatBadge value={kpi.csat.current} />
+              <span style={{ color: FG_SEC, fontSize: 14, fontFamily: F }}>→</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: AI_COLOR, fontFamily: F, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Sparkles size={12} />
+                {kpi.csat.target}
+              </span>
             </div>
           </>
         )}
       </div>
 
       {kpi.delta && (
-        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[#16a34a] mb-2 leading-none">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, lineHeight: 1, fontSize: 12, fontWeight: 600, color: S_SUC_FG, fontFamily: F }}>
           {kpi.delta.arrow && <span>{kpi.delta.arrow}</span>}
           <span>{kpi.delta.text}</span>
-          {kpi.delta.suffix && <span className="font-normal text-[#64748b]">{kpi.delta.suffix}</span>}
+          {kpi.delta.suffix && <span style={{ fontWeight: 400, color: FG_SEC }}>{kpi.delta.suffix}</span>}
         </div>
       )}
       {kpi.subtitle && (
-        <div
-          className="text-[12px] font-semibold mb-2 leading-none"
-          style={{ color: subtitleColor }}
-        >
+        <div style={{ marginBottom: 8, lineHeight: 1, fontSize: 12, fontWeight: 600, color: subtitleColor, fontFamily: F }}>
           {kpi.subtitle}
         </div>
       )}
       {kpi.note && (
-        <div className="text-[11px] text-[#64748B] mb-2 leading-snug">
+        <div style={{ marginBottom: 8, lineHeight: 1.4, fontSize: 12, fontWeight: 400, color: FG_SEC, fontFamily: F }}>
           {kpi.note}
         </div>
       )}
 
-      {/* Outer accordion — only present once AI recommendations are revealed */}
+      {/* AI insight accordion */}
       {insightsVisible && (
-        <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] overflow-hidden transition-all duration-200">
-          {/* Always-visible headline + toggle */}
+        <div style={{ borderRadius: R_MD, background: AI_BG, border: `1px solid ${AI_BORDER}`, overflow: 'hidden' }}>
           <button
             onClick={onToggle}
-            className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none hover:bg-[#e0ecfe] transition-colors"
+            style={{ display: 'flex', alignItems: 'flex-start', gap: 6, width: '100%', padding: '8px 10px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.06)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none' }}
           >
-            <Sparkles className="h-3 w-3 text-[#6366f1] flex-shrink-0 mt-0.5" fill="#6366f1" />
-            <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-              <p className="text-[11px] font-semibold text-[#1e3a8a] leading-snug line-clamp-1">{kpi.headline}</p>
-              <span className="text-[10px] font-medium text-[#6366f1] hover:text-[#4f46e5] transition-colors">
+            <Sparkles className="h-3 w-3" style={{ color: AI_COLOR, flexShrink: 0, marginTop: 2 }} fill={AI_COLOR} />
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: FG, lineHeight: 1.4, fontFamily: F, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' }}>{kpi.headline}</p>
+              <span style={{ fontSize: 12, fontWeight: 500, color: AI_COLOR, fontFamily: F }}>
                 {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
               </span>
             </div>
           </button>
 
-          {/* Expanded content */}
           <div
-            className="overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out"
-            style={{
-              maxHeight: expanded ? '600px' : '0px',
-              opacity: expanded ? 1 : 0,
-            }}
+            style={{ overflow: 'hidden', transition: 'max-height 0.2s ease, opacity 0.2s ease', maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
           >
-            <div className="px-2.5 pb-2 pt-1 border-t border-[#dbeafe]">
+            <div style={{ padding: '4px 10px 8px', borderTop: `1px solid ${AI_BORDER}` }}>
               <KpiInsightBody
                 insightBullets={kpi.insightBullets}
                 expectedImpact={kpi.expectedImpact}
@@ -681,24 +829,24 @@ function KpiInsightBody({
 
   if (status === 'done') {
     return (
-      <div className="group rounded-[6px] bg-[#f0fdf4] border border-[#bbf7d0] px-2 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#16a34a] flex items-center justify-center">
-          <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group" style={{ borderRadius: R_SM, background: S_SUC_BG, border: `1px solid rgba(35,114,45,0.2)`, padding: '6px 8px', display: 'flex', alignItems: 'center', gap: 6, fontFamily: F }}>
+        <div style={{ width: 14, height: 14, flexShrink: 0, borderRadius: R_FULL, background: S_SUC_FG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#16a34a] leading-none">Done · {TODAY}</span>
-        <span className="text-[11px] text-[#166534] leading-tight flex-1 min-w-0 truncate">· {actionText}</span>
-        <button onClick={() => setStatus('pending')} className="text-[10px] font-medium text-[#16a34a] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">Undo</button>
+        <span style={{ fontSize: 12, fontWeight: 600, color: S_SUC_FG, letterSpacing: '0.05em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F }}>Done · {TODAY}</span>
+        <span style={{ fontSize: 12, fontWeight: 400, color: S_SUC_FG, lineHeight: 1.3, fontFamily: F, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>· {actionText}</span>
+        <button onClick={() => setStatus('pending')} style={{ fontSize: 12, fontWeight: 500, color: S_SUC_FG, fontFamily: F, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }} className="hover:underline opacity-0 group-hover:opacity-100 transition-opacity">Undo</button>
       </div>
     )
   }
   if (status === 'dismissed') {
     return (
-      <div className="group rounded-[6px] bg-[#f8fafc] border border-[#e2e8f0] px-2 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#94a3b8] flex items-center justify-center">
-          <X className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group" style={{ borderRadius: R_SM, background: BG_SHELL, border: `1px solid ${BD_SOFT}`, padding: '6px 8px', display: 'flex', alignItems: 'center', gap: 6, fontFamily: F }}>
+        <div style={{ width: 14, height: 14, flexShrink: 0, borderRadius: R_FULL, background: FG_DIS, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <X className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8] leading-none flex-1">Dismissed · {TODAY}</span>
-        <button onClick={() => setStatus('pending')} className="text-[10px] font-medium text-[#64748b] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">Undo</button>
+        <span style={{ fontSize: 12, fontWeight: 600, color: FG_SEC, letterSpacing: '0.05em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F, flex: 1 }}>Dismissed · {TODAY}</span>
+        <button onClick={() => setStatus('pending')} style={{ fontSize: 12, fontWeight: 500, color: FG_SEC, fontFamily: F, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }} className="hover:underline opacity-0 group-hover:opacity-100 transition-opacity">Undo</button>
       </div>
     )
   }
@@ -708,35 +856,35 @@ function KpiInsightBody({
   const cancelEdit = () => setEditing(false)
 
   return (
-    <div className="flex flex-col gap-2">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontFamily: F }}>
       {/* Insight bullets */}
-      <ul className="flex flex-col gap-1 list-none">
+      <ul style={{ display: 'flex', flexDirection: 'column', gap: 4, listStyle: 'none', margin: 0, padding: 0 }}>
         {insightBullets.map((bullet, i) => (
-          <li key={i} className="flex items-start gap-1.5 text-[11px] text-[#1e3a8a] leading-[1.45]">
-            <span className="text-[#6366f1] font-bold flex-shrink-0 mt-px">•</span>
-            <span className="flex-1 min-w-0">{bullet}</span>
+          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 6, lineHeight: 1.45, fontSize: 12, color: FG, fontFamily: F }}>
+            <span style={{ color: AI_COLOR, fontWeight: 600, flexShrink: 0, marginTop: 1 }}>•</span>
+            <span style={{ flex: 1, minWidth: 0 }}>{bullet}</span>
           </li>
         ))}
       </ul>
 
       {/* Expected Impact */}
-      <div className="pt-1.5 border-t border-[#dbeafe] flex flex-col gap-1">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#64748b] leading-none">Expected Impact</span>
-        <ul className="flex flex-col gap-1 list-none">
+      <div style={{ paddingTop: 6, borderTop: `1px solid ${AI_BORDER}`, display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: FG_SEC, letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F }}>Expected Impact</span>
+        <ul style={{ display: 'flex', flexDirection: 'column', gap: 4, listStyle: 'none', margin: 0, padding: 0 }}>
           {expectedImpact.map((bullet, i) => (
-            <li key={i} className="flex items-start gap-1.5 text-[11px] text-[#0f172a] leading-[1.45]">
-              <span className="text-[#16a34a] font-bold flex-shrink-0 mt-px">•</span>
-              <span className="flex-1 min-w-0">{bullet}</span>
+            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 6, lineHeight: 1.45, fontSize: 12, color: FG, fontFamily: F }}>
+              <span style={{ color: S_SUC_FG, fontWeight: 600, flexShrink: 0, marginTop: 1 }}>•</span>
+              <span style={{ flex: 1, minWidth: 0 }}>{bullet}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="pt-1.5 border-t border-[#dbeafe] flex flex-col gap-1.5">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6366f1] leading-none">Recommended action</span>
+      <div style={{ paddingTop: 6, borderTop: `1px solid ${AI_BORDER}`, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: AI_COLOR, letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: 1, fontFamily: F }}>Recommended action</span>
 
         {editing ? (
-          <div className="flex items-center gap-1">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <input
               ref={inputRef}
               value={draft}
@@ -745,30 +893,32 @@ function KpiInsightBody({
                 if (e.key === 'Enter') saveEdit()
                 if (e.key === 'Escape') cancelEdit()
               }}
-              className="flex-1 min-w-0 text-[11px] text-[#1e3a8a] bg-white border border-[#c7d2fe] rounded-[4px] px-1.5 py-1 outline-none focus:border-[#6366f1]"
+              style={{ fontSize: 12, color: FG, fontFamily: F, flex: 1, minWidth: 0, background: BG_BASE, border: `1px solid ${AI_BORDER}`, borderRadius: R_SM, padding: '4px 6px', outline: 'none' }}
+              onFocus={e => { e.currentTarget.style.borderColor = BD_FOCUS; e.currentTarget.style.boxShadow = `0 0 0 2px rgba(78,57,168,0.15)` }}
+              onBlur={e => { e.currentTarget.style.borderColor = AI_BORDER; e.currentTarget.style.boxShadow = '' }}
             />
-            <button onClick={saveEdit} title="Save" className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-[#6366f1] hover:bg-[#4f46e5] flex items-center justify-center transition-colors outline-none focus:outline-none">
-              <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+            <button onClick={saveEdit} title="Save" aria-label="Save" style={{ width: 20, height: 20, flexShrink: 0, borderRadius: R_SM, background: AI_COLOR, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
             </button>
-            <button onClick={cancelEdit} title="Cancel" className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-white border border-[#c7d2fe] hover:border-[#94a3b8] flex items-center justify-center transition-colors outline-none focus:outline-none">
-              <X className="h-2.5 w-2.5 text-[#64748b]" strokeWidth={3} />
+            <button onClick={cancelEdit} title="Cancel" aria-label="Cancel" style={{ width: 20, height: 20, flexShrink: 0, borderRadius: R_SM, background: BG_BASE, border: `1px solid ${BD_SOFT}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <X className="h-2.5 w-2.5" style={{ color: FG_SEC }} strokeWidth={3} />
             </button>
           </div>
         ) : (
-          <div className="flex items-start gap-1.5">
-            <p className="text-[11px] text-[#1e3a8a] leading-snug flex-1">{actionText}</p>
-            <button onClick={startEdit} title="Edit action" className="text-[#6366f1] hover:text-[#4f46e5] transition-colors outline-none focus:outline-none flex-shrink-0 mt-px">
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+            <p style={{ fontSize: 12, color: FG, lineHeight: 1.4, fontFamily: F, flex: 1, margin: 0 }}>{actionText}</p>
+            <button onClick={startEdit} title="Edit action" aria-label="Edit action" style={{ background: 'none', border: 'none', cursor: 'pointer', color: AI_COLOR, flexShrink: 0, marginTop: 1, padding: 0 }}>
               <Pencil className="h-2.5 w-2.5" />
             </button>
           </div>
         )}
 
         {!editing && (
-          <div className="flex items-center gap-1.5">
-            <button onClick={() => setStatus('done')} className="text-[10px] font-semibold text-white bg-[#6366f1] hover:bg-[#4f46e5] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button onClick={() => setStatus('done')} style={{ fontSize: 12, fontWeight: 600, fontFamily: F, color: 'var(--lyra-color-fg-inverse)', background: AI_COLOR, border: 'none', borderRadius: R_SM, padding: '4px 8px', cursor: 'pointer' }}>
               Approve
             </button>
-            <button onClick={() => setStatus('dismissed')} className="text-[10px] font-semibold text-[#64748b] bg-white border border-[#c7d2fe] hover:bg-[#f8fafc] hover:text-[#0f172a] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none">
+            <button onClick={() => setStatus('dismissed')} style={{ fontSize: 12, fontWeight: 600, fontFamily: F, color: FG_SEC, background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_SM, padding: '4px 8px', cursor: 'pointer' }}>
               Dismiss
             </button>
           </div>
@@ -781,24 +931,24 @@ function KpiInsightBody({
 /* ---------- 3. Response-Rate-Over-Time card ---------- */
 function ResponseRateOverTimeCard() {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[16px] shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] overflow-hidden">
+    <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_XL, boxShadow: SH_MD, overflow: 'hidden' }}>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[#e2e8f0]">
-        <div className="flex items-start justify-between mb-2">
+      <div style={{ padding: '12px 16px', borderBottom: `1px solid ${BD_SUBTLE}` }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
           <div>
-            <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">
+            <h3 style={{ fontSize: 14, fontWeight: 600, color: FG, marginBottom: 2, lineHeight: 1.2, fontFamily: F, margin: '0 0 2px 0' }}>
               Response Rate Over Time
             </h3>
-            <p className="text-[11px] text-[#94a3b8] leading-tight">
+            <p style={{ fontSize: 12, color: FG_SEC, lineHeight: 1.2, fontFamily: F, margin: 0 }}>
               Mar 15 – May 14, 2026 · Weekends shaded · Outliers flagged
             </p>
           </div>
-          <div className="flex items-center gap-3 pt-1 px-2.5 py-1.5 rounded-full bg-[#f8fafc] border border-[#e2e8f0]">
-            <LegendDot label="Weekend" swatch={<span className="w-3 h-3 bg-[#f1f5f9] border border-[#e2e8f0] rounded-[2px] inline-block" />} />
-            <span className="w-px h-3 bg-[#e2e8f0]" />
-            <LegendDot label="Low outlier" swatch={<span className="w-2 h-2 bg-[#8b5cf6] rounded-full inline-block" />} />
-            <span className="w-px h-3 bg-[#e2e8f0]" />
-            <LegendDot label="Spike" swatch={<span className="w-2 h-2 bg-[#3b82f6] rounded-full inline-block" />} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '4px 10px 4px 10px', borderRadius: R_FULL, background: BG_SHELL, border: `1px solid ${BD_SUBTLE}` }}>
+            <LegendDot label="Weekend" swatch={<span style={{ width: 12, height: 12, background: BG_SHELL, border: `1px solid ${BD_SUBTLE}`, borderRadius: 2, display: 'inline-block' }} />} />
+            <span style={{ width: 1, height: 12, background: BD_SUBTLE, display: 'inline-block' }} />
+            <LegendDot label="Low outlier" swatch={<span style={{ width: 8, height: 8, background: AI_COLOR, borderRadius: '50%', display: 'inline-block' }} />} />
+            <span style={{ width: 1, height: 12, background: BD_SUBTLE, display: 'inline-block' }} />
+            <LegendDot label="Spike" swatch={<span style={{ width: 8, height: 8, background: BRAND_600, borderRadius: '50%', display: 'inline-block' }} />} />
           </div>
         </div>
       </div>
@@ -807,7 +957,7 @@ function ResponseRateOverTimeCard() {
       <OutlierAnnotationRail />
 
       {/* Chart */}
-      <div className="px-4 py-3">
+      <div style={{ padding: '12px 16px' }}>
         <ResponseRateChart />
       </div>
     </div>
@@ -816,9 +966,9 @@ function ResponseRateOverTimeCard() {
 
 function LegendDot({ label, swatch }: { label: string; swatch: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
       {swatch}
-      <span className="text-[11px] text-[#64748b]">{label}</span>
+      <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>{label}</span>
     </div>
   )
 }
@@ -842,34 +992,35 @@ function PanelInsightAccordion({
   const insightsVisible = useContext(InsightsVisibleContext)
   if (!insightsVisible) return null
   return (
-    <div className="px-4 py-3 border-b border-[#e2e8f0]">
-    <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] overflow-hidden transition-all duration-200">
-      <button
-        onClick={onToggle}
-        className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none hover:bg-[#e0ecfe] transition-colors"
-      >
-        <Sparkles className="h-3 w-3 text-[#6366f1] flex-shrink-0 mt-0.5" fill="#6366f1" />
-        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-          <p className="text-[11px] text-[#1e3a8a] leading-[1.45]">{collapsed}</p>
-          <span className="text-[10px] font-medium text-[#6366f1] hover:text-[#4f46e5] transition-colors">
-            {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
-          </span>
-        </div>
-      </button>
+    <div style={{ padding: '12px 16px', borderBottom: `1px solid ${BD_SUBTLE}` }}>
+      <div style={{ borderRadius: R_MD, background: AI_BG, border: `1px solid ${AI_BORDER}`, overflow: 'hidden' }}>
+        <button
+          onClick={onToggle}
+          style={{ display: 'flex', alignItems: 'flex-start', gap: 6, width: '100%', padding: '8px 10px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.06)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none' }}
+        >
+          <Sparkles className="h-3 w-3" style={{ color: AI_COLOR, flexShrink: 0, marginTop: 2 }} fill={AI_COLOR} />
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <p style={{ fontSize: 12, color: FG, lineHeight: 1.45, fontFamily: F, margin: 0 }}>{collapsed}</p>
+            <span style={{ fontSize: 12, fontWeight: 500, color: AI_COLOR, fontFamily: F }}>
+              {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
+            </span>
+          </div>
+        </button>
 
-      <div
-        className="overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out"
-        style={{ maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
-      >
-        <div className="px-2.5 pb-2 pt-1 border-t border-[#dbeafe]">
-          <KpiInsightBody
-            insightBullets={insightBullets}
-            expectedImpact={expectedImpact}
-            action={action}
-          />
+        <div
+          style={{ overflow: 'hidden', transition: 'max-height 0.2s ease, opacity 0.2s ease', maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
+        >
+          <div style={{ padding: '4px 10px 8px', borderTop: `1px solid ${AI_BORDER}` }}>
+            <KpiInsightBody
+              insightBullets={insightBullets}
+              expectedImpact={expectedImpact}
+              action={action}
+            />
+          </div>
         </div>
       </div>
-    </div>
     </div>
   )
 }
@@ -937,8 +1088,8 @@ function OutlierAnnotationRail() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   if (!insightsVisible) return null
   return (
-    <div className="px-4 py-3 border-b border-[#e2e8f0]">
-      <div className="grid grid-cols-3 gap-2 items-stretch">
+    <div style={{ padding: '12px 16px', borderBottom: `1px solid ${BD_SUBTLE}` }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, alignItems: 'stretch' }}>
         {OUTLIER_ANNOTATIONS.map((ann, i) => (
           <OutlierAnnotationCard
             key={ann.id}
@@ -952,39 +1103,30 @@ function OutlierAnnotationRail() {
   )
 }
 
-function OutlierAnnotationCard({
-  ann,
-  expanded,
-  onToggle,
-}: {
-  ann: OutlierAnnotation
-  expanded: boolean
-  onToggle: () => void
-}) {
+function OutlierAnnotationCard({ ann, expanded, onToggle }: { ann: OutlierAnnotation; expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] overflow-hidden transition-all duration-200 h-full flex flex-col">
-      {/* Always-visible one-liner + toggle */}
+    <div style={{ borderRadius: R_MD, background: AI_BG, border: `1px solid ${AI_BORDER}`, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <button
         onClick={onToggle}
-        className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none hover:bg-[#e0ecfe] transition-colors flex-1"
+        style={{ display: 'flex', alignItems: 'flex-start', gap: 6, width: '100%', padding: '8px 10px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', flex: 1 }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.06)' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none' }}
       >
-        <Sparkles className="h-3 w-3 text-[#6366f1] flex-shrink-0 mt-0.5" fill="#6366f1" />
-        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-          <p className="text-[11px] text-[#1e3a8a] leading-[1.4]">
-            <strong>{ann.date}</strong> · {ann.summary}
+        <Sparkles className="h-3 w-3" style={{ color: AI_COLOR, flexShrink: 0, marginTop: 2 }} fill={AI_COLOR} />
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <p style={{ fontSize: 12, color: FG, lineHeight: 1.4, fontFamily: F, margin: 0 }}>
+            <strong style={{ fontWeight: 600 }}>{ann.date}</strong> · {ann.summary}
           </p>
-          <span className="text-[10px] font-medium text-[#6366f1] hover:text-[#4f46e5] transition-colors">
+          <span style={{ fontSize: 12, fontWeight: 500, color: AI_COLOR, fontFamily: F }}>
             {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
           </span>
         </div>
       </button>
 
-      {/* Expanded content */}
       <div
-        className="overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out"
-        style={{ maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
+        style={{ overflow: 'hidden', transition: 'max-height 0.2s ease, opacity 0.2s ease', maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
       >
-        <div className="px-2.5 pb-2 pt-1 border-t border-[#dbeafe]">
+        <div style={{ padding: '4px 10px 8px', borderTop: `1px solid ${AI_BORDER}` }}>
           <KpiInsightBody
             insightBullets={ann.insightBullets}
             expectedImpact={ann.expectedImpact}
@@ -1086,18 +1228,18 @@ function ResponseRateChart() {
         onMouseLeave={() => setHovered(null)}
       >
         <defs>
-          {/* Area gradient — deep electric blue fading down */}
+          {/* Area gradient — brand blue fading down */}
           <linearGradient id="fi-area" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#3b82f6" stopOpacity="0.28" />
-            <stop offset="55%"  stopColor="#3b82f6" stopOpacity="0.10" />
-            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+            <stop offset="0%"   stopColor="#166CCA" stopOpacity="0.22" />
+            <stop offset="55%"  stopColor="#166CCA" stopOpacity="0.07" />
+            <stop offset="100%" stopColor="#166CCA" stopOpacity="0" />
           </linearGradient>
 
-          {/* Line gradient — subtle hue shift along the curve */}
+          {/* Line gradient — brand-600 → brand-400 */}
           <linearGradient id="fi-line" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"   stopColor="#6366f1" />
-            <stop offset="50%"  stopColor="#3b82f6" />
-            <stop offset="100%" stopColor="#06b6d4" />
+            <stop offset="0%"   stopColor="#185BA4" />
+            <stop offset="50%"  stopColor="#166CCA" />
+            <stop offset="100%" stopColor="#4896EC" />
           </linearGradient>
 
           {/* Soft glow under the line for depth */}
@@ -1118,8 +1260,8 @@ function ResponseRateChart() {
             y={padding.top}
             width={bandWidth}
             height={ch}
-            fill="#f1f5f9"
-            opacity={0.5}
+            fill="rgba(0,0,0,0.025)"
+            opacity={1}
           />
         ))}
 
@@ -1131,16 +1273,15 @@ function ResponseRateChart() {
               y1={ys(t)}
               x2={width - padding.right}
               y2={ys(t)}
-              stroke="#e2e8f0"
+              stroke="rgba(0,0,0,0.06)"
               strokeDasharray="3 5"
               strokeWidth="1"
-              opacity={t === 0 ? 1 : 0.7}
             />
             <text
               x={padding.left - 12}
               y={ys(t) + 4}
               textAnchor="end"
-              fill="#cbd5e1"
+              fill="rgba(0,0,0,0.25)"
               fontSize="10"
               fontWeight="500"
               letterSpacing="0.5"
@@ -1168,15 +1309,13 @@ function ResponseRateChart() {
           }}
         />
 
-        {/* Outliers — purple for low, blue for spike */}
+        {/* Outliers — AI purple for low, brand blue for spike */}
         {data.map(d => {
           if (!d.outlier) return null
-          const color = d.outlier === 'low' ? '#8b5cf6' : '#3b82f6'
+          const color = d.outlier === 'low' ? AI_COLOR : '#166CCA'
           return (
             <g key={`out-${d.i}`}>
-              {/* Outer halo */}
-              <circle cx={xs(d.i)} cy={ys(d.y)} r={12} fill={color} opacity={0.15} />
-              {/* Inner ring */}
+              <circle cx={xs(d.i)} cy={ys(d.y)} r={12} fill={color} opacity={0.12} />
               <circle cx={xs(d.i)} cy={ys(d.y)} r={6} fill="white" stroke={color} strokeWidth={2.5} />
               <circle cx={xs(d.i)} cy={ys(d.y)} r={2.5} fill={color} />
             </g>
@@ -1201,16 +1340,12 @@ function ResponseRateChart() {
         {hovered !== null && (
           <g>
             <line
-              x1={xs(hovered)}
-              y1={padding.top}
-              x2={xs(hovered)}
-              y2={padding.top + ch}
-              stroke="#3b82f6"
-              strokeOpacity={0.35}
-              strokeDasharray="3 4"
+              x1={xs(hovered)} y1={padding.top}
+              x2={xs(hovered)} y2={padding.top + ch}
+              stroke="#166CCA" strokeOpacity={0.35} strokeDasharray="3 4"
             />
-            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={9} fill="#3b82f6" opacity={0.18} />
-            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={5} fill="white" stroke="#3b82f6" strokeWidth={2.5} />
+            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={9} fill="#166CCA" opacity={0.15} />
+            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={5} fill="white" stroke="#166CCA" strokeWidth={2.5} />
           </g>
         )}
 
@@ -1221,7 +1356,7 @@ function ResponseRateChart() {
             x={xs(d.i)}
             y={height - 14}
             textAnchor="middle"
-            fill="#94a3b8"
+            fill="rgba(0,0,0,0.35)"
             fontSize="11"
             fontWeight="500"
             letterSpacing="0.3"
@@ -1242,30 +1377,25 @@ function ResponseRateChart() {
           }}
         >
           <div
-            className="rounded-xl px-3.5 py-2.5 whitespace-nowrap border border-white/10"
             style={{
-              background: 'linear-gradient(135deg, rgba(15,23,42,0.96), rgba(30,41,59,0.96))',
-              backdropFilter: 'blur(12px)',
-              boxShadow: '0 12px 32px -8px rgba(15,23,42,0.45), 0 2px 8px rgba(15,23,42,0.25)',
+              borderRadius: R_LG, padding: '10px 14px', whiteSpace: 'nowrap', border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--lyra-color-bg-surface-inverse)',
+              boxShadow: SH_LG,
             }}
           >
-            <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-white/60 leading-none">
+            <div style={{ fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.6)', lineHeight: 1, fontFamily: F }}>
               {data[hovered].fullDate}
             </div>
-            <div className="flex items-baseline gap-2 mt-1.5">
-              <span className="text-[20px] font-semibold text-white leading-none tabular-nums">{data[hovered].y}%</span>
-              <span className="text-[10px] text-white/50 uppercase tracking-wider">response rate</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 6 }}>
+              <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--lyra-color-fg-inverse)', lineHeight: 1, fontVariantNumeric: 'tabular-nums', fontFamily: F }}>{data[hovered].y}%</span>
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: F }}>response rate</span>
             </div>
             {data[hovered].outlier && (
-              <div className="mt-2 pt-2 border-t border-white/10 flex items-center gap-1.5">
+              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span
-                  className="inline-block w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: data[hovered].outlier === 'low' ? '#8b5cf6' : '#3b82f6' }}
+                  style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', backgroundColor: data[hovered].outlier === 'low' ? AI_COLOR : '#166CCA' }}
                 />
-                <span
-                  className="text-[10px] font-semibold uppercase tracking-wider"
-                  style={{ color: data[hovered].outlier === 'low' ? '#c4b5fd' : '#93c5fd' }}
-                >
+                <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.75)' }}>
                   {data[hovered].outlier === 'low' ? 'Low outlier' : 'Spike detected'}
                 </span>
               </div>
@@ -1289,19 +1419,18 @@ const CUSTOMER_ROWS: CustomerRow[] = [
 
 function ByCustomerTypePanel({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden h-full flex flex-col">
-      <div className="px-4 py-3 border-b border-[#e2e8f0] flex items-center justify-between gap-2">
+    <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_LG, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '12px 16px', borderBottom: `1px solid ${BD_SUBTLE}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <div>
-          <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">By Customer Type</h3>
-          <p className="text-[12px] text-[#94a3b8] leading-tight">Segment response rate vs. 55.4% baseline</p>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: FG, marginBottom: 2, lineHeight: 1.2, fontFamily: F, margin: '0 0 2px 0' }}>By Customer Type</h3>
+          <p style={{ fontSize: 12, color: FG_SEC, lineHeight: 1.2, fontFamily: F, margin: 0 }}>Segment response rate vs. 55.4% baseline</p>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#eef2ff] border border-[#c7d2fe] rounded-full text-[11px] font-semibold text-[#6366f1]">
-          <Sparkles className="h-3 w-3" fill="#6366f1" />
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', background: AI_BG, border: `1px solid ${AI_BORDER}`, borderRadius: R_FULL, fontSize: 12, fontWeight: 600, color: AI_COLOR, fontFamily: F, whiteSpace: 'nowrap' }}>
+          <Sparkles className="h-3 w-3" style={{ color: AI_COLOR }} fill={AI_COLOR} />
           AI segment pattern
         </div>
       </div>
 
-      {/* AI insight accordion (renders only when insights are revealed) */}
       <PanelInsightAccordion
         expanded={expanded}
         onToggle={onToggle}
@@ -1318,8 +1447,8 @@ function ByCustomerTypePanel({ expanded, onToggle }: { expanded: boolean; onTogg
         action="Fix Group Booking survey routing · A/B test First-Time Traveler re-engagement campaign"
       />
 
-      <div className="p-4 flex-1">
-        <div className="space-y-4">
+      <div style={{ padding: 16, flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {CUSTOMER_ROWS.map(r => <CustomerTypeRow key={r.name} row={r} />)}
         </div>
       </div>
@@ -1328,19 +1457,18 @@ function ByCustomerTypePanel({ expanded, onToggle }: { expanded: boolean; onTogg
 }
 
 function CustomerTypeRow({ row }: { row: CustomerRow }) {
-  const dotColor = row.tone === 'up' ? '#6366f1' : row.tone === 'flat' ? '#3b82f6' : row.name === 'First-Time Traveler' ? '#93c5fd' : '#bfdbfe'
-  const deltaColor = row.tone === 'up' ? '#16a34a' : row.tone === 'flat' ? '#64748b' : '#dc2626'
-  const trendColor = row.tone === 'up' ? '#6366f1' : row.tone === 'flat' ? '#64748b' : '#94a3b8'
+  const dotColor = row.tone === 'up' ? AI_COLOR : row.tone === 'flat' ? BRAND_600 : FG_SEC
+  const deltaColor = row.tone === 'up' ? S_SUC_FG : row.tone === 'flat' ? FG_SEC : S_CRIT_FG
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
-      <div className="flex-1 text-[13px] text-[#0f172a] font-medium leading-none">{row.name}</div>
-      <div className="text-[13px] font-semibold text-[#0f172a] leading-none">{row.pct}%</div>
-      <div className="w-[42px] text-right text-[12px] font-semibold leading-none" style={{ color: deltaColor }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ width: 12, height: 12, borderRadius: '50%', flexShrink: 0, background: dotColor }} />
+      <div style={{ flex: 1, fontSize: 14, color: FG, fontWeight: 500, lineHeight: 1, fontFamily: F }}>{row.name}</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: FG, lineHeight: 1, fontFamily: F }}>{row.pct}%</div>
+      <div style={{ width: 42, textAlign: 'right', fontSize: 12, fontWeight: 600, lineHeight: 1, color: deltaColor, fontFamily: F }}>
         {row.vs}
       </div>
-      <div className="w-[24px] text-center text-[18px] leading-none" style={{ color: trendColor }}>
+      <div style={{ width: 20, textAlign: 'center', fontSize: 16, lineHeight: 1, color: deltaColor, fontFamily: F }}>
         {row.trend}
       </div>
     </div>
@@ -1360,13 +1488,12 @@ const CHANNEL_ROWS: ChannelRow[] = [
 
 function ByChannelPanel({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden h-full flex flex-col">
-      <div className="px-4 py-3 border-b border-[#e2e8f0]">
-        <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">By Channel</h3>
-        <p className="text-[12px] text-[#94a3b8] leading-tight">Response rate per survey delivery method</p>
+    <div style={{ background: BG_BASE, border: `1px solid ${BD_SOFT}`, borderRadius: R_LG, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '12px 16px', borderBottom: `1px solid ${BD_SUBTLE}` }}>
+        <h3 style={{ fontSize: 14, fontWeight: 600, color: FG, marginBottom: 2, lineHeight: 1.2, fontFamily: F, margin: '0 0 2px 0' }}>By Channel</h3>
+        <p style={{ fontSize: 12, color: FG_SEC, lineHeight: 1.2, fontFamily: F, margin: 0 }}>Response rate per survey delivery method</p>
       </div>
 
-      {/* AI insight accordion (renders only when insights are revealed) */}
       <PanelInsightAccordion
         expanded={expanded}
         onToggle={onToggle}
@@ -1383,8 +1510,8 @@ function ByChannelPanel({ expanded, onToggle }: { expanded: boolean; onToggle: (
         action="A/B test WhatsApp vs. SMS on Sundays · Deprioritize Web Widget survey delivery"
       />
 
-      <div className="p-4">
-        <div className="space-y-4">
+      <div style={{ padding: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {CHANNEL_ROWS.map(r => <ChannelRowItem key={r.name} row={r} />)}
         </div>
       </div>
@@ -1393,23 +1520,20 @@ function ByChannelPanel({ expanded, onToggle }: { expanded: boolean; onToggle: (
 }
 
 function ChannelRowItem({ row }: { row: ChannelRow }) {
-  const barColor = row.tone === 'up' ? '#3b82f6' : row.tone === 'flat' ? '#93c5fd' : '#bfdbfe'
-  const deltaColor = row.tone === 'up' ? '#16a34a' : row.tone === 'flat' ? '#64748b' : '#dc2626'
+  const barColor = row.tone === 'up' ? BRAND_600 : row.tone === 'flat' ? FG_SEC : S_CRIT_FG
+  const deltaColor = row.tone === 'up' ? S_SUC_FG : row.tone === 'flat' ? FG_SEC : S_CRIT_FG
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[13px] text-[#0f172a] font-medium leading-none truncate">{row.name}</span>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-[13px] font-semibold text-[#0f172a] leading-none">{row.pct}%</span>
-          <span className="text-[12px] font-semibold leading-none" style={{ color: deltaColor }}>{row.delta}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+        <span style={{ fontSize: 14, color: FG, fontWeight: 500, lineHeight: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: F }}>{row.name}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: FG, lineHeight: 1, fontFamily: F }}>{row.pct}%</span>
+          <span style={{ fontSize: 12, fontWeight: 600, lineHeight: 1, color: deltaColor, fontFamily: F }}>{row.delta}</span>
         </div>
       </div>
-      <div className="h-[6px] bg-[#f1f5f9] rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all duration-300"
-          style={{ width: `${row.pct}%`, backgroundColor: barColor }}
-        />
+      <div style={{ height: 6, background: BD_SUBTLE, borderRadius: R_FULL, overflow: 'hidden' }}>
+        <div style={{ height: '100%', borderRadius: R_FULL, transition: 'width 0.3s ease', width: `${row.pct}%`, background: barColor }} />
       </div>
     </div>
   )
@@ -1417,10 +1541,10 @@ function ChannelRowItem({ row }: { row: ChannelRow }) {
 
 /* ---------- Campaign context strip ---------- */
 const CTX_STATUS_STYLES: Record<CampaignStatus, { bg: string; text: string; label: string }> = {
-  active: { bg: '#dcfce7', text: '#15803d', label: 'Active' },
-  paused: { bg: '#fef3c7', text: '#b45309', label: 'Paused' },
-  draft: { bg: '#e2e8f0', text: '#475569', label: 'Draft' },
-  ended: { bg: '#f1f5f9', text: '#64748b', label: 'Ended' },
+  active: { bg: S_SUC_BG,  text: S_SUC_FG,  label: 'Active' },
+  paused: { bg: S_WARN_BG, text: S_WARN_FG, label: 'Paused' },
+  draft:  { bg: BG_SHELL,  text: FG_SEC,    label: 'Draft'  },
+  ended:  { bg: BG_SHELL,  text: FG_DIS,    label: 'Ended'  },
 }
 
 function CampaignContextStrip({
@@ -1434,45 +1558,46 @@ function CampaignContextStrip({
 }) {
   const s = CTX_STATUS_STYLES[campaign.status]
   return (
-    <div className="rounded-[10px] bg-white border border-[#e2e8f0] px-4 py-3 flex items-start justify-between gap-4">
-      <div className="flex-1 min-w-0">
+    <div style={{ borderRadius: R_LG, background: BG_BASE, border: `1px solid ${BD_SOFT}`, padding: '12px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, fontFamily: F }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         {onBackToPortfolio && (
           <button
             onClick={onBackToPortfolio}
-            className="inline-flex items-center gap-1 text-[12px] font-medium text-[#64748b] hover:text-[#0f172a] mb-2 outline-none focus:outline-none transition-colors"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 500, color: FG_LINK, marginBottom: 8, background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: F }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = FG }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = FG_LINK }}
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back to all campaigns
           </button>
         )}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[15px] font-semibold text-[#0f172a]">{campaign.name}</span>
-          <span className="text-[13px] text-[#94a3b8] font-medium">{campaign.version}</span>
-          <span
-            className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold"
-            style={{ backgroundColor: s.bg, color: s.text }}
-          >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 15, fontWeight: 600, color: FG, fontFamily: F }}>{campaign.name}</span>
+          <span style={{ fontSize: 13, color: FG_SEC, fontWeight: 500, fontFamily: F }}>{campaign.version}</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: R_FULL, padding: '2px 8px', fontSize: 12, fontWeight: 600, background: s.bg, color: s.text, fontFamily: F }}>
             {s.label}
           </span>
           {campaign.daysRunning !== null && (
             <>
-              <span className="text-[11px] text-[#94a3b8]">·</span>
-              <span className="text-[12px] text-[#64748b]">{campaign.daysRunning} days running</span>
+              <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>·</span>
+              <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>{campaign.daysRunning} days running</span>
             </>
           )}
-          <span className="text-[11px] text-[#94a3b8]">·</span>
-          <span className="text-[12px] text-[#64748b]">{campaign.channels.join(' · ')}</span>
+          <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>·</span>
+          <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>{campaign.channels.join(' · ')}</span>
         </div>
-        <p className="text-[11px] text-[#94a3b8] mt-1 leading-snug">
+        <p style={{ fontSize: 12, color: FG_SEC, marginTop: 4, lineHeight: 1.4, fontFamily: F, margin: '4px 0 0 0' }}>
           Trigger: {campaign.trigger}
         </p>
       </div>
       {onViewOperations && (
         <button
           onClick={onViewOperations}
-          className="inline-flex items-center gap-1.5 rounded-md border border-[#c7d2fe] bg-[#eef2ff] hover:bg-[#e0e7ff] px-3 py-1.5 text-[12px] font-semibold text-[#4f46e5] transition-colors outline-none focus:outline-none flex-shrink-0"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: R_MD, border: `1px solid ${AI_BORDER}`, background: AI_BG, padding: '6px 12px', fontSize: 12, fontWeight: 600, color: AI_COLOR, cursor: 'pointer', flexShrink: 0, fontFamily: F }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.08)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = AI_BG }}
         >
-          <Sparkles className="h-3.5 w-3.5" fill="#6366f1" />
+          <Sparkles className="h-3.5 w-3.5" style={{ color: AI_COLOR }} fill={AI_COLOR} />
           View Campaign Insight
         </button>
       )}

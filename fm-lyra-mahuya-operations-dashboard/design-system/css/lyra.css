@@ -1,0 +1,127 @@
+/* ============================================================
+ * Lyra Foundations V1 — CSS Custom Properties
+ * Source: Lyra Design System (NiCE CXone)
+ * Do NOT edit manually — token values are authoritative from Lyra.
+ * ============================================================ */
+
+:root {
+  /* Font */
+  --lyra-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Color primitives */
+  --lyra-brand-50:  #e9f1fc;
+  --lyra-brand-100: #cfe0f8;
+  --lyra-brand-200: #a6c6f0;
+  --lyra-brand-300: #72a6e8;
+  --lyra-brand-400: #4896ec;
+  --lyra-brand-500: #3d81e7;
+  --lyra-brand-600: #166cca;
+  --lyra-brand-700: #185ba4;
+  --lyra-brand-800: #164479;
+  --lyra-brand-900: #0c2459;
+
+  --lyra-slate-50:  #fbfcfe;
+  --lyra-slate-100: #f5f7f9;
+  --lyra-slate-200: #eef0f2;
+  --lyra-slate-300: #d2d8db;
+  --lyra-slate-400: #a8b3bb;
+  --lyra-slate-500: #82959e;
+  --lyra-slate-600: #526b7a;
+  --lyra-slate-700: #3f5e69;
+  --lyra-slate-800: #3f4e5d;
+  --lyra-slate-900: #1d2630;
+
+  --lyra-teal-500:   #006889;
+  --lyra-green-500:  #278a33;
+  --lyra-green-700:  #1c5e25;
+  --lyra-orange-500: #ec7000;
+  --lyra-orange-700: #a64f00;
+  --lyra-red-500:    #d83434;
+  --lyra-red-600:    #bf2323;
+  --lyra-purple-700: #4d3a7a;
+
+  /* Semantic — backgrounds */
+  --lyra-color-bg-surface-base:      #ffffff;
+  --lyra-color-bg-surface-canvas:    #fbfcfe;
+  --lyra-color-bg-surface-shell:     #f5f7f9;
+  --lyra-color-bg-surface-overlay:   #ffffff;
+  --lyra-color-bg-surface-inverse:   #1d2630;
+  --lyra-color-bg-primary:           #166cca;
+  --lyra-color-bg-field:             #ffffff;
+  --lyra-color-bg-disabled:          rgba(0,0,0,0.06);
+  --lyra-color-bg-active-subtle:     #f1f7fe;
+  --lyra-color-bg-active-moderate:   #d3e6fd;
+  --lyra-color-bg-active-strong:     #166cca;
+  --lyra-color-bg-destructive:       #bd2a2a;
+  --lyra-color-bg-ai:                rgba(143,115,227,0.04);
+
+  /* Semantic — state */
+  --lyra-color-state-bg-hover-opacity:           rgba(0,0,0,0.04);
+  --lyra-color-state-bg-pressed-opacity:         rgba(0,0,0,0.08);
+  --lyra-color-state-bg-hover-primary:           #185ba4;
+  --lyra-color-state-bg-pressed-primary:         #164479;
+  --lyra-color-state-bg-hover-secondary:         #fbfcfe;
+  --lyra-color-state-bg-hover-active-subtle:     #e8f1fc;
+  --lyra-color-state-bg-pressed-active-subtle:   #d3e6fd;
+
+  /* Semantic — foreground */
+  --lyra-color-fg-default:       rgba(0,0,0,0.80);
+  --lyra-color-fg-secondary:     rgba(0,0,0,0.60);
+  --lyra-color-fg-disabled:      rgba(0,0,0,0.30);
+  --lyra-color-fg-inverse:       #ffffff;
+  --lyra-color-fg-link:          #166cca;
+  --lyra-color-fg-active-strong: #185ba4;
+  --lyra-color-fg-on-primary:    #ffffff;
+  --lyra-color-fg-action:        #5d6a79;
+  --lyra-color-fg-ai:            #4d3a7a;
+
+  /* Semantic — borders */
+  --lyra-color-border-subtle:        rgba(0,0,0,0.10);
+  --lyra-color-border-soft:          rgba(0,0,0,0.16);
+  --lyra-color-border-medium:        rgba(0,0,0,0.32);
+  --lyra-color-border-strong:        rgba(0,0,0,0.46);
+  --lyra-color-border-active:        #166cca;
+  --lyra-color-border-focus-default: #185ba4;
+  --lyra-color-border-disabled:      rgba(0,0,0,0.10);
+
+  /* Status */
+  --lyra-color-status-success-subtle:   #ebfaed;
+  --lyra-color-status-success-medium:   #64b96f;
+  --lyra-color-status-success-strong:   #23722d;
+  --lyra-color-status-warning-subtle:   #fffae0;
+  --lyra-color-status-warning-medium:   #facb33;
+  --lyra-color-status-warning-strong:   #8e6800;
+  --lyra-color-status-critical-subtle:  #fff0f0;
+  --lyra-color-status-critical-medium:  #fa7f7f;
+  --lyra-color-status-critical-strong:  #bd2a2a;
+  --lyra-color-status-info-subtle:      #f0f5ff;
+  --lyra-color-status-info-medium:      #789fed;
+  --lyra-color-status-info-strong:      #2d5bb9;
+
+  /* Shadows (Lyra/Solstice) */
+  --sol-effect-shadowsm: 0px 2px 6px 0px rgba(0,0,0,0.04);
+  --sol-effect-shadowmd: 0px 4px 12px 0px rgba(0,0,0,0.06);
+  --sol-effect-shadowlg: 0px 12px 24px 0px rgba(0,0,0,0.08);
+  --sol-effect-shadowxl: 0px 20px 40px 0px rgba(0,0,0,0.12);
+  --sol-effect-activering: 0px 0px 1px 3px rgba(44,138,242,0.25);
+
+  /* Radius */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+}

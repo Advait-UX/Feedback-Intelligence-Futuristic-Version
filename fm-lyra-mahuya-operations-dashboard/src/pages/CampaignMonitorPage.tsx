@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   ArrowLeft,
   Sparkles,
@@ -411,6 +411,68 @@ type HeroKpi = {
   delta: { arrow: '↑' | '↓' | '→'; text: string; tone: 'up' | 'down' | 'flat' }
   note: string
   emphasis?: 'positive' | 'caution'
+  progressBar?: { value: number; target: number }
+}
+
+/* ── Inline progress bar — mirrors dashboard ResponseRateTile ── */
+function HeroProgressBar({ value, target }: { value: number; target: number }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t) }, [])
+  const [tooltip, setTooltip] = useState<{ x: number } | null>(null)
+
+  const pct = mounted ? Math.min(value, 100) : 0
+  const gap = Math.abs(value - target)
+  const barColor = value >= target
+    ? 'var(--lyra-color-status-success-strong)'
+    : value >= 40
+    ? 'var(--lyra-color-status-warning-strong)'
+    : 'var(--lyra-color-status-critical-strong)'
+
+  return (
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', marginTop: 12 }}>
+      {/* Labels */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+        <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>0%</span>
+        <span style={{
+          position: 'absolute', left: `${target}%`, transform: 'translateX(-50%)',
+          fontSize: 11, fontWeight: 500, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT, whiteSpace: 'nowrap',
+        }}>Target {target}%</span>
+        <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>100%</span>
+      </div>
+      {/* Track */}
+      <div
+        style={{ position: 'relative', width: '100%', height: 12, borderRadius: 9999, background: 'var(--lyra-color-bg-disabled)', cursor: 'default' }}
+        onMouseMove={e => { const r = (e.currentTarget as HTMLElement).getBoundingClientRect(); setTooltip({ x: e.clientX - r.left }) }}
+        onMouseLeave={() => setTooltip(null)}
+      >
+        <div style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`,
+          borderRadius: 9999, background: barColor,
+          transition: 'width 0.9s cubic-bezier(0.4,0,0.2,1)',
+        }} />
+        <div style={{
+          position: 'absolute', top: -2, bottom: -2, left: `${target}%`, transform: 'translateX(-50%)',
+          width: 2, borderRadius: 2, background: 'var(--lyra-color-fg-default)', opacity: 0.45,
+        }} />
+      </div>
+      {/* Tooltip */}
+      {tooltip && (
+        <div style={{
+          position: 'absolute', bottom: -4, left: tooltip.x, transform: 'translateX(-50%) translateY(100%)',
+          background: 'var(--lyra-color-bg-surface-inverse)', color: 'var(--lyra-color-fg-inverse)',
+          fontSize: 11, fontWeight: 500, fontFamily: FONT,
+          padding: '5px 9px', borderRadius: 'var(--radius-sm)',
+          whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
+          boxShadow: 'var(--sol-effect-shadowlg)', lineHeight: 1.5,
+        }}>
+          <div style={{ fontWeight: 600 }}>{value}% current</div>
+          <div style={{ opacity: 0.75, fontSize: 10 }}>
+            Target {target}% · {value >= target ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 const HERO_KPIS: HeroKpi[] = [
@@ -432,6 +494,7 @@ const HERO_KPIS: HeroKpi[] = [
     delta: { arrow: '↑', text: '+6pp', tone: 'up' },
     note: '11.6pp above org baseline (55.4%)',
     emphasis: 'positive',
+    progressBar: { value: 67, target: 60 },
   },
   {
     label: 'Avg VU of triggered',
@@ -513,6 +576,7 @@ function HeroKpiCard({ kpi }: { kpi: HeroKpi }) {
         </div>
       </div>
       <div style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', lineHeight: '16px' }}>{kpi.note}</div>
+      {kpi.progressBar && <HeroProgressBar value={kpi.progressBar.value} target={kpi.progressBar.target} />}
     </div>
   )
 }
