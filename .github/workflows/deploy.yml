@@ -29,6 +29,8 @@ jobs:
           cache-dependency-path: fm-lyra-mahuya-operations-dashboard/package-lock.json
       - run: npm ci
       - run: npm run build
+        env:
+          GITHUB_ACTIONS: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: fm-lyra-mahuya-operations-dashboard/dist
