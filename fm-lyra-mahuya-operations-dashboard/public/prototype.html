@@ -9,10 +9,10 @@
 <style>
 /* Feedback Intelligence — additions over shell.css */
 
-/* ─── Global scrollbar — Lyra slate palette, thin & subtle ──────────── */
+/* ─── Global scrollbar — hidden until scroll, thin & subtle ──────────── */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--lyra-slate-300, #d2d8db) transparent;
+  scrollbar-color: transparent transparent;
 }
 *::-webkit-scrollbar {
   width: 4px;
@@ -22,11 +22,20 @@
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background: var(--lyra-slate-300, #d2d8db);
+  background: transparent;
   border-radius: 9999px;
+  transition: background 0.2s;
 }
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--lyra-slate-400, #a8b3bb);
+/* Show on hover of any scrollable ancestor */
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.18);
+}
+*:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.30);
+}
+/* Firefox — show on hover isn't supported, use auto-hide */
+*:hover {
+  scrollbar-color: rgba(0,0,0,0.18) transparent;
 }
 
 /* ─── Lyra Info banner — used for inline help text above tables ──────────────
@@ -88,7 +97,7 @@
   display: flex; flex-direction: column;
   gap: var(--space-4);                                  /* 16px between rows (per request) */
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-medium) transparent;
+  scrollbar-color: transparent transparent;
 }
 .app-menu-gap {
   height: var(--space-2);                               /* Figma: 8px tall divider container */
@@ -1036,12 +1045,13 @@ select.fi-input {
   overflow-y: auto;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: var(--lyra-slate-300, #d2d8db) transparent;
+  scrollbar-color: transparent transparent;
 }
 .wz-scroll-area::-webkit-scrollbar { width: 4px; }
 .wz-scroll-area::-webkit-scrollbar-track { background: transparent; }
-.wz-scroll-area::-webkit-scrollbar-thumb { background: var(--lyra-slate-300, #d2d8db); border-radius: 9999px; }
-.wz-scroll-area::-webkit-scrollbar-thumb:hover { background: var(--lyra-slate-400, #a8b3bb); }
+.wz-scroll-area::-webkit-scrollbar-thumb { background: transparent; border-radius: 9999px; }
+.wz-scroll-area:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
+.wz-scroll-area::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.30); }
 /* Two-column outer layout: form left, summary right — sits below wizard bar */
 .wz-content-area {
   display: flex;
@@ -2331,7 +2341,7 @@ select.fi-input {
   padding: 0 var(--space-6) var(--space-4);
   display: flex; flex-direction: column; gap: var(--space-2);
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-medium) transparent;
+  scrollbar-color: transparent transparent;
 }
 
 .model-picker-row {
@@ -3755,7 +3765,7 @@ tbody tr.selected td:first-child::before{
   display: flex; flex-direction: column;
   gap: var(--space-4);                                  /* 16px between rows (per request) */
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-medium) transparent;
+  scrollbar-color: transparent transparent;
 }
 .app-menu-gap {
   height: var(--space-2);                               /* Figma: 8px tall divider container */
@@ -5533,7 +5543,7 @@ select.fi-input {
   padding: 0 var(--space-6) var(--space-4);
   display: flex; flex-direction: column; gap: var(--space-2);
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-medium) transparent;
+  scrollbar-color: transparent transparent;
 }
 
 .model-picker-row {
