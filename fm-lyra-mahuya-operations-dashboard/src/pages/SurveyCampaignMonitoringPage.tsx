@@ -267,10 +267,11 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
   const min = Math.min(...data)
   const max = Math.max(...data)
   const range = max - min || 1
-  const padY = 6
+  const padY = 8
+  const padX = 6  // keeps first/last point away from edges so dot isn't clipped
 
   const pts = data.map((v, i) => ({
-    x: (i / (data.length - 1)) * width,
+    x: padX + (i / (data.length - 1)) * (width - padX * 2),
     y: (height - padY * 2) - ((v - min) / range) * (height - padY * 2) + padY,
   }))
 
@@ -290,11 +291,11 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
   const activePt = pts[activeIdx]
 
   return (
-    <div style={{ position: 'relative', display: 'block', width: '100%' }}>
+    <div style={{ position: 'relative', display: 'block', width: '100%', overflow: 'hidden' }}>
       <svg
         width="100%" height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
         preserveAspectRatio="none"
-        style={{ overflow: 'hidden', cursor: 'crosshair', display: 'block' }}
+        style={{ overflow: 'visible', cursor: 'crosshair', display: 'block' }}
         onMouseMove={e => {
           const rect = (e.currentTarget as SVGElement).getBoundingClientRect()
           const scaleX = width / rect.width
@@ -328,14 +329,24 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
           <line x1={activePt.x} y1={0} x2={activePt.x} y2={height}
             stroke={lineColor} strokeWidth="1" strokeDasharray="3 2" opacity={0.4} />
         )}
-        {/* Glow halo */}
-        <circle cx={hoverIdx !== null ? activePt.x : last.x} cy={hoverIdx !== null ? activePt.y : last.y} r="6" fill={lineColor} opacity="0.12">
-          {hoverIdx === null && <animate attributeName="opacity" from="0" to="0.12" dur="0.3s" begin="1.15s" fill="freeze" />}
-        </circle>
-        {/* Endpoint dot */}
-        <circle cx={hoverIdx !== null ? activePt.x : last.x} cy={hoverIdx !== null ? activePt.y : last.y} r="2.5" fill={lineColor}>
-          {hoverIdx === null && <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.15s" fill="freeze" />}
-        </circle>
+        {/* Hover dot */}
+        {hoverIdx !== null && (
+          <>
+            <circle cx={activePt.x} cy={activePt.y} r="5" fill={lineColor} opacity="0.15" />
+            <circle cx={activePt.x} cy={activePt.y} r="3" fill={lineColor} />
+          </>
+        )}
+        {/* Live endpoint dot — pulse ring + solid core */}
+        {hoverIdx === null && (
+          <>
+            <circle cx={last.x} cy={last.y} r="3" fill={lineColor} opacity="0.18">
+              <animate attributeName="r" values="3;9;3" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.18;0;0.18" dur="2s" repeatCount="indefinite" />
+            </circle>
+            <circle cx={last.x} cy={last.y} r="3.5" fill="white" />
+            <circle cx={last.x} cy={last.y} r="2.5" fill={lineColor} />
+          </>
+        )}
       </svg>
       {/* Tooltip — positioned in actual pixel space */}
       {hoverIdx !== null && (
