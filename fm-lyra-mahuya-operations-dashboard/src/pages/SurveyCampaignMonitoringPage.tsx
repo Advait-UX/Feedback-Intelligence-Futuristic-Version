@@ -35,18 +35,22 @@ export function SurveyCampaignMonitoringPage({
 
           {/* KPI section */}
           <section>
-            <SectionHeader
-              title="Campaign Performance"
-              right={
-                <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>
-                  <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 8, height: 8, flexShrink: 0 }}>
-                    <span className="alert-ping" style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--lyra-color-status-success-medium)' }} />
-                    <span className="alert-core" style={{ position: 'relative', width: 6, height: 6, borderRadius: '50%', background: 'var(--lyra-color-status-success-strong)' }} />
-                  </span>
-                  Live across active campaigns · last 30 days
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <span style={{
+                fontFamily: FONT, fontSize: 11, fontWeight: 600,
+                color: 'var(--lyra-color-fg-secondary)', letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}>
+                Campaign Performance
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>
+                <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 8, height: 8, flexShrink: 0 }}>
+                  <span className="alert-ping" style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--lyra-color-status-success-medium)' }} />
+                  <span className="alert-core" style={{ position: 'relative', width: 6, height: 6, borderRadius: '50%', background: 'var(--lyra-color-status-success-strong)' }} />
                 </span>
-              }
-            />
+                Live across active campaigns · last 30 days
+              </span>
+            </div>
             <KpiRow summary={summary} />
           </section>
 
