@@ -291,7 +291,7 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
   const activePt = pts[activeIdx]
 
   return (
-    <div style={{ position: 'relative', display: 'block', width: '100%', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', display: 'block', width: '100%' }}>
       <svg
         width="100%" height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
         preserveAspectRatio="none"
@@ -306,7 +306,8 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
             if (d < minDist) { minDist = d; closest = i }
           })
           setHoverIdx(closest)
-          setTooltipPos({ x: e.clientX - rect.left, y: pts[closest].y })
+          // store viewport coords for fixed positioning
+          setTooltipPos({ x: e.clientX, y: e.clientY })
         }}
         onMouseLeave={() => setHoverIdx(null)}
       >
@@ -348,18 +349,18 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
           </>
         )}
       </svg>
-      {/* Tooltip — positioned in actual pixel space */}
+      {/* Tooltip — fixed to viewport so it's never clipped by any parent overflow */}
       {hoverIdx !== null && (
         <div style={{
-          position: 'absolute',
+          position: 'fixed',
           left: tooltipPos.x,
-          top: tooltipPos.y - 42,
+          top: tooltipPos.y - 52,
           transform: 'translateX(-50%)',
           background: 'var(--lyra-color-bg-surface-inverse)',
           color: 'var(--lyra-color-fg-inverse)',
           fontSize: 11, fontWeight: 500, fontFamily: FONT,
           padding: '5px 9px', borderRadius: 'var(--radius-sm)',
-          whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
+          whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 9999,
           boxShadow: 'var(--sol-effect-shadowlg)',
           lineHeight: 1.5,
         }}>
