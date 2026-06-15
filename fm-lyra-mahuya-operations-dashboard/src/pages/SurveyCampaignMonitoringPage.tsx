@@ -267,11 +267,12 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
   const min = Math.min(...data)
   const max = Math.max(...data)
   const range = max - min || 1
-  const pad = 4
+  const padY = 4
+  const padX = 8
 
   const pts = data.map((v, i) => ({
-    x: (i / (data.length - 1)) * width,
-    y: (height - pad * 2) - ((v - min) / range) * (height - pad * 2) + pad,
+    x: padX + (i / (data.length - 1)) * (width - padX * 2),
+    y: (height - padY * 2) - ((v - min) / range) * (height - padY * 2) + padY,
   }))
 
   const line = pts.map((p, i) => {
@@ -620,9 +621,9 @@ function KpiTile({ label, value, delta, tone = 'up', accent, sparkData, sparkToo
         <span style={{ ...BIG_NUM }}>{value}</span>
       </div>
 
-      {/* Sparkline — stretches full card width (minus padding), same on every card */}
+      {/* Sparkline — stretches edge-to-edge, negative margin cancels card padding */}
       {sparkData && (
-        <div style={{ width: '100%', marginBottom: 14 }}>
+        <div style={{ width: 'calc(100% + 36px)', marginLeft: -18, marginBottom: 14 }}>
           <Sparkline data={sparkData} color={accent} width={240} height={48} tooltipLabel={sparkTooltipLabel} />
         </div>
       )}
