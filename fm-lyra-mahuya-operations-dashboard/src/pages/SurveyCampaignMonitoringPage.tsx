@@ -34,19 +34,30 @@ export function SurveyCampaignMonitoringPage({
           </div>
 
           {/* KPI section */}
-          <section>
-            <SectionHeader
-              title="Campaign Performance"
-              right={
-                <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>
-                  <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 8, height: 8, flexShrink: 0 }}>
-                    <span className="alert-ping" style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--lyra-color-status-success-medium)' }} />
-                    <span className="alert-core" style={{ position: 'relative', width: 6, height: 6, borderRadius: '50%', background: 'var(--lyra-color-status-success-strong)' }} />
-                  </span>
-                  Live across active campaigns · last 30 days
+          <section style={{
+            background: 'var(--lyra-color-bg-surface-base)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--lyra-color-border-subtle)',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04)',
+            padding: '20px 20px 20px 20px',
+          }}>
+            {/* Header row inside card */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <span style={{
+                fontFamily: FONT, fontSize: 11, fontWeight: 600,
+                color: 'var(--lyra-color-fg-secondary)', letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}>
+                Campaign Performance
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>
+                <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 8, height: 8, flexShrink: 0 }}>
+                  <span className="alert-ping" style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'var(--lyra-color-status-success-medium)' }} />
+                  <span className="alert-core" style={{ position: 'relative', width: 6, height: 6, borderRadius: '50%', background: 'var(--lyra-color-status-success-strong)' }} />
                 </span>
-              }
-            />
+                Live across active campaigns · last 30 days
+              </span>
+            </div>
             <KpiRow summary={summary} />
           </section>
 
@@ -377,14 +388,14 @@ const BIG_NUM: React.CSSProperties = {
 function KpiShell({ accent, children }: { accent: string; children: React.ReactNode }) {
   return (
     <div style={{
-      background: 'var(--lyra-color-bg-surface-base)',
-      borderRadius: 14,
+      background: 'var(--lyra-color-bg-surface-canvas)',
+      borderRadius: 10,
       border: '1px solid var(--lyra-color-border-subtle)',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05)',
       display: 'flex', flexDirection: 'column',
+      overflow: 'hidden',
     }}>
-      <div style={{ height: 3, background: accent, borderRadius: '14px 14px 0 0', flexShrink: 0 }} />
-      <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+      <div style={{ height: 3, background: accent, flexShrink: 0 }} />
+      <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
         {children}
       </div>
     </div>
