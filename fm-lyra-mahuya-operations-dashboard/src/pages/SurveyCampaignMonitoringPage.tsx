@@ -721,6 +721,7 @@ function CampaignTable({ onSelectCampaign }: { onSelectCampaign: (id: string) =>
     { label: 'Emerging Topic', align: 'left'  },
     { label: 'Channel',        align: 'left'  },
     { label: 'Category',       align: 'left'  },
+    { label: '',               align: 'right', width: 40 },
   ]
 
   return (
@@ -800,6 +801,11 @@ function CampaignRow({ campaign, onSelect, isLast }: { campaign: Campaign; onSel
         <ChannelChip channel={primaryChannel} />
       </td>
       <td style={{ padding: 'var(--space-4) var(--space-5)', color: 'var(--lyra-color-fg-secondary)', fontSize: 14 }}>{campaign.category}</td>
+      <td style={{ padding: 'var(--space-4) 16px var(--space-4) 0', textAlign: 'right', width: 40 }}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ display: 'inline-block', verticalAlign: 'middle', color: 'var(--lyra-color-fg-secondary)', opacity: 0.5 }}>
+          <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </td>
     </tr>
   )
 }
