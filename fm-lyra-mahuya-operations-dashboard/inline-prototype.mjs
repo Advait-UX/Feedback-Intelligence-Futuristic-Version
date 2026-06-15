@@ -18,11 +18,11 @@ html = html.replace('</head>', INJECT + '</head>')
 
 // Patch the two iframe src props in the Vite bundle (they use backtick strings)
 html = html.replace(
-  'src:`/prototype.html?embed=topbar`',
+  'src:`./prototype.html?embed=topbar`',
   'srcdoc:window.__PROTO_HTML__'
 )
 html = html.replace(
-  'src:`/prototype.html?embed=full`',
+  'src:`./prototype.html?embed=full`',
   'srcdoc:window.__PROTO_HTML__'
 )
 

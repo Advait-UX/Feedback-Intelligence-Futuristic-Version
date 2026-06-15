@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef, useEffect } from 'react'
+import { Fragment, useState, useRef } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import { TopBar } from './components/layout/TopBar'
 import { TrendingUp, Minus, ChevronRight, Sparkles, AlertTriangle, Activity, Megaphone, FileText, Network } from 'lucide-react'
@@ -499,8 +499,6 @@ export default function App() {
         setFiSection(id as typeof fiSection)
         // Clicking Dashboard always returns to the portfolio top-level
         if (id === 'dashboard') setPage('campaign-portfolio')
-        // For prototype sections, send section via postMessage (works with data URL iframes)
-        else protoIframeRef.current?.contentWindow?.postMessage({ type: 'fi-navigate', section: id }, '*')
       }}
     >
       {fiSection === 'dashboard' ? (
@@ -591,14 +589,11 @@ export default function App() {
         )
       ) : (
         <iframe
+          key={fiSection}
           ref={protoIframeRef}
-          src="./prototype.html?embed=full"
+          src={`./prototype.html?embed=full&section=${fiSection}`}
           title={FI_TITLES[fiSection]}
           style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
-          onLoad={() => {
-            // Once loaded, navigate to the correct section via postMessage
-            protoIframeRef.current?.contentWindow?.postMessage({ type: 'fi-navigate', section: fiSection }, '*')
-          }}
         />
       )}
     </AppShell>
