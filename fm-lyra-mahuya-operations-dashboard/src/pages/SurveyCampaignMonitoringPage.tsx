@@ -354,18 +354,19 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
         <div style={{
           position: 'fixed',
           left: tooltipPos.x,
-          top: tooltipPos.y - 52,
+          top: tooltipPos.y - 60,
           transform: 'translateX(-50%)',
-          background: 'var(--lyra-color-bg-surface-inverse)',
-          color: 'var(--lyra-color-fg-inverse)',
-          fontSize: 11, fontWeight: 500, fontFamily: FONT,
-          padding: '5px 9px', borderRadius: 'var(--radius-sm)',
+          background: 'var(--lyra-color-bg-surface-overlay)',
+          border: '1px solid var(--lyra-color-border-soft)',
+          color: 'var(--lyra-color-fg-default)',
+          fontSize: 12, fontWeight: 400, fontFamily: FONT,
+          padding: '6px 10px', borderRadius: 'var(--radius-md)',
           whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 9999,
           boxShadow: 'var(--sol-effect-shadowlg)',
           lineHeight: 1.5,
         }}>
-          <div style={{ opacity: 0.6, fontSize: 10, marginBottom: 1 }}>{SPARK_WEEKS[hoverIdx]}</div>
-          <div style={{ fontWeight: 600 }}>{tooltipLabel}{data[hoverIdx]}</div>
+          <div style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', marginBottom: 2 }}>{SPARK_WEEKS[hoverIdx]}</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--lyra-color-fg-default)' }}>{tooltipLabel}{data[hoverIdx].toLocaleString()}</div>
         </div>
       )}
     </div>
