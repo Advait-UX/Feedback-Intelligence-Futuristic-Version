@@ -16,8 +16,8 @@ interface Props {
   invert?: boolean
 }
 
-export function AnimatedSmile({ size = 24, className, color = '#3694FC', invert = false }: Props) {
-  const fill = invert ? '#FFFFFF' : color
+export function AnimatedSmile({ size = 24, className, color = 'var(--lyra-brand-400)', invert = false }: Props) {
+  const fill = invert ? 'var(--lyra-color-fg-inverse)' : color
   return (
     <svg
       width={size}

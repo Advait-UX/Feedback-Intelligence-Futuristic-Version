@@ -63,7 +63,7 @@ export function AiAssistantPanel({ open, onClose }: AiAssistantPanelProps) {
             className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none mb-2"
           />
           <div className="flex items-center justify-between">
-            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
               Sonnet 4.6
             </span>
             <button className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
@@ -71,7 +71,7 @@ export function AiAssistantPanel({ open, onClose }: AiAssistantPanelProps) {
             </button>
           </div>
         </div>
-        <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
+        <p className="mt-1.5 text-center text-xs text-muted-foreground">
           AI assistant can make mistakes, double-check responses.
         </p>
       </div>

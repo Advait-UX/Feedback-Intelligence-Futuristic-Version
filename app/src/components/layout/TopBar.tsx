@@ -15,67 +15,67 @@ type Group = { tint: string; apps: App[] }
 
 const GROUPS: Group[] = [
   {
-    tint: 'rgba(142,214,238,0.5)',
+    tint: 'var(--lyra-color-status-info-subtle)',
     apps: [
-      { label: 'Admin', icon: Shield, bg: 'rgba(142,214,238,0.5)' },
-      { label: 'Supervisor', icon: UserCog, bg: 'rgba(142,214,238,0.5)' },
-      { label: 'Message Center', icon: MessageSquare, bg: 'rgba(142,214,238,0.5)' },
-      { label: 'AI Studio', icon: Sparkles, bg: 'rgba(142,214,238,0.5)' },
+      { label: 'Admin', icon: Shield, bg: 'var(--lyra-color-status-info-subtle)' },
+      { label: 'Supervisor', icon: UserCog, bg: 'var(--lyra-color-status-info-subtle)' },
+      { label: 'Message Center', icon: MessageSquare, bg: 'var(--lyra-color-status-info-subtle)' },
+      { label: 'AI Studio', icon: Sparkles, bg: 'var(--lyra-color-status-info-subtle)' },
     ],
   },
   {
-    tint: 'rgba(171,156,237,0.5)',
+    tint: 'var(--lyra-color-bg-ai)',
     apps: [
-      { label: 'Cogingy AI', icon: Bot, bg: 'rgba(171,156,237,0.5)' },
-      { label: 'Agent Integration', icon: GitBranch, bg: 'rgba(171,156,237,0.5)' },
-      { label: 'WFI', icon: Zap, bg: 'rgba(171,156,237,0.5)' },
-      { label: 'Neva Studio', icon: Workflow, bg: 'rgba(171,156,237,0.5)' },
+      { label: 'Cogingy AI', icon: Bot, bg: 'var(--lyra-color-bg-ai)' },
+      { label: 'Agent Integration', icon: GitBranch, bg: 'var(--lyra-color-bg-ai)' },
+      { label: 'WFI', icon: Zap, bg: 'var(--lyra-color-bg-ai)' },
+      { label: 'Neva Studio', icon: Workflow, bg: 'var(--lyra-color-bg-ai)' },
     ],
   },
   {
-    tint: 'rgba(255,205,131,0.5)',
+    tint: 'var(--lyra-color-status-warning-subtle)',
     apps: [
-      { label: 'ACD', icon: Network, bg: 'rgba(255,205,131,0.5)' },
-      { label: 'Agent', icon: Headphones, bg: 'rgba(255,205,131,0.5)' },
-      { label: 'MAX', icon: User, bg: 'rgba(255,205,131,0.5)' },
-      { label: 'Studio', icon: Layers, bg: 'rgba(255,205,131,0.5)' },
-      { label: 'Studio Authentication', icon: KeyRound, bg: 'rgba(255,205,131,0.5)' },
+      { label: 'ACD', icon: Network, bg: 'var(--lyra-color-status-warning-subtle)' },
+      { label: 'Agent', icon: Headphones, bg: 'var(--lyra-color-status-warning-subtle)' },
+      { label: 'MAX', icon: User, bg: 'var(--lyra-color-status-warning-subtle)' },
+      { label: 'Studio', icon: Layers, bg: 'var(--lyra-color-status-warning-subtle)' },
+      { label: 'Studio Authentication', icon: KeyRound, bg: 'var(--lyra-color-status-warning-subtle)' },
     ],
   },
   {
-    tint: 'rgba(149,221,155,0.5)',
+    tint: 'var(--lyra-color-status-success-subtle)',
     apps: [
-      { label: 'Workforce Management', icon: CalendarClock, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Enhanced Strategic Planner', icon: Target, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Quality Management', icon: ClipboardCheck, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Feedback Intelligence', icon: MessageSquareText, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Performance Management', icon: TrendingUp, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Coaching', icon: GraduationCap, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Interaction Hub', icon: MessageCircle, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'My Zone', icon: Compass, bg: 'rgba(149,221,155,0.5)' },
-      { label: 'Desktop Discovery', icon: ScanSearch, bg: 'rgba(149,221,155,0.5)' },
+      { label: 'Workforce Management', icon: CalendarClock, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Enhanced Strategic Planner', icon: Target, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Quality Management', icon: ClipboardCheck, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Feedback Intelligence', icon: MessageSquareText, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Performance Management', icon: TrendingUp, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Coaching', icon: GraduationCap, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Interaction Hub', icon: MessageCircle, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'My Zone', icon: Compass, bg: 'var(--lyra-color-status-success-subtle)' },
+      { label: 'Desktop Discovery', icon: ScanSearch, bg: 'var(--lyra-color-status-success-subtle)' },
     ],
   },
   {
-    tint: 'rgba(251,182,182,0.5)',
+    tint: 'var(--lyra-color-status-critical-subtle)',
     apps: [
-      { label: 'Actions', icon: Play, bg: 'rgba(251,182,182,0.5)' },
-      { label: 'Dashboard', icon: LayoutDashboard, bg: 'rgba(251,182,182,0.5)' },
-      { label: 'Analytics', icon: PieChart, bg: 'rgba(251,182,182,0.5)' },
-      { label: 'Reporting', icon: FileBarChart, bg: 'rgba(251,182,182,0.5)' },
-      { label: 'Metric', icon: Activity, bg: 'rgba(251,182,182,0.5)' },
-      { label: 'Self-Service Analytics', icon: Search, bg: 'rgba(251,182,182,0.5)' },
-      { label: 'Enlighten XO', icon: Brain, bg: 'rgba(251,182,182,0.5)' },
+      { label: 'Actions', icon: Play, bg: 'var(--lyra-color-status-critical-subtle)' },
+      { label: 'Dashboard', icon: LayoutDashboard, bg: 'var(--lyra-color-status-critical-subtle)' },
+      { label: 'Analytics', icon: PieChart, bg: 'var(--lyra-color-status-critical-subtle)' },
+      { label: 'Reporting', icon: FileBarChart, bg: 'var(--lyra-color-status-critical-subtle)' },
+      { label: 'Metric', icon: Activity, bg: 'var(--lyra-color-status-critical-subtle)' },
+      { label: 'Self-Service Analytics', icon: Search, bg: 'var(--lyra-color-status-critical-subtle)' },
+      { label: 'Enlighten XO', icon: Brain, bg: 'var(--lyra-color-status-critical-subtle)' },
     ],
   },
   {
-    tint: 'rgba(198,205,209,0.5)',
+    tint: 'var(--lyra-slate-100)',
     apps: [
-      { label: 'Performance Management (legacy)', icon: History, bg: 'rgba(198,205,209,0.5)' },
-      { label: 'Digital', icon: Globe, bg: 'rgba(198,205,209,0.5)' },
-      { label: 'Adapters', icon: Plug, bg: 'rgba(198,205,209,0.5)' },
-      { label: 'Connections Hub', icon: Link2, bg: 'rgba(198,205,209,0.5)' },
-      { label: 'Guide', icon: BookOpen, bg: 'rgba(198,205,209,0.5)' },
+      { label: 'Performance Management (legacy)', icon: History, bg: 'var(--lyra-slate-100)' },
+      { label: 'Digital', icon: Globe, bg: 'var(--lyra-slate-100)' },
+      { label: 'Adapters', icon: Plug, bg: 'var(--lyra-slate-100)' },
+      { label: 'Connections Hub', icon: Link2, bg: 'var(--lyra-slate-100)' },
+      { label: 'Guide', icon: BookOpen, bg: 'var(--lyra-slate-100)' },
     ],
   },
 ]
@@ -105,9 +105,7 @@ export function TopBar({ onAppSwitch, appName = 'Feedback Intelligence' }: TopBa
   function handleToggle() {
     if (!appSwitcherOpen && headerRef.current) {
       const headerRect = headerRef.current.getBoundingClientRect()
-      // Align top with bottom of header + body gap (8px padding)
       const top = headerRect.bottom + 8
-      // Align left with body padding (8px from viewport edge)
       const left = 8
       setDropdownPos({ top, left })
     }
@@ -115,7 +113,7 @@ export function TopBar({ onAppSwitch, appName = 'Feedback Intelligence' }: TopBa
   }
 
   return (
-    <header ref={headerRef} className="flex h-12 items-center justify-between px-4 pt-1 flex-shrink-0 w-full" style={{ background: 'rgb(243, 245, 246)' }}>
+    <header ref={headerRef} className="flex h-12 items-center justify-between px-4 pt-1 flex-shrink-0 w-full" style={{ background: 'var(--lyra-color-bg-surface-shell)' }}>
       {/* Left: logo + app name — clicking opens the App Menu */}
       <div ref={switcherRef} className="relative flex items-center">
         <button
@@ -129,9 +127,11 @@ export function TopBar({ onAppSwitch, appName = 'Feedback Intelligence' }: TopBa
 
         {appSwitcherOpen && (
           <div
-            className="fixed z-50 flex flex-col w-[320px] rounded-xl border border-black/[0.16] bg-white overflow-hidden"
+            className="fixed z-50 flex flex-col w-[320px] rounded-xl overflow-hidden"
             style={{
-              boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
+              border: '1px solid var(--lyra-color-border-soft)',
+              backgroundColor: 'var(--lyra-color-bg-surface-overlay)',
+              boxShadow: 'var(--sol-effect-shadowlg)',
               top: dropdownPos.top,
               left: dropdownPos.left,
               maxHeight: `calc(100vh - ${dropdownPos.top + 8}px)`,
@@ -150,34 +150,37 @@ export function TopBar({ onAppSwitch, appName = 'Feedback Intelligence' }: TopBa
                           setAppSwitcherOpen(false)
                           onAppSwitch?.(app.label)
                         }}
-                        className="flex items-center gap-2 h-8 px-2 rounded-lg hover:bg-black/[0.04] transition-colors text-left"
+                        className="flex items-center gap-2 h-8 px-2 rounded-lg transition-colors text-left"
+                        style={{ color: 'var(--lyra-color-fg-default)' }}
+                        onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--lyra-color-state-bg-hover-opacity)')}
+                        onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
                       >
                         <span
                           className="flex h-6 w-6 items-center justify-center rounded-md flex-shrink-0"
                           style={{ backgroundColor: app.bg }}
                         >
-                          <Icon className="h-3.5 w-3.5 text-[#1f2937]" strokeWidth={1.75} />
+                          <Icon className="h-3.5 w-3.5" style={{ color: 'var(--lyra-color-fg-default)' }} strokeWidth={1.75} />
                         </span>
                         <span
-                          className="text-[13px] font-medium truncate"
-                          style={{ color: 'rgba(0,0,0,0.8)', lineHeight: '18px' }}
+                          className="text-sm font-medium truncate"
+                          style={{ color: 'var(--lyra-color-fg-default)', lineHeight: '18px' }}
                         >
                           {app.label}
                         </span>
                       </button>
                     )
                   })}
-                  {gi < GROUPS.length - 1 && <div className="h-px bg-black/[0.08] my-1" />}
+                  {gi < GROUPS.length - 1 && <div className="h-px my-1" style={{ backgroundColor: 'var(--lyra-color-border-subtle)' }} />}
                 </div>
               ))}
             </div>
 
             {/* CXone footer */}
-            <div className="flex items-center justify-center h-16 border-t border-black/[0.1] flex-shrink-0">
+            <div className="flex items-center justify-center h-16 flex-shrink-0" style={{ borderTop: '1px solid var(--lyra-color-border-subtle)' }}>
               <div className="flex items-center gap-1.5">
-                <span className="text-[15px] font-semibold tracking-tight text-[#0F172A]">NiCE</span>
-                <span className="flex items-center px-1.5 py-0.5 rounded-md bg-[#126bce] text-white text-[10px] font-bold tracking-wide">
-                  CX<span className="bg-white text-[#126bce] rounded-sm px-0.5 ml-0.5">one</span>
+                <span className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--lyra-color-fg-default)' }}>NiCE</span>
+                <span className="flex items-center px-1.5 py-0.5 rounded-md text-xs font-semibold tracking-wide" style={{ backgroundColor: 'var(--lyra-color-bg-primary)', color: 'var(--lyra-color-fg-on-primary)' }}>
+                  CX<span className="rounded-sm px-0.5 ml-0.5" style={{ backgroundColor: 'var(--lyra-color-bg-surface-base)', color: 'var(--lyra-color-bg-primary)' }}>one</span>
                 </span>
               </div>
             </div>
@@ -188,18 +191,18 @@ export function TopBar({ onAppSwitch, appName = 'Feedback Intelligence' }: TopBa
       {/* Right: utilities */}
       <div className="flex items-center gap-1">
         <button className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-          <HelpCircle className="h-[18px] w-[18px]" />
+          <HelpCircle className="h-5 w-5" />
         </button>
 
         <button className="relative flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-          <Bell className="h-[18px] w-[18px]" />
-          <span className="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-destructive text-[9px] font-bold text-white leading-none">
+          <Bell className="h-5 w-5" />
+          <span className="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-xs font-semibold leading-none" style={{ backgroundColor: 'var(--lyra-color-bg-destructive)', color: 'var(--lyra-color-fg-inverse)' }}>
             5
           </span>
         </button>
 
         <div className="ml-1 flex items-center gap-1 cursor-pointer">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground select-none">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold select-none" style={{ backgroundColor: 'var(--lyra-color-bg-primary)', color: 'var(--lyra-color-fg-on-primary)' }}>
             JS
           </div>
           <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />

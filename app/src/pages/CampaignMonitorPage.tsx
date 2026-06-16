@@ -168,10 +168,10 @@ function Header({
     : 'var(--lyra-color-status-success-strong)'
 
   const statusBorder =
-    campaign?.status === 'paused' ? 'rgba(142,104,0,0.18)'
-    : campaign?.status === 'draft'  ? 'rgba(0,0,0,0.10)'
-    : campaign?.status === 'ended'  ? 'rgba(0,0,0,0.10)'
-    : 'rgba(35,114,45,0.18)'
+    campaign?.status === 'paused' ? 'var(--lyra-color-status-warning-medium)'
+    : campaign?.status === 'draft'  ? 'var(--lyra-color-border-subtle)'
+    : campaign?.status === 'ended'  ? 'var(--lyra-color-border-subtle)'
+    : 'var(--lyra-color-status-success-medium)'
 
   const days = campaign?.daysRunning ?? 14
   const channels = campaign?.channels?.join(' · ') ?? 'SMS · WhatsApp · AI Agent (Cognigy)'
@@ -432,27 +432,27 @@ function HeroProgressBar({ value, target }: { value: number; target: number }) {
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', marginTop: 12 }}>
       {/* Labels */}
       <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
-        <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>0%</span>
+        <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>0%</span>
         <span style={{
           position: 'absolute', left: `${target}%`, transform: 'translateX(-50%)',
-          fontSize: 11, fontWeight: 500, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT, whiteSpace: 'nowrap',
+          fontSize: 12, fontWeight: 500, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT, whiteSpace: 'nowrap',
         }}>Target {target}%</span>
-        <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>100%</span>
+        <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>100%</span>
       </div>
       {/* Track */}
       <div
-        style={{ position: 'relative', width: '100%', height: 12, borderRadius: 9999, background: 'var(--lyra-color-bg-disabled)', cursor: 'default' }}
+        style={{ position: 'relative', width: '100%', height: 12, borderRadius: 'var(--radius-full)', background: 'var(--lyra-color-bg-disabled)', cursor: 'default' }}
         onMouseMove={e => { const r = (e.currentTarget as HTMLElement).getBoundingClientRect(); setTooltip({ x: e.clientX - r.left }) }}
         onMouseLeave={() => setTooltip(null)}
       >
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`,
-          borderRadius: 9999, background: barColor,
+          borderRadius: 'var(--radius-full)', background: barColor,
           transition: 'width 0.9s cubic-bezier(0.4,0,0.2,1)',
         }} />
         <div style={{
           position: 'absolute', top: -2, bottom: -2, left: `${target}%`, transform: 'translateX(-50%)',
-          width: 2, borderRadius: 2, background: 'var(--lyra-color-fg-default)', opacity: 0.45,
+          width: 2, borderRadius: 'var(--radius-xs)', background: 'var(--lyra-color-fg-default)', opacity: 0.45,
         }} />
       </div>
       {/* Tooltip */}
@@ -460,13 +460,13 @@ function HeroProgressBar({ value, target }: { value: number; target: number }) {
         <div style={{
           position: 'absolute', bottom: -4, left: tooltip.x, transform: 'translateX(-50%) translateY(100%)',
           background: 'var(--lyra-color-bg-surface-inverse)', color: 'var(--lyra-color-fg-inverse)',
-          fontSize: 11, fontWeight: 500, fontFamily: FONT,
+          fontSize: 12, fontWeight: 500, fontFamily: FONT,
           padding: '5px 9px', borderRadius: 'var(--radius-sm)',
           whiteSpace: 'nowrap', pointerEvents: 'none', zIndex: 100,
           boxShadow: 'var(--sol-effect-shadowlg)', lineHeight: 1.5,
         }}>
           <div style={{ fontWeight: 600 }}>{value}% current</div>
-          <div style={{ opacity: 0.75, fontSize: 10 }}>
+          <div style={{ opacity: 0.75, fontSize: 12 }}>
             Target {target}% · {value >= target ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}
           </div>
         </div>
@@ -1144,7 +1144,7 @@ function TopTopicsCard() {
               style={{
                 padding: '10px var(--space-6)',
                 gap: 12,
-                borderBottom: '1px solid rgba(0,0,0,0.05)',
+                borderBottom: '1px solid var(--lyra-color-border-subtle)',
               }}
             >
               <div className="flex-1 min-w-0">
@@ -1467,7 +1467,7 @@ function QuestionLandingCard() {
       </div>
       <table className="w-full" style={{ fontSize: 14 }}>
         <thead>
-          <tr style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+          <tr style={{ borderBottom: '1px solid var(--lyra-color-border-subtle)' }}>
             <th
               scope="col"
               className="text-left"
@@ -1567,7 +1567,7 @@ function QuestionLandingCard() {
               <tr
                 key={q.question}
                 style={{
-                  borderBottom: '1px solid rgba(0,0,0,0.05)',
+                  borderBottom: '1px solid var(--lyra-color-border-subtle)',
                   background: isKill ? 'var(--lyra-color-status-warning-subtle)' : 'transparent',
                 }}
               >

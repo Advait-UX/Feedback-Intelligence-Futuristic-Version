@@ -13,8 +13,8 @@ function CsatBadge({ value }: { value: number | string }) {
     <span style={{
       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
       borderRadius: 'var(--radius-sm)', minWidth: 36, padding: '3px 8px',
-      fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
-      fontFamily: 'var(--lyra-font-sans)',
+      fontSize: 14, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+      fontFamily: 'var(--font-sans)',
       backgroundColor: bg, color: 'var(--lyra-color-fg-default)', letterSpacing: '-0.01em',
     }}>
       {value}
@@ -109,21 +109,22 @@ function AIInsight({
     if (editing) inputRef.current?.focus()
   }, [editing])
 
-  const text = size === 'xs' ? 'text-[11px]' : 'text-[12px]'
+  const text = size === 'xs' ? 'text-xs' : 'text-xs'
   const iconSize = size === 'xs' ? 'h-3 w-3' : 'h-3.5 w-3.5'
 
   /* -------- COLLAPSED: Done -------- */
   if (status === 'done') {
     return (
-      <div className="group rounded-[8px] bg-[#f0fdf4] border border-[#bbf7d0] px-2.5 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#16a34a] flex items-center justify-center">
-          <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group rounded-[--radius-md]" style={{ background: 'var(--lyra-color-status-success-subtle)', border: '1px solid rgba(35,114,45,0.2)', padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--lyra-color-status-success-strong)' }}>
+          <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#16a34a] leading-none">Done · {TODAY}</span>
-        <span className="text-[11px] text-[#166534] leading-tight flex-1 min-w-0 truncate">· {actionText}</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none" style={{ color: 'var(--lyra-color-status-success-strong)' }}>Done · {TODAY}</span>
+        <span className="text-xs leading-tight flex-1 min-w-0 truncate" style={{ color: 'var(--lyra-color-status-success-strong)' }}>· {actionText}</span>
         <button
           onClick={() => setStatus('pending')}
-          className="text-[10px] font-medium text-[#16a34a] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+          className="text-xs font-medium hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+          style={{ color: 'var(--lyra-color-status-success-strong)' }}
           title="Undo"
         >
           Undo
@@ -135,14 +136,15 @@ function AIInsight({
   /* -------- COLLAPSED: Dismissed -------- */
   if (status === 'dismissed') {
     return (
-      <div className="group rounded-[8px] bg-[#f8fafc] border border-[#e2e8f0] px-2.5 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#94a3b8] flex items-center justify-center">
-          <X className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group rounded-[--radius-md]" style={{ background: 'var(--lyra-color-bg-surface-shell)', border: '1px solid var(--lyra-color-border-soft)', padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--lyra-color-fg-disabled)' }}>
+          <X className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8] leading-none flex-1">Dismissed · {TODAY}</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none flex-1" style={{ color: 'var(--lyra-color-fg-disabled)' }}>Dismissed · {TODAY}</span>
         <button
           onClick={() => setStatus('pending')}
-          className="text-[10px] font-medium text-[#64748b] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+          className="text-xs font-medium hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+          style={{ color: 'var(--lyra-color-fg-secondary)' }}
           title="Undo"
         >
           Undo
@@ -163,31 +165,32 @@ function AIInsight({
   const cancelEdit = () => setEditing(false)
 
   return (
-    <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] px-2.5 py-2 flex flex-col gap-1.5">
+    <div className="rounded-[--radius-md] flex flex-col gap-1.5" style={{ background: 'var(--lyra-color-bg-ai)', border: '1px solid rgba(78,57,168,0.18)', padding: '8px 10px' }}>
       {/* Body */}
       <div className="flex items-start gap-1.5">
-        <Sparkles className={`${iconSize} text-[#6366f1] flex-shrink-0 mt-px`} fill="#6366f1" />
-        <p className={`${text} text-[#1e3a8a] leading-[1.45] flex-1 min-w-0`}>
-          {header && <strong>{header} · </strong>}
+        <Sparkles className={`${iconSize} flex-shrink-0 mt-px`} style={{ color: '#4E39A8' }} fill="#4E39A8" />
+        <p className={`${text} leading-[1.45] flex-1 min-w-0`} style={{ color: 'var(--lyra-color-fg-default)' }}>
+          {header && <strong style={{ color: '#4E39A8' }}>{header} · </strong>}
           {children}
         </p>
       </div>
 
       {/* Accordion: Recommended action */}
       {action && (
-        <div className="pt-1.5 border-t border-[#dbeafe] flex flex-col gap-1.5">
+        <div className="pt-1.5 flex flex-col gap-1.5" style={{ borderTop: '1px solid rgba(78,57,168,0.18)' }}>
           {/* Accordion trigger */}
           <button
             onClick={() => setExpanded(v => !v)}
             className="flex items-center gap-1 text-left outline-none focus:outline-none group"
           >
             <ChevronDown
-              className={`h-3 w-3 text-[#6366f1] flex-shrink-0 transition-transform duration-200 ${
+              className={`h-3 w-3 flex-shrink-0 transition-transform duration-200 ${
                 expanded ? 'rotate-0' : '-rotate-90'
               }`}
+              style={{ color: '#4E39A8' }}
               strokeWidth={2.5}
             />
-            <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6366f1] leading-none group-hover:text-[#4f46e5] transition-colors">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none" style={{ color: '#4E39A8' }}>
               Recommended action
             </span>
           </button>
@@ -205,30 +208,34 @@ function AIInsight({
                       if (e.key === 'Enter') saveEdit()
                       if (e.key === 'Escape') cancelEdit()
                     }}
-                    className="flex-1 min-w-0 text-[11px] text-[#1e3a8a] bg-white border border-[#c7d2fe] rounded-[4px] px-1.5 py-1 outline-none focus:border-[#6366f1]"
+                    className="flex-1 min-w-0 text-xs rounded-[--radius-xs] outline-none"
+                    style={{ color: 'var(--lyra-color-fg-default)', background: 'var(--lyra-color-bg-surface-base)', border: '1px solid rgba(78,57,168,0.18)', padding: '4px 6px' }}
                   />
                   <button
                     onClick={saveEdit}
                     title="Save"
-                    className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-[#6366f1] hover:bg-[#4f46e5] flex items-center justify-center transition-colors outline-none focus:outline-none"
+                    className="h-5 w-5 flex-shrink-0 rounded-[--radius-xs] flex items-center justify-center transition-colors outline-none focus:outline-none"
+                    style={{ background: '#4E39A8' }}
                   >
-                    <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+                    <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
                   </button>
                   <button
                     onClick={cancelEdit}
                     title="Cancel"
-                    className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-white border border-[#c7d2fe] hover:border-[#94a3b8] flex items-center justify-center transition-colors outline-none focus:outline-none"
+                    className="h-5 w-5 flex-shrink-0 rounded-[--radius-xs] flex items-center justify-center transition-colors outline-none focus:outline-none"
+                    style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid rgba(78,57,168,0.18)' }}
                   >
-                    <X className="h-2.5 w-2.5 text-[#64748b]" strokeWidth={3} />
+                    <X className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-secondary)' }} strokeWidth={3} />
                   </button>
                 </div>
               ) : (
                 <div className="flex items-start gap-1.5">
-                  <p className="text-[11px] text-[#1e3a8a] leading-snug flex-1">{actionText}</p>
+                  <p className="text-xs leading-snug flex-1" style={{ color: 'var(--lyra-color-fg-default)' }}>{actionText}</p>
                   <button
                     onClick={startEdit}
                     title="Edit action"
-                    className="text-[#6366f1] hover:text-[#4f46e5] transition-colors outline-none focus:outline-none flex-shrink-0 mt-px"
+                    className="transition-colors outline-none focus:outline-none flex-shrink-0 mt-px"
+                    style={{ color: '#4E39A8' }}
                   >
                     <Pencil className="h-2.5 w-2.5" />
                   </button>
@@ -239,13 +246,15 @@ function AIInsight({
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => setStatus('done')}
-                    className="text-[10px] font-semibold text-white bg-[#6366f1] hover:bg-[#4f46e5] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none"
+                    className="text-xs font-semibold rounded-[--radius-xs] px-2 py-1 transition-colors outline-none focus:outline-none"
+                    style={{ color: 'var(--lyra-color-fg-inverse)', background: '#4E39A8' }}
                   >
                     Approve
                   </button>
                   <button
                     onClick={() => setStatus('dismissed')}
-                    className="text-[10px] font-semibold text-[#64748b] bg-white border border-[#c7d2fe] hover:bg-[#f8fafc] hover:text-[#0f172a] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none"
+                    className="text-xs font-semibold rounded-[--radius-xs] px-2 py-1 transition-colors outline-none focus:outline-none"
+                    style={{ color: 'var(--lyra-color-fg-secondary)', background: 'var(--lyra-color-bg-surface-base)', border: '1px solid rgba(78,57,168,0.18)' }}
                   >
                     Dismiss
                   </button>
@@ -268,13 +277,18 @@ function FilterRow() {
         {filters.map(label => (
           <select
             key={label}
-            className="h-[32px] px-3 bg-white border border-[#e2e8f0] rounded-[8px] text-[12px] text-[#0f172a] font-medium hover:border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M6%208L2%204h8z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[center_right_10px] pr-8"
+            className="h-[32px] px-3 rounded-[--radius-md] text-xs font-medium appearance-none bg-no-repeat pr-8 outline-none"
+            style={{
+              background: `var(--lyra-color-bg-surface-base) url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%2282959e%22%20d%3D%22M6%208L2%204h8z%22%2F%3E%3C%2Fsvg%3E') no-repeat right 10px center`,
+              border: '1px solid var(--lyra-color-border-soft)',
+              color: 'var(--lyra-color-fg-default)',
+            }}
           >
             <option>{label}</option>
           </select>
         ))}
       </div>
-      <div className="text-[12px] text-[#94a3b8]">May 14, 2026 · 09:14</div>
+      <div className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>May 14, 2026 · 09:14</div>
     </div>
   )
 }
@@ -342,11 +356,11 @@ const KPIS: Kpi[] = [
     headline: (
       <>
         2 SLA breaches · 1 campaign spike to replicate
-        <span className="text-[#94A3B8] mx-1">|</span>
-        <span className="text-[#94A3B8]">CSAT </span>
-        <span className="text-[#3b82f6] font-semibold">87</span>
-        <span className="text-[#94A3B8]"> → </span>
-        <span className="text-[#8b5cf6] font-semibold">60</span>
+        <span style={{ color: 'var(--lyra-color-fg-disabled)', margin: '0 4px' }}>|</span>
+        <span style={{ color: 'var(--lyra-color-fg-disabled)' }}>CSAT </span>
+        <span style={{ color: 'var(--lyra-brand-600)', fontWeight: 600 }}>87</span>
+        <span style={{ color: 'var(--lyra-color-fg-disabled)' }}> → </span>
+        <span style={{ color: '#4E39A8', fontWeight: 600 }}>60</span>
       </>
     ),
     insightBullets: [
@@ -398,39 +412,37 @@ function KpiCards() {
 
 function KpiCard({ kpi, expanded, onToggle }: { kpi: Kpi; expanded: boolean; onToggle: () => void }) {
   const insightsVisible = useContext(InsightsVisibleContext)
-  // Match the chart palette: low outliers = purple, spike = blue
   const valueColor =
-    kpi.kind === 'negative' ? '#8b5cf6' :
-    kpi.kind === 'positive' ? '#3b82f6' :
-    '#0f172a'
+    kpi.kind === 'negative' ? '#4E39A8' :
+    kpi.kind === 'positive' ? 'var(--lyra-brand-600)' :
+    'var(--lyra-color-fg-default)'
 
   const subtitleColor =
-    kpi.kind === 'negative' ? '#8b5cf6' :
-    kpi.kind === 'positive' ? '#0f172a' :
-    '#0f172a'
+    kpi.kind === 'negative' ? '#4E39A8' :
+    'var(--lyra-color-fg-default)'
 
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] p-4">
-      <div className="text-[10px] font-medium text-[#94a3b8] uppercase tracking-[0.5px] mb-2 leading-none">
+    <div className="rounded-[--radius-lg] p-4" style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)' }}>
+      <div className="text-xs font-medium uppercase tracking-[0.5px] mb-2 leading-none" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
         {kpi.label}
       </div>
 
       {/* Value row — optionally extended with a secondary metric (CSAT) */}
       <div className="flex items-center gap-4 mb-2">
         <div
-          className="text-[32px] font-bold leading-[1] tracking-[-0.02em]"
+          className="text-[32px] font-semibold leading-[1] tracking-[-0.02em]"
           style={{ color: valueColor }}
         >
           {kpi.value}
         </div>
         {kpi.csat && (
           <>
-            <div className="w-px h-7 bg-[#E2E8F0]" />
+            <div className="w-px h-7" style={{ background: 'var(--lyra-color-border-soft)' }} />
             <div className="flex items-center gap-2">
-              <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: 'var(--lyra-font-sans)' }}>CSAT</span>
+              <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: 'var(--font-sans)' }}>CSAT</span>
               <CsatBadge value={kpi.csat.current} />
-              <span style={{ color: 'var(--lyra-color-fg-secondary)', fontSize: 14, fontFamily: 'var(--lyra-font-sans)' }}>→</span>
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#4E39A8', fontFamily: 'var(--lyra-font-sans)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ color: 'var(--lyra-color-fg-secondary)', fontSize: 14, fontFamily: 'var(--font-sans)' }}>→</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#4E39A8', fontFamily: 'var(--font-sans)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                 <Sparkles size={12} />
                 {kpi.csat.target}
               </span>
@@ -440,38 +452,40 @@ function KpiCard({ kpi, expanded, onToggle }: { kpi: Kpi; expanded: boolean; onT
       </div>
 
       {kpi.delta && (
-        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[#16a34a] mb-2 leading-none">
+        <div className="flex items-center gap-1.5 text-xs font-semibold mb-2 leading-none" style={{ color: 'var(--lyra-color-status-success-strong)' }}>
           {kpi.delta.arrow && <span>{kpi.delta.arrow}</span>}
           <span>{kpi.delta.text}</span>
-          {kpi.delta.suffix && <span className="font-normal text-[#64748b]">{kpi.delta.suffix}</span>}
+          {kpi.delta.suffix && <span className="font-normal" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{kpi.delta.suffix}</span>}
         </div>
       )}
       {kpi.subtitle && (
         <div
-          className="text-[12px] font-semibold mb-2 leading-none"
+          className="text-xs font-semibold mb-2 leading-none"
           style={{ color: subtitleColor }}
         >
           {kpi.subtitle}
         </div>
       )}
       {kpi.note && (
-        <div className="text-[11px] text-[#64748B] mb-2 leading-snug">
+        <div className="text-xs mb-2 leading-snug" style={{ color: 'var(--lyra-color-fg-secondary)' }}>
           {kpi.note}
         </div>
       )}
 
       {/* Outer accordion — only present once AI recommendations are revealed */}
       {insightsVisible && (
-        <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] overflow-hidden transition-all duration-200">
+        <div className="rounded-[--radius-md] overflow-hidden transition-all duration-200" style={{ background: 'var(--lyra-color-bg-ai)', border: '1px solid rgba(78,57,168,0.18)' }}>
           {/* Always-visible headline + toggle */}
           <button
             onClick={onToggle}
-            className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none hover:bg-[#e0ecfe] transition-colors"
+            className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none transition-colors"
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.06)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
           >
-            <Sparkles className="h-3 w-3 text-[#6366f1] flex-shrink-0 mt-0.5" fill="#6366f1" />
+            <Sparkles className="h-3 w-3 flex-shrink-0 mt-0.5" style={{ color: '#4E39A8' }} fill="#4E39A8" />
             <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-              <p className="text-[11px] font-semibold text-[#1e3a8a] leading-snug line-clamp-1">{kpi.headline}</p>
-              <span className="text-[10px] font-medium text-[#6366f1] hover:text-[#4f46e5] transition-colors">
+              <p className="text-xs font-semibold leading-snug line-clamp-1" style={{ color: 'var(--lyra-color-fg-default)' }}>{kpi.headline}</p>
+              <span className="text-xs font-medium" style={{ color: '#4E39A8' }}>
                 {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
               </span>
             </div>
@@ -485,7 +499,7 @@ function KpiCard({ kpi, expanded, onToggle }: { kpi: Kpi; expanded: boolean; onT
               opacity: expanded ? 1 : 0,
             }}
           >
-            <div className="px-2.5 pb-2 pt-1 border-t border-[#dbeafe]">
+            <div className="px-2.5 pb-2 pt-1" style={{ borderTop: '1px solid rgba(78,57,168,0.18)' }}>
               <KpiInsightBody
                 insightBullets={kpi.insightBullets}
                 expectedImpact={kpi.expectedImpact}
@@ -521,24 +535,24 @@ function KpiInsightBody({
 
   if (status === 'done') {
     return (
-      <div className="group rounded-[6px] bg-[#f0fdf4] border border-[#bbf7d0] px-2 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#16a34a] flex items-center justify-center">
-          <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group rounded-[--radius-sm]" style={{ background: 'var(--lyra-color-status-success-subtle)', border: '1px solid rgba(35,114,45,0.2)', padding: '6px 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--lyra-color-status-success-strong)' }}>
+          <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#16a34a] leading-none">Done · {TODAY}</span>
-        <span className="text-[11px] text-[#166534] leading-tight flex-1 min-w-0 truncate">· {actionText}</span>
-        <button onClick={() => setStatus('pending')} className="text-[10px] font-medium text-[#16a34a] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">Undo</button>
+        <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none" style={{ color: 'var(--lyra-color-status-success-strong)' }}>Done · {TODAY}</span>
+        <span className="text-xs leading-tight flex-1 min-w-0 truncate" style={{ color: 'var(--lyra-color-status-success-strong)' }}>· {actionText}</span>
+        <button onClick={() => setStatus('pending')} className="text-xs font-medium hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" style={{ color: 'var(--lyra-color-status-success-strong)' }}>Undo</button>
       </div>
     )
   }
   if (status === 'dismissed') {
     return (
-      <div className="group rounded-[6px] bg-[#f8fafc] border border-[#e2e8f0] px-2 py-1.5 flex items-center gap-1.5">
-        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full bg-[#94a3b8] flex items-center justify-center">
-          <X className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+      <div className="group rounded-[--radius-sm]" style={{ background: 'var(--lyra-color-bg-surface-shell)', border: '1px solid var(--lyra-color-border-soft)', padding: '6px 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="h-3.5 w-3.5 flex-shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--lyra-color-fg-disabled)' }}>
+          <X className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8] leading-none flex-1">Dismissed · {TODAY}</span>
-        <button onClick={() => setStatus('pending')} className="text-[10px] font-medium text-[#64748b] hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">Undo</button>
+        <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none flex-1" style={{ color: 'var(--lyra-color-fg-disabled)' }}>Dismissed · {TODAY}</span>
+        <button onClick={() => setStatus('pending')} className="text-xs font-medium hover:underline opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" style={{ color: 'var(--lyra-color-fg-secondary)' }}>Undo</button>
       </div>
     )
   }
@@ -552,28 +566,28 @@ function KpiInsightBody({
       {/* Insight bullets */}
       <ul className="flex flex-col gap-1 list-none">
         {insightBullets.map((bullet, i) => (
-          <li key={i} className="flex items-start gap-1.5 text-[11px] text-[#1e3a8a] leading-[1.45]">
-            <span className="text-[#6366f1] font-bold flex-shrink-0 mt-px">•</span>
+          <li key={i} className="flex items-start gap-1.5 text-xs leading-[1.45]" style={{ color: 'var(--lyra-color-fg-default)' }}>
+            <span className="font-semibold flex-shrink-0 mt-px" style={{ color: '#4E39A8' }}>•</span>
             <span className="flex-1 min-w-0">{bullet}</span>
           </li>
         ))}
       </ul>
 
       {/* Expected Impact */}
-      <div className="pt-1.5 border-t border-[#dbeafe] flex flex-col gap-1">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#64748b] leading-none">Expected Impact</span>
+      <div className="pt-1.5 flex flex-col gap-1" style={{ borderTop: '1px solid rgba(78,57,168,0.18)' }}>
+        <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none" style={{ color: 'var(--lyra-color-fg-secondary)' }}>Expected Impact</span>
         <ul className="flex flex-col gap-1 list-none">
           {expectedImpact.map((bullet, i) => (
-            <li key={i} className="flex items-start gap-1.5 text-[11px] text-[#0f172a] leading-[1.45]">
-              <span className="text-[#16a34a] font-bold flex-shrink-0 mt-px">•</span>
+            <li key={i} className="flex items-start gap-1.5 text-xs leading-[1.45]" style={{ color: 'var(--lyra-color-fg-default)' }}>
+              <span className="font-semibold flex-shrink-0 mt-px" style={{ color: 'var(--lyra-color-status-success-strong)' }}>•</span>
               <span className="flex-1 min-w-0">{bullet}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="pt-1.5 border-t border-[#dbeafe] flex flex-col gap-1.5">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6366f1] leading-none">Recommended action</span>
+      <div className="pt-1.5 flex flex-col gap-1.5" style={{ borderTop: '1px solid rgba(78,57,168,0.18)' }}>
+        <span className="text-xs font-semibold uppercase tracking-[0.08em] leading-none" style={{ color: '#4E39A8' }}>Recommended action</span>
 
         {editing ? (
           <div className="flex items-center gap-1">
@@ -585,19 +599,20 @@ function KpiInsightBody({
                 if (e.key === 'Enter') saveEdit()
                 if (e.key === 'Escape') cancelEdit()
               }}
-              className="flex-1 min-w-0 text-[11px] text-[#1e3a8a] bg-white border border-[#c7d2fe] rounded-[4px] px-1.5 py-1 outline-none focus:border-[#6366f1]"
+              className="flex-1 min-w-0 text-xs rounded-[--radius-xs] outline-none"
+              style={{ color: 'var(--lyra-color-fg-default)', background: 'var(--lyra-color-bg-surface-base)', border: '1px solid rgba(78,57,168,0.18)', padding: '4px 6px' }}
             />
-            <button onClick={saveEdit} title="Save" className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-[#6366f1] hover:bg-[#4f46e5] flex items-center justify-center transition-colors outline-none focus:outline-none">
-              <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+            <button onClick={saveEdit} title="Save" className="h-5 w-5 flex-shrink-0 rounded-[--radius-xs] flex items-center justify-center transition-colors outline-none focus:outline-none" style={{ background: '#4E39A8' }}>
+              <Check className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-inverse)' }} strokeWidth={3} />
             </button>
-            <button onClick={cancelEdit} title="Cancel" className="h-5 w-5 flex-shrink-0 rounded-[4px] bg-white border border-[#c7d2fe] hover:border-[#94a3b8] flex items-center justify-center transition-colors outline-none focus:outline-none">
-              <X className="h-2.5 w-2.5 text-[#64748b]" strokeWidth={3} />
+            <button onClick={cancelEdit} title="Cancel" className="h-5 w-5 flex-shrink-0 rounded-[--radius-xs] flex items-center justify-center transition-colors outline-none focus:outline-none" style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid rgba(78,57,168,0.18)' }}>
+              <X className="h-2.5 w-2.5" style={{ color: 'var(--lyra-color-fg-secondary)' }} strokeWidth={3} />
             </button>
           </div>
         ) : (
           <div className="flex items-start gap-1.5">
-            <p className="text-[11px] text-[#1e3a8a] leading-snug flex-1">{actionText}</p>
-            <button onClick={startEdit} title="Edit action" className="text-[#6366f1] hover:text-[#4f46e5] transition-colors outline-none focus:outline-none flex-shrink-0 mt-px">
+            <p className="text-xs leading-snug flex-1" style={{ color: 'var(--lyra-color-fg-default)' }}>{actionText}</p>
+            <button onClick={startEdit} title="Edit action" className="transition-colors outline-none focus:outline-none flex-shrink-0 mt-px" style={{ color: '#4E39A8' }}>
               <Pencil className="h-2.5 w-2.5" />
             </button>
           </div>
@@ -605,10 +620,10 @@ function KpiInsightBody({
 
         {!editing && (
           <div className="flex items-center gap-1.5">
-            <button onClick={() => setStatus('done')} className="text-[10px] font-semibold text-white bg-[#6366f1] hover:bg-[#4f46e5] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none">
+            <button onClick={() => setStatus('done')} className="text-xs font-semibold rounded-[--radius-xs] px-2 py-1 transition-colors outline-none focus:outline-none" style={{ color: 'var(--lyra-color-fg-inverse)', background: '#4E39A8' }}>
               Approve
             </button>
-            <button onClick={() => setStatus('dismissed')} className="text-[10px] font-semibold text-[#64748b] bg-white border border-[#c7d2fe] hover:bg-[#f8fafc] hover:text-[#0f172a] rounded-[4px] px-2 py-1 transition-colors outline-none focus:outline-none">
+            <button onClick={() => setStatus('dismissed')} className="text-xs font-semibold rounded-[--radius-xs] px-2 py-1 transition-colors outline-none focus:outline-none" style={{ color: 'var(--lyra-color-fg-secondary)', background: 'var(--lyra-color-bg-surface-base)', border: '1px solid rgba(78,57,168,0.18)' }}>
               Dismiss
             </button>
           </div>
@@ -621,24 +636,24 @@ function KpiInsightBody({
 /* ---------- 3. Response-Rate-Over-Time card ---------- */
 function ResponseRateOverTimeCard() {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[16px] shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] overflow-hidden">
+    <div className="rounded-[--radius-xl] overflow-hidden" style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)', boxShadow: 'var(--sol-effect-shadowmd)' }}>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[#e2e8f0]">
+      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
         <div className="flex items-start justify-between mb-2">
           <div>
-            <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">
+            <h3 className="text-sm font-semibold mb-0.5 leading-tight" style={{ color: 'var(--lyra-color-fg-default)' }}>
               Response Rate Over Time
             </h3>
-            <p className="text-[11px] text-[#94a3b8] leading-tight">
+            <p className="text-xs leading-tight" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
               Mar 15 – May 14, 2026 · Weekends shaded · Outliers flagged
             </p>
           </div>
-          <div className="flex items-center gap-3 pt-1 px-2.5 py-1.5 rounded-full bg-[#f8fafc] border border-[#e2e8f0]">
-            <LegendDot label="Weekend" swatch={<span className="w-3 h-3 bg-[#f1f5f9] border border-[#e2e8f0] rounded-[2px] inline-block" />} />
-            <span className="w-px h-3 bg-[#e2e8f0]" />
-            <LegendDot label="Low outlier" swatch={<span className="w-2 h-2 bg-[#8b5cf6] rounded-full inline-block" />} />
-            <span className="w-px h-3 bg-[#e2e8f0]" />
-            <LegendDot label="Spike" swatch={<span className="w-2 h-2 bg-[#3b82f6] rounded-full inline-block" />} />
+          <div className="flex items-center gap-3 pt-1 px-2.5 py-1.5 rounded-full" style={{ background: 'var(--lyra-color-bg-surface-shell)', border: '1px solid var(--lyra-color-border-subtle)' }}>
+            <LegendDot label="Weekend" swatch={<span className="w-3 h-3 rounded-[2px] inline-block" style={{ background: 'var(--lyra-color-bg-surface-shell)', border: '1px solid var(--lyra-color-border-subtle)' }} />} />
+            <span className="w-px h-3 inline-block" style={{ background: 'var(--lyra-color-border-subtle)' }} />
+            <LegendDot label="Low outlier" swatch={<span className="w-2 h-2 rounded-full inline-block" style={{ background: '#4E39A8' }} />} />
+            <span className="w-px h-3 inline-block" style={{ background: 'var(--lyra-color-border-subtle)' }} />
+            <LegendDot label="Spike" swatch={<span className="w-2 h-2 rounded-full inline-block" style={{ background: 'var(--lyra-brand-600)' }} />} />
           </div>
         </div>
       </div>
@@ -658,7 +673,7 @@ function LegendDot({ label, swatch }: { label: string; swatch: React.ReactNode }
   return (
     <div className="flex items-center gap-1.5">
       {swatch}
-      <span className="text-[11px] text-[#64748b]">{label}</span>
+      <span className="text-xs" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{label}</span>
     </div>
   )
 }
@@ -682,16 +697,18 @@ function PanelInsightAccordion({
   const insightsVisible = useContext(InsightsVisibleContext)
   if (!insightsVisible) return null
   return (
-    <div className="px-4 py-3 border-b border-[#e2e8f0]">
-    <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] overflow-hidden transition-all duration-200">
+    <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
+    <div className="rounded-[--radius-md] overflow-hidden transition-all duration-200" style={{ background: 'var(--lyra-color-bg-ai)', border: '1px solid rgba(78,57,168,0.18)' }}>
       <button
         onClick={onToggle}
-        className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none hover:bg-[#e0ecfe] transition-colors"
+        className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none transition-colors"
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.06)' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
       >
-        <Sparkles className="h-3 w-3 text-[#6366f1] flex-shrink-0 mt-0.5" fill="#6366f1" />
+        <Sparkles className="h-3 w-3 flex-shrink-0 mt-0.5" style={{ color: '#4E39A8' }} fill="#4E39A8" />
         <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-          <p className="text-[11px] text-[#1e3a8a] leading-[1.45]">{collapsed}</p>
-          <span className="text-[10px] font-medium text-[#6366f1] hover:text-[#4f46e5] transition-colors">
+          <p className="text-xs leading-[1.45]" style={{ color: 'var(--lyra-color-fg-default)' }}>{collapsed}</p>
+          <span className="text-xs font-medium" style={{ color: '#4E39A8' }}>
             {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
           </span>
         </div>
@@ -701,7 +718,7 @@ function PanelInsightAccordion({
         className="overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out"
         style={{ maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
       >
-        <div className="px-2.5 pb-2 pt-1 border-t border-[#dbeafe]">
+        <div className="px-2.5 pb-2 pt-1" style={{ borderTop: '1px solid rgba(78,57,168,0.18)' }}>
           <KpiInsightBody
             insightBullets={insightBullets}
             expectedImpact={expectedImpact}
@@ -777,7 +794,7 @@ function OutlierAnnotationRail() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   if (!insightsVisible) return null
   return (
-    <div className="px-4 py-3 border-b border-[#e2e8f0]">
+    <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
       <div className="grid grid-cols-3 gap-2 items-stretch">
         {OUTLIER_ANNOTATIONS.map((ann, i) => (
           <OutlierAnnotationCard
@@ -802,18 +819,20 @@ function OutlierAnnotationCard({
   onToggle: () => void
 }) {
   return (
-    <div className="rounded-[8px] bg-[#eff6ff] border border-[#dbeafe] overflow-hidden transition-all duration-200 h-full flex flex-col">
+    <div className="rounded-[--radius-md] overflow-hidden transition-all duration-200 h-full flex flex-col" style={{ background: 'var(--lyra-color-bg-ai)', border: '1px solid rgba(78,57,168,0.18)' }}>
       {/* Always-visible one-liner + toggle */}
       <button
         onClick={onToggle}
-        className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none hover:bg-[#e0ecfe] transition-colors flex-1"
+        className="flex items-start gap-1.5 w-full px-2.5 py-2 text-left outline-none focus:outline-none transition-colors flex-1"
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(78,57,168,0.06)' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
       >
-        <Sparkles className="h-3 w-3 text-[#6366f1] flex-shrink-0 mt-0.5" fill="#6366f1" />
+        <Sparkles className="h-3 w-3 flex-shrink-0 mt-0.5" style={{ color: '#4E39A8' }} fill="#4E39A8" />
         <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-          <p className="text-[11px] text-[#1e3a8a] leading-[1.4]">
+          <p className="text-xs leading-[1.4]" style={{ color: 'var(--lyra-color-fg-default)' }}>
             <strong>{ann.date}</strong> · {ann.summary}
           </p>
-          <span className="text-[10px] font-medium text-[#6366f1] hover:text-[#4f46e5] transition-colors">
+          <span className="text-xs font-medium" style={{ color: '#4E39A8' }}>
             {expanded ? '▾ Hide insight & action' : '▸ See insight & action'}
           </span>
         </div>
@@ -824,7 +843,7 @@ function OutlierAnnotationCard({
         className="overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out"
         style={{ maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
       >
-        <div className="px-2.5 pb-2 pt-1 border-t border-[#dbeafe]">
+        <div className="px-2.5 pb-2 pt-1" style={{ borderTop: '1px solid rgba(78,57,168,0.18)' }}>
           <KpiInsightBody
             insightBullets={ann.insightBullets}
             expectedImpact={ann.expectedImpact}
@@ -926,18 +945,18 @@ function ResponseRateChart() {
         onMouseLeave={() => setHovered(null)}
       >
         <defs>
-          {/* Area gradient — deep electric blue fading down */}
+          {/* Area gradient — brand blue fading down */}
           <linearGradient id="fi-area" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#3b82f6" stopOpacity="0.28" />
-            <stop offset="55%"  stopColor="#3b82f6" stopOpacity="0.10" />
-            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+            <stop offset="0%"   stopColor="#166CCA" stopOpacity="0.28" />
+            <stop offset="55%"  stopColor="#166CCA" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#166CCA" stopOpacity="0" />
           </linearGradient>
 
-          {/* Line gradient — subtle hue shift along the curve */}
+          {/* Line gradient — brand-700 → brand-600 → brand-400 */}
           <linearGradient id="fi-line" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"   stopColor="#6366f1" />
-            <stop offset="50%"  stopColor="#3b82f6" />
-            <stop offset="100%" stopColor="#06b6d4" />
+            <stop offset="0%"   stopColor="#185BA4" />
+            <stop offset="50%"  stopColor="#166CCA" />
+            <stop offset="100%" stopColor="#4896EC" />
           </linearGradient>
 
           {/* Soft glow under the line for depth */}
@@ -958,8 +977,8 @@ function ResponseRateChart() {
             y={padding.top}
             width={bandWidth}
             height={ch}
-            fill="#f1f5f9"
-            opacity={0.5}
+            fill="rgba(0,0,0,0.025)"
+            opacity={1}
           />
         ))}
 
@@ -971,7 +990,7 @@ function ResponseRateChart() {
               y1={ys(t)}
               x2={width - padding.right}
               y2={ys(t)}
-              stroke="#e2e8f0"
+              stroke="rgba(0,0,0,0.06)"
               strokeDasharray="3 5"
               strokeWidth="1"
               opacity={t === 0 ? 1 : 0.7}
@@ -980,7 +999,7 @@ function ResponseRateChart() {
               x={padding.left - 12}
               y={ys(t) + 4}
               textAnchor="end"
-              fill="#cbd5e1"
+              fill="rgba(0,0,0,0.25)"
               fontSize="10"
               fontWeight="500"
               letterSpacing="0.5"
@@ -1011,7 +1030,7 @@ function ResponseRateChart() {
         {/* Outliers — purple for low, blue for spike */}
         {data.map(d => {
           if (!d.outlier) return null
-          const color = d.outlier === 'low' ? '#8b5cf6' : '#3b82f6'
+          const color = d.outlier === 'low' ? '#4E39A8' : '#166CCA'
           return (
             <g key={`out-${d.i}`}>
               {/* Outer halo */}
@@ -1045,12 +1064,12 @@ function ResponseRateChart() {
               y1={padding.top}
               x2={xs(hovered)}
               y2={padding.top + ch}
-              stroke="#3b82f6"
+              stroke="#166CCA"
               strokeOpacity={0.35}
               strokeDasharray="3 4"
             />
-            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={9} fill="#3b82f6" opacity={0.18} />
-            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={5} fill="white" stroke="#3b82f6" strokeWidth={2.5} />
+            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={9} fill="#166CCA" opacity={0.18} />
+            <circle cx={xs(hovered)} cy={ys(data[hovered].y)} r={5} fill="white" stroke="#166CCA" strokeWidth={2.5} />
           </g>
         )}
 
@@ -1061,7 +1080,7 @@ function ResponseRateChart() {
             x={xs(d.i)}
             y={height - 14}
             textAnchor="middle"
-            fill="#94a3b8"
+            fill="rgba(0,0,0,0.45)"
             fontSize="11"
             fontWeight="500"
             letterSpacing="0.3"
@@ -1082,29 +1101,29 @@ function ResponseRateChart() {
           }}
         >
           <div
-            className="rounded-xl px-3.5 py-2.5 whitespace-nowrap border border-white/10"
+            className="rounded-[--radius-xl] px-3.5 py-2.5 whitespace-nowrap border border-white/10"
             style={{
-              background: 'linear-gradient(135deg, rgba(15,23,42,0.96), rgba(30,41,59,0.96))',
+              background: 'var(--lyra-color-bg-surface-inverse)',
               backdropFilter: 'blur(12px)',
-              boxShadow: '0 12px 32px -8px rgba(15,23,42,0.45), 0 2px 8px rgba(15,23,42,0.25)',
+              boxShadow: 'var(--sol-effect-shadowlg)',
             }}
           >
-            <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-white/60 leading-none">
+            <div className="text-xs font-medium uppercase tracking-[0.08em] leading-none" style={{ color: 'var(--lyra-color-fg-inverse)', opacity: 0.6 }}>
               {data[hovered].fullDate}
             </div>
             <div className="flex items-baseline gap-2 mt-1.5">
-              <span className="text-[20px] font-semibold text-white leading-none tabular-nums">{data[hovered].y}%</span>
-              <span className="text-[10px] text-white/50 uppercase tracking-wider">response rate</span>
+              <span className="text-[20px] font-semibold leading-none tabular-nums" style={{ color: 'var(--lyra-color-fg-inverse)' }}>{data[hovered].y}%</span>
+              <span className="text-xs uppercase tracking-wider" style={{ color: 'var(--lyra-color-fg-inverse)', opacity: 0.5 }}>response rate</span>
             </div>
             {data[hovered].outlier && (
               <div className="mt-2 pt-2 border-t border-white/10 flex items-center gap-1.5">
                 <span
                   className="inline-block w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: data[hovered].outlier === 'low' ? '#8b5cf6' : '#3b82f6' }}
+                  style={{ backgroundColor: data[hovered].outlier === 'low' ? '#4E39A8' : '#166CCA' }}
                 />
                 <span
-                  className="text-[10px] font-semibold uppercase tracking-wider"
-                  style={{ color: data[hovered].outlier === 'low' ? '#c4b5fd' : '#93c5fd' }}
+                  className="text-xs font-semibold uppercase tracking-wider"
+                  style={{ color: 'var(--lyra-color-fg-inverse)', opacity: 0.75 }}
                 >
                   {data[hovered].outlier === 'low' ? 'Low outlier' : 'Spike detected'}
                 </span>
@@ -1131,11 +1150,11 @@ const INTENT_ROWS: IntentRow[] = [
 
 function ByIntentPanel({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden h-full flex flex-col">
+    <div className="rounded-[--radius-lg] overflow-hidden h-full flex flex-col" style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)' }}>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[#e2e8f0]">
-        <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">By Intent</h3>
-        <p className="text-[12px] text-[#94a3b8] leading-tight">Response rate per AI-detected topic</p>
+      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
+        <h3 className="text-sm font-semibold mb-0.5 leading-tight" style={{ color: 'var(--lyra-color-fg-default)' }}>By Intent</h3>
+        <p className="text-xs leading-tight" style={{ color: 'var(--lyra-color-fg-disabled)' }}>Response rate per AI-detected topic</p>
       </div>
 
       {/* AI insight accordion (renders only when insights are revealed) */}
@@ -1166,22 +1185,22 @@ function ByIntentPanel({ expanded, onToggle }: { expanded: boolean; onToggle: ()
 }
 
 function IntentRow({ row }: { row: IntentRow }) {
-  const barColor = row.tone === 'up' ? '#3b82f6' : row.tone === 'flat' ? '#93c5fd' : '#bfdbfe'
-  const deltaColor = row.tone === 'up' ? '#16a34a' : row.tone === 'flat' ? '#64748b' : '#dc2626'
+  const barColor = row.tone === 'up' ? 'var(--lyra-color-bg-primary)' : row.tone === 'flat' ? 'var(--lyra-brand-300)' : 'var(--lyra-brand-100)'
+  const deltaColor = row.tone === 'up' ? 'var(--lyra-color-status-success-strong)' : row.tone === 'flat' ? 'var(--lyra-color-fg-secondary)' : 'var(--lyra-color-status-critical-strong)'
 
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[13px] text-[#0f172a] font-medium leading-none truncate">{row.name}</span>
+        <span className="text-sm font-medium leading-none truncate" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.name}</span>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-[13px] font-semibold text-[#0f172a] leading-none">{row.pct}%</span>
-          <span className="text-[12px] font-semibold leading-none" style={{ color: deltaColor }}>{row.delta}</span>
+          <span className="text-sm font-semibold leading-none" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.pct}%</span>
+          <span className="text-xs font-semibold leading-none" style={{ color: deltaColor }}>{row.delta}</span>
         </div>
       </div>
-      <div className="h-[6px] bg-[#f1f5f9] rounded-full overflow-hidden">
+      <div className="h-[6px] rounded-full overflow-hidden" style={{ background: 'var(--lyra-color-bg-surface-shell)' }}>
         <div
           className="h-full rounded-full transition-all duration-300"
-          style={{ width: `${row.pct}%`, backgroundColor: barColor }}
+          style={{ width: `${row.pct}%`, background: barColor }}
         />
       </div>
     </div>
@@ -1200,14 +1219,14 @@ const CUSTOMER_ROWS: CustomerRow[] = [
 
 function ByCustomerTypePanel({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden h-full flex flex-col">
-      <div className="px-4 py-3 border-b border-[#e2e8f0] flex items-center justify-between gap-2">
+    <div className="rounded-[--radius-lg] overflow-hidden h-full flex flex-col" style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)' }}>
+      <div className="px-4 py-3 flex items-center justify-between gap-2" style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
         <div>
-          <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">By Customer Type</h3>
-          <p className="text-[12px] text-[#94a3b8] leading-tight">Segment response rate vs. 55.4% baseline</p>
+          <h3 className="text-sm font-semibold mb-0.5 leading-tight" style={{ color: 'var(--lyra-color-fg-default)' }}>By Customer Type</h3>
+          <p className="text-xs leading-tight" style={{ color: 'var(--lyra-color-fg-disabled)' }}>Segment response rate vs. 55.4% baseline</p>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#eef2ff] border border-[#c7d2fe] rounded-full text-[11px] font-semibold text-[#6366f1]">
-          <Sparkles className="h-3 w-3" fill="#6366f1" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--lyra-color-bg-ai)', border: '1px solid rgba(78,57,168,0.18)', color: '#4E39A8' }}>
+          <Sparkles className="h-3 w-3" fill="#4E39A8" />
           AI segment pattern
         </div>
       </div>
@@ -1239,16 +1258,16 @@ function ByCustomerTypePanel({ expanded, onToggle }: { expanded: boolean; onTogg
 }
 
 function CustomerTypeRow({ row }: { row: CustomerRow }) {
-  const dotColor = row.tone === 'up' ? '#6366f1' : row.tone === 'flat' ? '#3b82f6' : row.name === 'First-Time Traveler' ? '#93c5fd' : '#bfdbfe'
-  const deltaColor = row.tone === 'up' ? '#16a34a' : row.tone === 'flat' ? '#64748b' : '#dc2626'
-  const trendColor = row.tone === 'up' ? '#6366f1' : row.tone === 'flat' ? '#64748b' : '#94a3b8'
+  const dotColor = row.tone === 'up' ? '#4E39A8' : row.tone === 'flat' ? 'var(--lyra-color-bg-primary)' : row.name === 'First-Time Traveler' ? 'var(--lyra-brand-300)' : 'var(--lyra-brand-100)'
+  const deltaColor = row.tone === 'up' ? 'var(--lyra-color-status-success-strong)' : row.tone === 'flat' ? 'var(--lyra-color-fg-secondary)' : 'var(--lyra-color-status-critical-strong)'
+  const trendColor = row.tone === 'up' ? '#4E39A8' : row.tone === 'flat' ? 'var(--lyra-color-fg-secondary)' : 'var(--lyra-color-fg-disabled)'
 
   return (
     <div className="flex items-center gap-3">
-      <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
-      <div className="flex-1 text-[13px] text-[#0f172a] font-medium leading-none">{row.name}</div>
-      <div className="text-[13px] font-semibold text-[#0f172a] leading-none">{row.pct}%</div>
-      <div className="w-[42px] text-right text-[12px] font-semibold leading-none" style={{ color: deltaColor }}>
+      <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: dotColor }} />
+      <div className="flex-1 text-sm font-medium leading-none" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.name}</div>
+      <div className="text-sm font-semibold leading-none" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.pct}%</div>
+      <div className="w-[42px] text-right text-xs font-semibold leading-none" style={{ color: deltaColor }}>
         {row.vs}
       </div>
       <div className="w-[24px] text-center text-[18px] leading-none" style={{ color: trendColor }}>
@@ -1271,10 +1290,10 @@ const CHANNEL_ROWS: ChannelRow[] = [
 
 function ByChannelPanel({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden h-full flex flex-col">
-      <div className="px-4 py-3 border-b border-[#e2e8f0]">
-        <h3 className="text-[14px] font-semibold text-[#0f172a] mb-0.5 leading-tight">By Channel</h3>
-        <p className="text-[12px] text-[#94a3b8] leading-tight">Response rate per survey delivery method</p>
+    <div className="rounded-[--radius-lg] overflow-hidden h-full flex flex-col" style={{ background: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)' }}>
+      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--lyra-color-border-soft)' }}>
+        <h3 className="text-sm font-semibold mb-0.5 leading-tight" style={{ color: 'var(--lyra-color-fg-default)' }}>By Channel</h3>
+        <p className="text-xs leading-tight" style={{ color: 'var(--lyra-color-fg-disabled)' }}>Response rate per survey delivery method</p>
       </div>
 
       {/* AI insight accordion (renders only when insights are revealed) */}
@@ -1304,22 +1323,22 @@ function ByChannelPanel({ expanded, onToggle }: { expanded: boolean; onToggle: (
 }
 
 function ChannelRowItem({ row }: { row: ChannelRow }) {
-  const barColor = row.tone === 'up' ? '#3b82f6' : row.tone === 'flat' ? '#93c5fd' : '#bfdbfe'
-  const deltaColor = row.tone === 'up' ? '#16a34a' : row.tone === 'flat' ? '#64748b' : '#dc2626'
+  const barColor = row.tone === 'up' ? 'var(--lyra-color-bg-primary)' : row.tone === 'flat' ? 'var(--lyra-brand-300)' : 'var(--lyra-brand-100)'
+  const deltaColor = row.tone === 'up' ? 'var(--lyra-color-status-success-strong)' : row.tone === 'flat' ? 'var(--lyra-color-fg-secondary)' : 'var(--lyra-color-status-critical-strong)'
 
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[13px] text-[#0f172a] font-medium leading-none truncate">{row.name}</span>
+        <span className="text-sm font-medium leading-none truncate" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.name}</span>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-[13px] font-semibold text-[#0f172a] leading-none">{row.pct}%</span>
-          <span className="text-[12px] font-semibold leading-none" style={{ color: deltaColor }}>{row.delta}</span>
+          <span className="text-sm font-semibold leading-none" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.pct}%</span>
+          <span className="text-xs font-semibold leading-none" style={{ color: deltaColor }}>{row.delta}</span>
         </div>
       </div>
-      <div className="h-[6px] bg-[#f1f5f9] rounded-full overflow-hidden">
+      <div className="h-[6px] rounded-full overflow-hidden" style={{ background: 'var(--lyra-color-bg-surface-shell)' }}>
         <div
           className="h-full rounded-full transition-all duration-300"
-          style={{ width: `${row.pct}%`, backgroundColor: barColor }}
+          style={{ width: `${row.pct}%`, background: barColor }}
         />
       </div>
     </div>

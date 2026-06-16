@@ -7,7 +7,7 @@ import { TopicsTable } from './TopicsTable'
 import { SurveysList } from './SurveysList'
 
 /* ── Lyra design token aliases (keep all color/font/radius in one place) ── */
-const F = 'var(--lyra-font-sans)'
+const F = 'var(--font-sans)'
 // Foreground
 const FG         = 'var(--lyra-color-fg-default)'       // rgba(0,0,0,80%)
 const FG_SEC     = 'var(--lyra-color-fg-secondary)'     // rgba(0,0,0,60%)
@@ -205,11 +205,11 @@ function ResponseRateKpiTile({ value, target, delta }: { value: number; target: 
       <div style={{ height: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
         {/* Labels */}
         <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', marginBottom: 6 }}>
-          <span style={{ fontSize: 11, color: FG_SEC, fontFamily: F }}>0%</span>
-          <span style={{ position: 'absolute', left: `${target}%`, transform: 'translateX(-50%)', fontSize: 11, color: FG_SEC, whiteSpace: 'nowrap', fontFamily: F }}>
+          <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>0%</span>
+          <span style={{ position: 'absolute', left: `${target}%`, transform: 'translateX(-50%)', fontSize: 12, color: FG_SEC, whiteSpace: 'nowrap', fontFamily: F }}>
             Target {target}%
           </span>
-          <span style={{ fontSize: 11, color: FG_SEC, fontFamily: F }}>100%</span>
+          <span style={{ fontSize: 12, color: FG_SEC, fontFamily: F }}>100%</span>
         </div>
         {/* Track */}
         <div
@@ -238,7 +238,7 @@ function ResponseRateKpiTile({ value, target, delta }: { value: number; target: 
             boxShadow: SH_LG, lineHeight: 1.5,
           }}>
             <div style={{ fontWeight: 600 }}>{value}% current</div>
-            <div style={{ opacity: 0.7, fontSize: 11 }}>
+            <div style={{ opacity: 0.7, fontSize: 12 }}>
               Target {target}% · {value >= target ? `${gap}pp above` : `${gap.toFixed(1)}pp to go`}
             </div>
           </div>
@@ -1357,7 +1357,7 @@ function ResponseRateChart() {
             y={height - 14}
             textAnchor="middle"
             fill="rgba(0,0,0,0.35)"
-            fontSize="11"
+            fontSize="12"
             fontWeight="500"
             letterSpacing="0.3"
           >
@@ -1383,19 +1383,19 @@ function ResponseRateChart() {
               boxShadow: SH_LG,
             }}
           >
-            <div style={{ fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.6)', lineHeight: 1, fontFamily: F }}>
+            <div style={{ fontSize: 12, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--lyra-color-fg-inverse)', opacity: 0.6, lineHeight: 1, fontFamily: F }}>
               {data[hovered].fullDate}
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 6 }}>
               <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--lyra-color-fg-inverse)', lineHeight: 1, fontVariantNumeric: 'tabular-nums', fontFamily: F }}>{data[hovered].y}%</span>
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: F }}>response rate</span>
+              <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-inverse)', opacity: 0.5, textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: F }}>response rate</span>
             </div>
             {data[hovered].outlier && (
               <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span
-                  style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', backgroundColor: data[hovered].outlier === 'low' ? AI_COLOR : '#166CCA' }}
+                  style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', backgroundColor: data[hovered].outlier === 'low' ? AI_COLOR : 'var(--lyra-brand-600)' }}
                 />
-                <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.75)' }}>
+                <span style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--lyra-color-fg-inverse)', opacity: 0.75 }}>
                   {data[hovered].outlier === 'low' ? 'Low outlier' : 'Spike detected'}
                 </span>
               </div>

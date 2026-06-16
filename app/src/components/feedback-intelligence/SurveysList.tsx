@@ -15,43 +15,43 @@ export function SurveysList({
   return (
     <section>
       <div className="flex items-baseline justify-between mb-3">
-        <h2 className="text-[16px] font-semibold text-[#0f172a]">Recent surveys</h2>
-        <span className="text-[11px] text-[#94a3b8]">
+        <h2 className="text-base font-semibold" style={{ color: 'var(--lyra-color-fg-default)' }}>Recent surveys</h2>
+        <span className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
           {surveys.length} surveys · click a row to open the survey detail
         </span>
       </div>
 
       {surveys.length === 0 ? (
-        <div className="bg-white border border-[#e2e8f0] rounded-[12px] p-6 text-center">
-          <p className="text-[13px] text-[#94a3b8]">No surveys yet for this campaign.</p>
+        <div className="bg-white border border-[--lyra-color-border-soft] rounded-[--radius-lg] p-6 text-center">
+          <p className="text-sm" style={{ color: 'var(--lyra-color-fg-disabled)' }}>No surveys yet for this campaign.</p>
         </div>
       ) : (
-        <div className="bg-white border border-[#e2e8f0] rounded-[12px] overflow-hidden">
-          <table className="w-full text-[13px]">
+        <div className="bg-white border border-[--lyra-color-border-soft] rounded-[--radius-lg] overflow-hidden">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#f1f5f9]">
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+              <tr className="border-b border-[--lyra-color-border-subtle]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Customer
                 </th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Phone
                 </th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Email
                 </th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Agent
                 </th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Interaction
                 </th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Status
                 </th>
-                <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   CSAT
                 </th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
                   Top Topic
                 </th>
                 <th className="px-5 py-3 w-[36px]" />
@@ -75,17 +75,17 @@ function SurveyRow({ survey, onSelect }: { survey: Survey; onSelect: () => void 
   return (
     <tr
       onClick={onSelect}
-      className="border-b border-[#f1f5f9] last:border-b-0 hover:bg-[#f8fafc] cursor-pointer transition-colors"
+      className="border-b border-[--lyra-color-border-subtle] last:border-b-0 hover:bg-[--lyra-color-state-bg-hover-opacity] cursor-pointer transition-colors"
     >
       <td className="px-5 py-3.5">
-        <div className="text-[13px] font-medium text-[#0f172a]">{survey.customer.name}</div>
+        <div className="text-sm font-medium" style={{ color: 'var(--lyra-color-fg-default)' }}>{survey.customer.name}</div>
       </td>
-      <td className="px-5 py-3.5 text-[#475569] tabular-nums">{survey.customer.phone}</td>
-      <td className="px-5 py-3.5 text-[#475569]">{survey.customer.email}</td>
-      <td className="px-5 py-3.5 text-[#475569]">{survey.agent.name}</td>
+      <td className="px-5 py-3.5 tabular-nums" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{survey.customer.phone}</td>
+      <td className="px-5 py-3.5" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{survey.customer.email}</td>
+      <td className="px-5 py-3.5" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{survey.agent.name}</td>
       <td className="px-5 py-3.5">
-        <div className="text-[12px] text-[#0f172a]">{interactionDate}</div>
-        <div className="text-[11px] text-[#94a3b8]">{survey.interaction.channel}</div>
+        <div className="text-xs" style={{ color: 'var(--lyra-color-fg-default)' }}>{interactionDate}</div>
+        <div className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>{survey.interaction.channel}</div>
       </td>
       <td className="px-5 py-3.5">
         <SurveyStatusPill status={survey.status} />
@@ -95,7 +95,7 @@ function SurveyRow({ survey, onSelect }: { survey: Survey; onSelect: () => void 
           <span style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             borderRadius: 'var(--radius-sm)', minWidth: 36, padding: '3px 8px',
-            fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+            fontSize: 14, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
             fontFamily: 'var(--lyra-font-sans)', letterSpacing: '-0.01em',
             backgroundColor: survey.csat >= 70
               ? 'var(--lyra-color-status-info-subtle)'
@@ -108,9 +108,9 @@ function SurveyRow({ survey, onSelect }: { survey: Survey; onSelect: () => void 
           <span style={{ color: 'var(--lyra-color-fg-secondary)' }}>—</span>
         )}
       </td>
-      <td className="px-5 py-3.5 text-[#475569]">{topTopic}</td>
+      <td className="px-5 py-3.5" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{topTopic}</td>
       <td className="px-5 py-3.5 text-right">
-        <ChevronRight className="h-4 w-4 text-[#94a3b8]" />
+        <ChevronRight className="h-4 w-4" style={{ color: 'var(--lyra-color-fg-disabled)' }} />
       </td>
     </tr>
   )
@@ -118,10 +118,10 @@ function SurveyRow({ survey, onSelect }: { survey: Survey; onSelect: () => void 
 
 /* ---------- Status pill ---------- */
 const SURVEY_STATUS_STYLES: Record<SurveyStatus, { bg: string; color: string; border: string; label: string }> = {
-  completed: { bg: 'var(--lyra-color-status-success-subtle)', color: 'var(--lyra-color-status-success-strong)', border: 'rgba(35,114,45,0.18)',  label: 'Completed' },
-  partial:   { bg: 'var(--lyra-color-status-warning-subtle)', color: 'var(--lyra-color-status-warning-strong)', border: 'rgba(142,104,0,0.18)', label: 'Partial'   },
-  abandoned: { bg: 'var(--lyra-slate-200)',                   color: 'var(--lyra-slate-500)',                   border: 'rgba(0,0,0,0.10)',      label: 'Abandoned' },
-  pending:   { bg: 'var(--lyra-slate-100)',                   color: 'var(--lyra-slate-600)',                   border: 'rgba(0,0,0,0.10)',      label: 'Pending'   },
+  completed: { bg: 'var(--lyra-color-status-success-subtle)', color: 'var(--lyra-color-status-success-strong)', border: 'var(--lyra-color-status-success-medium)',  label: 'Completed' },
+  partial:   { bg: 'var(--lyra-color-status-warning-subtle)', color: 'var(--lyra-color-status-warning-strong)', border: 'var(--lyra-color-status-warning-medium)', label: 'Partial'   },
+  abandoned: { bg: 'var(--lyra-slate-200)',                   color: 'var(--lyra-slate-500)',                   border: 'var(--lyra-color-border-subtle)',           label: 'Abandoned' },
+  pending:   { bg: 'var(--lyra-slate-100)',                   color: 'var(--lyra-slate-600)',                   border: 'var(--lyra-color-border-subtle)',           label: 'Pending'   },
 }
 
 export function SurveyStatusPill({ status }: { status: SurveyStatus }) {

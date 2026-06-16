@@ -37,7 +37,7 @@ export function SurveyCampaignMonitoringPage({
           <section>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
               <span style={{
-                fontFamily: FONT, fontSize: 11, fontWeight: 600,
+                fontFamily: FONT, fontSize: 12, fontWeight: 600,
                 color: 'var(--lyra-color-fg-secondary)', letterSpacing: '0.08em',
                 textTransform: 'uppercase',
               }}>
@@ -114,7 +114,7 @@ function SectionHeader({ title, right, badge }: { title: string; right?: React.R
             borderRadius: 'var(--radius-full)',
             background: 'var(--lyra-slate-200)',
             color: 'var(--lyra-slate-600)',
-            fontSize: 11, fontWeight: 600, fontFamily: FONT,
+            fontSize: 12, fontWeight: 600, fontFamily: FONT,
             fontVariantNumeric: 'tabular-nums', letterSpacing: 0,
           }}>
             {badge}
@@ -209,10 +209,10 @@ const TOOLTIP_SHELL: React.CSSProperties = {
   lineHeight: 1.5,
 }
 const TOOLTIP_LABEL: React.CSSProperties = {
-  fontSize: 11, fontWeight: 400, color: 'var(--lyra-color-fg-secondary)',
+  fontSize: 12, fontWeight: 400, color: 'var(--lyra-color-fg-secondary)',
 }
 const TOOLTIP_VALUE: React.CSSProperties = {
-  fontSize: 13, fontWeight: 600, color: 'var(--lyra-color-fg-default)',
+  fontSize: 14, fontWeight: 600, color: 'var(--lyra-color-fg-default)',
 }
 
 function Tooltip({ text, children }: { text: string; children: React.ReactNode }) {
@@ -384,7 +384,7 @@ function Sparkline({ data, color: _accentColor, width = 160, height = 52, toolti
    ───────────────────────────────────────────── */
 
 const LABEL_STYLE: React.CSSProperties = {
-  fontSize: 11, fontWeight: 600, color: 'var(--lyra-color-fg-secondary)',
+  fontSize: 12, fontWeight: 600, color: 'var(--lyra-color-fg-secondary)',
   textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: FONT,
   marginBottom: 12,
 }
@@ -398,14 +398,14 @@ function KpiShell({ accent, children }: { accent: string; children: React.ReactN
   return (
     <div style={{
       background: 'var(--lyra-color-bg-surface-base)',
-      borderRadius: 14,
+      borderRadius: 'var(--radius-lg)',
       border: '1px solid var(--lyra-color-border-subtle)',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05)',
+      boxShadow: 'var(--sol-effect-shadowsm)',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
     }}>
       <div style={{ height: 3, background: accent, flexShrink: 0 }} />
-      <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+      <div style={{ padding: 'var(--space-5)', display: 'flex', flexDirection: 'column', flex: 1 }}>
         {children}
       </div>
     </div>
@@ -421,7 +421,7 @@ function DeltaBadge({ text, suffix, tone }: { text: string; suffix?: string; ton
     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
       <span style={{
         display: 'inline-flex', alignItems: 'center', gap: 3,
-        background: bg, color, borderRadius: 9999,
+        background: bg, color, borderRadius: 'var(--radius-full)',
         padding: '3px 8px', fontSize: 12, fontWeight: 600, fontFamily: FONT,
       }}>
         {arrow} {text}
@@ -441,9 +441,9 @@ function ActiveCampaignsTile({ accent, total, activeCount, breakdown }: {
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t) }, [])
 
   const segments = [
-    { label: 'Active',   count: breakdown.active,   color: '#64B96F' },
-    { label: 'Inactive', count: breakdown.inactive,  color: '#FACB33' },
-    { label: 'Expired',  count: breakdown.expired,   color: '#C8D0D5' },
+    { label: 'Active',   count: breakdown.active,   color: 'var(--lyra-color-status-success-medium)' },
+    { label: 'Inactive', count: breakdown.inactive,  color: 'var(--lyra-color-status-warning-medium)' },
+    { label: 'Expired',  count: breakdown.expired,   color: 'var(--lyra-slate-300)' },
   ]
 
   return (
@@ -462,7 +462,7 @@ function ActiveCampaignsTile({ accent, total, activeCount, breakdown }: {
       <div style={{ width: '100%', height: 48, display: 'flex', alignItems: 'flex-end', marginBottom: 14, position: 'relative' }}>
         <div style={{
           display: 'flex', width: '100%', height: 12,
-          borderRadius: 6, overflow: 'hidden',
+          borderRadius: 'var(--radius-sm)', overflow: 'hidden',
           background: 'var(--lyra-color-bg-disabled)',
         }}>
           {segments.map((seg, i) => {
@@ -548,18 +548,18 @@ function ResponseRateTile({ accent, value, target = 60, delta }: {
       <div style={{ width: '100%', height: 48, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 6, marginBottom: 14, position: 'relative' }}>
         {/* Labels row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
-          <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>0%</span>
+          <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>0%</span>
           <span style={{
             position: 'absolute', left: `${targetPct}%`, transform: 'translateX(-50%)',
-            fontSize: 11, fontWeight: 500, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT,
+            fontSize: 12, fontWeight: 500, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT,
             whiteSpace: 'nowrap',
           }}>Target {target}%</span>
-          <span style={{ fontSize: 11, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>100%</span>
+          <span style={{ fontSize: 12, color: 'var(--lyra-color-fg-secondary)', fontFamily: FONT }}>100%</span>
         </div>
 
         {/* Track + fill + target tick */}
         <div
-          style={{ position: 'relative', width: '100%', height: 12, borderRadius: 9999, background: 'var(--lyra-color-bg-disabled)', cursor: 'default' }}
+          style={{ position: 'relative', width: '100%', height: 12, borderRadius: 'var(--radius-full)', background: 'var(--lyra-color-bg-disabled)', cursor: 'default' }}
           onMouseMove={e => setBarTooltip({ x: e.clientX, y: e.clientY })}
           onMouseLeave={() => setBarTooltip(null)}
         >
@@ -567,7 +567,7 @@ function ResponseRateTile({ accent, value, target = 60, delta }: {
           <div style={{
             position: 'absolute', left: 0, top: 0, bottom: 0,
             width: `${pct}%`,
-            borderRadius: 9999,
+            borderRadius: 'var(--radius-full)',
             background: barColor,
             transition: 'width 0.9s cubic-bezier(0.4,0,0.2,1)',
           }} />
@@ -575,7 +575,7 @@ function ResponseRateTile({ accent, value, target = 60, delta }: {
           <div style={{
             position: 'absolute', top: -2, bottom: -2,
             left: `${targetPct}%`, transform: 'translateX(-50%)',
-            width: 2, borderRadius: 2,
+            width: 2, borderRadius: 'var(--radius-xs)',
             background: 'var(--lyra-color-fg-default)',
             opacity: 0.45,
           }} />
@@ -629,7 +629,7 @@ function KpiTile({ label, value, delta, tone = 'up', accent, sparkData, sparkToo
 /* ── KPI grid ── */
 const KPI_ACCENTS = [
   'var(--lyra-brand-700)',
-  'var(--lyra-teal-500)',
+  'var(--lyra-color-status-info-medium)',
   'var(--lyra-slate-600)',
   'var(--lyra-brand-500)',
 ]
@@ -673,7 +673,7 @@ function CsatBadge({ value }: { value: number | null | undefined }) {
       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
       borderRadius: 'var(--radius-sm)',
       minWidth: 36, padding: '3px 8px',
-      fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums', fontFamily: FONT,
+      fontSize: 14, fontWeight: 600, fontVariantNumeric: 'tabular-nums', fontFamily: FONT,
       backgroundColor: bg,
       color: 'var(--lyra-color-fg-default)',
       letterSpacing: '-0.01em',
@@ -708,7 +708,7 @@ function CampaignTable({ onSelectCampaign }: { onSelectCampaign: (id: string) =>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: FONT, fontSize: 14 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid rgba(0,0,0,0.06)', background: 'var(--lyra-color-bg-surface-base)' }}>
+            <tr style={{ borderBottom: '1px solid var(--lyra-color-border-subtle)', background: 'var(--lyra-color-bg-surface-base)' }}>
               {cols.map(col => (
                 <th
                   key={col.label}
@@ -752,7 +752,7 @@ function CampaignRow({ campaign, onSelect, isLast }: { campaign: Campaign; onSel
   return (
     <tr
       onClick={onSelect}
-      style={{ borderBottom: isLast ? 'none' : '1px solid rgba(0,0,0,0.05)', cursor: 'pointer', transition: 'background 0.1s' }}
+      style={{ borderBottom: isLast ? 'none' : '1px solid var(--lyra-color-border-subtle)', cursor: 'pointer', transition: 'background 0.1s' }}
       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--lyra-color-state-bg-hover-opacity)' }}
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '' }}
     >
@@ -832,7 +832,7 @@ function ResponseRateCell({ rate }: { rate: number }) {
           position: 'absolute', top: -3, bottom: -3,
           left: `${TARGET}%`, width: 2,
           background: 'var(--lyra-color-fg-secondary)',
-          borderRadius: 1, opacity: 0.4,
+          borderRadius: 'var(--radius-xs)', opacity: 0.4,
           transform: 'translateX(-50%)',
         }} />
         {hovered && (
@@ -858,10 +858,10 @@ function ChannelChip({ channel }: { channel: string }) {
 
 /* ── Status pill ── */
 const STATUS_CFG: Record<CampaignStatus, { bg: string; color: string; border: string; label: string }> = {
-  active: { bg: 'var(--lyra-color-status-success-subtle)', color: 'var(--lyra-color-status-success-strong)', border: 'rgba(35,114,45,0.18)',   label: 'Active' },
-  paused: { bg: 'var(--lyra-color-status-warning-subtle)', color: 'var(--lyra-color-status-warning-strong)', border: 'rgba(142,104,0,0.18)',  label: 'Paused' },
-  draft:  { bg: 'var(--lyra-slate-100)',                   color: 'var(--lyra-slate-600)',                   border: 'rgba(0,0,0,0.10)',       label: 'Draft'  },
-  ended:  { bg: 'var(--lyra-slate-200)',                   color: 'var(--lyra-slate-500)',                   border: 'rgba(0,0,0,0.10)',       label: 'Ended'  },
+  active: { bg: 'var(--lyra-color-status-success-subtle)', color: 'var(--lyra-color-status-success-strong)', border: 'var(--lyra-color-status-success-medium)', label: 'Active' },
+  paused: { bg: 'var(--lyra-color-status-warning-subtle)', color: 'var(--lyra-color-status-warning-strong)', border: 'var(--lyra-color-status-warning-medium)', label: 'Paused' },
+  draft:  { bg: 'var(--lyra-slate-100)',                   color: 'var(--lyra-slate-600)',                   border: 'var(--lyra-color-border-subtle)',          label: 'Draft'  },
+  ended:  { bg: 'var(--lyra-slate-200)',                   color: 'var(--lyra-slate-500)',                   border: 'var(--lyra-color-border-subtle)',          label: 'Ended'  },
 }
 
 function StatusPill({ status }: { status: CampaignStatus }) {

@@ -30,7 +30,7 @@ export function SurveyDetailPage({
             font: '500 12px/16px ' + F,
             color: 'var(--lyra-color-fg-secondary)',
             background: 'none', border: 'none', cursor: 'pointer',
-            padding: '4px 6px', borderRadius: 6, marginBottom: 16, marginLeft: -6,
+            padding: '4px 6px', borderRadius: 'var(--radius-sm)', marginBottom: 16, marginLeft: -6,
             transition: 'background 0.12s, color 0.12s',
           }}
           onMouseEnter={e => { e.currentTarget.style.background = 'var(--lyra-color-state-bg-hover-opacity)'; e.currentTarget.style.color = 'var(--lyra-color-fg-default)' }}
@@ -40,7 +40,7 @@ export function SurveyDetailPage({
           Back to campaign dashboard
         </button>
 
-        <div style={{ font: '500 11px/14px ' + F, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--lyra-color-fg-active-strong)', marginBottom: 8 }}>
+        <div style={{ font: '500 12px/16px ' + F, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--lyra-color-fg-active-strong)', marginBottom: 8 }}>
           Survey · {survey.id}
         </div>
         <h1 style={{ font: '600 22px/28px ' + F, letterSpacing: '-0.018em', color: 'var(--lyra-color-fg-default)', margin: '0 0 12px', display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
@@ -112,7 +112,7 @@ function SectionLabel({ icon, children }: { icon: React.ReactNode; children: Rea
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 16 }}>
       <span style={{ color: 'var(--lyra-color-fg-secondary)', display: 'flex' }}>{icon}</span>
-      <span style={{ font: '500 10px/14px ' + F, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--lyra-color-fg-secondary)' }}>
+      <span style={{ font: '500 12px/16px ' + F, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--lyra-color-fg-secondary)' }}>
         {children}
       </span>
     </div>
@@ -123,7 +123,7 @@ function InfoRow({ icon, children }: { icon: React.ReactNode; children: React.Re
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
       <span style={{ color: 'var(--lyra-color-fg-secondary)', display: 'flex', marginTop: 1, flexShrink: 0 }}>{icon}</span>
-      <span style={{ font: '400 13px/20px ' + F, color: 'var(--lyra-color-fg-secondary)', minWidth: 0, flex: 1 }}>{children}</span>
+      <span style={{ font: '400 14px/20px ' + F, color: 'var(--lyra-color-fg-secondary)', minWidth: 0, flex: 1 }}>{children}</span>
     </div>
   )
 }
@@ -132,8 +132,8 @@ function Chip({ bg, color, children }: { bg: string; color: string; children: Re
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center',
-      background: bg, color, borderRadius: 5,
-      padding: '3px 9px', font: '500 11px/16px ' + F,
+      background: bg, color, borderRadius: 'var(--radius-xs)',
+      padding: '3px 9px', font: '500 12px/16px ' + F,
     }}>{children}</span>
   )
 }
@@ -201,7 +201,7 @@ function InteractionPanel({ survey }: { survey: Survey }) {
 
       {/* Topics */}
       <div style={{ marginBottom: 20 }}>
-        <div style={{ font: '500 10px/14px ' + F, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--lyra-color-fg-secondary)', marginBottom: 8 }}>
+        <div style={{ font: '500 12px/16px ' + F, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--lyra-color-fg-secondary)', marginBottom: 8 }}>
           Topics detected
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -218,7 +218,7 @@ function InteractionPanel({ survey }: { survey: Survey }) {
         fontStyle: 'italic', margin: 0,
         padding: '12px 14px',
         background: 'var(--lyra-slate-50)',
-        borderRadius: 8,
+        borderRadius: 'var(--radius-md)',
         borderLeft: '3px solid var(--lyra-color-border-soft)',
       }}>
         "{interaction.summary}"
@@ -258,9 +258,9 @@ function QuestionCard({ index, question }: { index: number; question: SurveyQues
 const cardShell: React.CSSProperties = {
   background: 'var(--lyra-color-bg-surface-base)',
   border: '1px solid var(--lyra-color-border-subtle)',
-  borderRadius: 12,
+  borderRadius: 'var(--radius-lg)',
   overflow: 'hidden',
-  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+  boxShadow: 'var(--sol-effect-shadowsm)',
 }
 
 function QMeta({ index, kind, topic, isAI = false }: { index: number; kind: string; topic: string; isAI?: boolean }) {
@@ -271,25 +271,25 @@ function QMeta({ index, kind, topic, isAI = false }: { index: number; kind: stri
         background: 'var(--lyra-color-bg-active-moderate)',
         color: 'var(--lyra-color-fg-active-strong)',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        font: '600 10px/1 ' + F,
+        font: '600 12px/1 ' + F,
       }}>Q{index}</span>
 
-      <span style={{ font: '500 11px/14px ' + F, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--lyra-color-fg-secondary)' }}>{kind}</span>
+      <span style={{ font: '500 12px/16px ' + F, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--lyra-color-fg-secondary)' }}>{kind}</span>
 
       <span style={{ width: 1, height: 10, background: 'var(--lyra-color-border-soft)', display: 'inline-block', flexShrink: 0 }} />
 
       <span style={{
         background: 'var(--lyra-slate-100)', color: 'var(--lyra-color-fg-secondary)',
-        borderRadius: 99, padding: '2px 9px', font: '500 11px/16px ' + F,
+        borderRadius: 'var(--radius-full)', padding: '2px 9px', font: '500 12px/16px ' + F,
       }}>{topic}</span>
 
       {isAI && (
         <span style={{
           display: 'inline-flex', alignItems: 'center', gap: 4,
           background: 'var(--lyra-color-bg-ai)',
-          border: '1px solid rgba(77,58,122,0.16)',
-          borderRadius: 99, padding: '2px 9px',
-          font: '500 11px/16px ' + F, color: 'var(--lyra-purple-700)',
+          border: '1px solid rgba(78,57,168,0.16)',
+          borderRadius: 'var(--radius-full)', padding: '2px 9px',
+          font: '500 12px/16px ' + F, color: 'var(--lyra-purple-700)',
         }}>
           <Sparkles style={{ width: 10, height: 10, fill: 'currentColor', stroke: 'none' }} />
           AI-generated
@@ -323,7 +323,7 @@ function OpenQuestionCard({ index, question }: { index: number; question: OpenQu
     <div style={cardShell}>
       <div style={{ padding: '20px 24px 22px' }}>
         <div style={{ marginBottom: 14 }}><QMeta index={index} kind="Open" topic={question.topic} isAI /></div>
-        <p style={{ font: '400 11px/17px ' + F, color: 'var(--lyra-color-fg-secondary)', fontStyle: 'italic', margin: '0 0 12px' }}>
+        <p style={{ font: '400 12px/18px ' + F, color: 'var(--lyra-color-fg-secondary)', fontStyle: 'italic', margin: '0 0 12px' }}>
           {provenance}
         </p>
         <p style={{ font: '500 15px/24px ' + F, color: 'var(--lyra-color-fg-default)', margin: '0 0 16px' }}>
@@ -332,14 +332,14 @@ function OpenQuestionCard({ index, question }: { index: number; question: OpenQu
         {question.response ? (
           <div style={{
             background: 'var(--lyra-slate-50)',
-            borderRadius: 8, padding: '16px 18px',
+            borderRadius: 'var(--radius-md)', padding: '16px 18px',
           }}>
             <p style={{ font: '400 14px/23px ' + F, color: 'var(--lyra-color-fg-default)', margin: '0 0 12px' }}>
               "{question.response}"
             </p>
             {question.responseSentiment !== null && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ font: '500 10px/14px ' + F, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--lyra-color-fg-secondary)' }}>
+                <span style={{ font: '500 12px/16px ' + F, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--lyra-color-fg-secondary)' }}>
                   Response sentiment
                 </span>
                 <SentimentBadge value={question.responseSentiment} />
@@ -347,7 +347,7 @@ function OpenQuestionCard({ index, question }: { index: number; question: OpenQu
             )}
           </div>
         ) : (
-          <div style={{ background: 'var(--lyra-slate-50)', border: '1px dashed var(--lyra-color-border-soft)', borderRadius: 8, padding: '14px 18px' }}>
+          <div style={{ background: 'var(--lyra-slate-50)', border: '1px dashed var(--lyra-color-border-soft)', borderRadius: 'var(--radius-md)', padding: '14px 18px' }}>
             <p style={{ font: '400 12px/18px ' + F, color: 'var(--lyra-color-fg-secondary)', fontStyle: 'italic', margin: 0 }}>
               No response — customer did not answer.
             </p>
@@ -361,7 +361,7 @@ function OpenQuestionCard({ index, question }: { index: number; question: OpenQu
 function RatingDisplay({ rating, max }: { rating: number | null; max: number }) {
   if (rating === null) {
     return (
-      <div style={{ background: 'var(--lyra-slate-50)', border: '1px dashed var(--lyra-color-border-soft)', borderRadius: 8, padding: '12px 16px' }}>
+      <div style={{ background: 'var(--lyra-slate-50)', border: '1px dashed var(--lyra-color-border-soft)', borderRadius: 'var(--radius-md)', padding: '12px 16px' }}>
         <p style={{ font: '400 12px/18px ' + F, color: 'var(--lyra-color-fg-secondary)', fontStyle: 'italic', margin: 0 }}>No response — customer did not rate.</p>
       </div>
     )
@@ -389,8 +389,8 @@ function SentimentBadge({ value }: { value: number }) {
       display: 'inline-flex', alignItems: 'center',
       background: pos ? 'var(--lyra-color-status-success-subtle)' : neg ? 'var(--lyra-color-status-critical-subtle)' : 'var(--lyra-slate-100)',
       color: pos ? 'var(--lyra-color-status-success-strong)' : neg ? 'var(--lyra-color-status-critical-strong)' : 'var(--lyra-color-fg-secondary)',
-      borderRadius: 4, padding: '2px 8px',
-      font: '600 11px/16px ' + F, fontVariantNumeric: 'tabular-nums',
+      borderRadius: 'var(--radius-xs)', padding: '2px 8px',
+      font: '600 12px/16px ' + F, fontVariantNumeric: 'tabular-nums',
     }}>{value > 0 ? `+${value}` : value}</span>
   )
 }

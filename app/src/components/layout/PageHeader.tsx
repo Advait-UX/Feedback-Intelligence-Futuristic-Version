@@ -30,7 +30,7 @@ import { cn } from '@/lib/utils'
     align           : center
 */
 
-const FONT = '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+const FONT = 'var(--font-sans)'
 
 interface PageHeaderProps {
   breadcrumb?: string[]
@@ -46,8 +46,8 @@ export function PageHeader({ breadcrumb = [], title, onToggleSidebar, sidebarOpe
 
   return (
     <div
-      className="flex-shrink-0 bg-white"
-      style={{ borderBottom: '1px solid rgba(0,0,0,0.10)' }}
+      className="flex-shrink-0"
+      style={{ background: 'var(--lyra-color-bg-surface-base)', borderBottom: '1px solid var(--lyra-color-border-subtle)' }}
     >
       {/* ── Crumbs row ── */}
       {hasCrumbs && (
@@ -61,7 +61,7 @@ export function PageHeader({ breadcrumb = [], title, onToggleSidebar, sidebarOpe
             fontWeight: 400,
             lineHeight: '16px',
             letterSpacing: '0.01rem',
-            color: 'rgba(0,0,0,0.64)',
+            color: 'var(--lyra-color-fg-secondary)',
           }}
         >
           {/* Sidebar toggle — sits at the far-left of the crumbs row */}
@@ -70,9 +70,9 @@ export function PageHeader({ breadcrumb = [], title, onToggleSidebar, sidebarOpe
               onClick={onToggleSidebar}
               title="Toggle sidebar"
               className="flex h-5 w-5 items-center justify-center rounded transition-colors outline-none focus:outline-none flex-shrink-0"
-              style={{ color: 'rgba(0,0,0,0.40)', marginRight: 4 }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(0,0,0,0.64)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(0,0,0,0.40)' }}
+              style={{ color: 'var(--lyra-color-fg-disabled)', marginRight: 4 }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--lyra-color-fg-secondary)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--lyra-color-fg-disabled)' }}
             >
               <PanelLeftClose className={cn('h-3.5 w-3.5 transition-transform', !sidebarOpen && 'scale-x-[-1]')} />
             </button>
@@ -84,7 +84,7 @@ export function PageHeader({ breadcrumb = [], title, onToggleSidebar, sidebarOpe
               <span
                 style={
                   i === breadcrumb.length - 1
-                    ? { color: 'rgba(0,0,0,0.80)', fontWeight: 500 }
+                    ? { color: 'var(--lyra-color-fg-default)', fontWeight: 500 }
                     : { cursor: 'pointer' }
                 }
               >
@@ -113,7 +113,7 @@ export function PageHeader({ breadcrumb = [], title, onToggleSidebar, sidebarOpe
             lineHeight: '24px',
             letterSpacing: '-0.01rem',
             margin: 0,
-            color: 'rgba(0,0,0,0.80)',
+            color: 'var(--lyra-color-fg-default)',
           }}
         >
           {title}

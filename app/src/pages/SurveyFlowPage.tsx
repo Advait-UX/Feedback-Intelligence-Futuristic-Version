@@ -40,25 +40,25 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateRows: '56px 1fr', height: '100vh', minWidth: '1280px', fontFamily: '"Open Sans", "Inter", system-ui, sans-serif' }}>
+    <div style={{ display: 'grid', gridTemplateRows: '56px 1fr', height: '100vh', minWidth: '1280px', fontFamily: 'var(--font-sans)' }}>
       {/* Topbar */}
       <header style={{
         display: 'flex',
         alignItems: 'center',
         gap: '16px',
         padding: '8px',
-        background: '#ffffff',
-        borderBottom: '1px solid rgba(0,0,0,0.1)'
+        background: 'var(--lyra-color-bg-surface-base)',
+        borderBottom: '1px solid var(--lyra-color-border-subtle)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '0 8px', height: '40px' }}>
-          <div style={{ width: '24px', height: '24px', color: 'rgb(54,148,252)', display: 'grid', placeItems: 'center' }}>
+          <div style={{ width: '24px', height: '24px', color: 'var(--lyra-color-fg-link)', display: 'grid', placeItems: 'center' }}>
             <svg width="24" height="24" viewBox="0 0 24 23.848" fill="none">
               <path d="M 23.719 5.814 C 23.876 5.815 24.002 5.94 24 6.096 C 23.849 15.818 15.918 23.698 6.134 23.848 C 5.978 23.849 5.851 23.724 5.851 23.568 L 5.851 19.309 C 5.851 19.156 5.975 19.034 6.129 19.03 C 13.245 18.884 19.005 13.16 19.152 6.09 C 19.156 5.936 19.279 5.813 19.433 5.813 L 23.719 5.814 Z" fill="currentColor" fillRule="nonzero"/>
               <path d="M 12.256 0.001 C 13.871 0.001 15.18 1.302 15.181 2.906 C 15.181 4.511 13.872 5.812 12.256 5.813 C 10.64 5.813 9.33 4.511 9.33 2.906 C 9.33 1.302 10.64 0.001 12.256 0.001 Z" fill="currentColor" fillRule="nonzero"/>
               <path d="M 2.926 0 C 4.541 0 5.85 1.301 5.851 2.905 C 5.851 4.509 4.541 5.811 2.926 5.812 C 1.31 5.812 0 4.51 0 2.905 C 0 1.301 1.31 0 2.926 0 Z" fill="currentColor" fillRule="nonzero"/>
             </svg>
           </div>
-          <div style={{ fontFamily: 'Inter', fontWeight: 500, fontSize: '16px', letterSpacing: '-0.01em', color: 'rgba(0,0,0,0.8)' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 500, fontSize: '16px', letterSpacing: '-0.01em', color: 'var(--lyra-color-fg-default)' }}>
             CXone Agent
           </div>
         </div>
@@ -69,11 +69,11 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           gap: '8px',
           height: '32px',
           padding: '0 12px',
-          borderRadius: '999px',
-          background: 'rgb(238,245,254)',
-          color: 'rgb(24,91,164)',
+          borderRadius: 'var(--radius-full)',
+          background: 'var(--lyra-color-bg-active-subtle)',
+          color: 'var(--lyra-color-fg-active-strong)',
           fontWeight: 600,
-          fontSize: '13px'
+          fontSize: '14px'
         }}>
           <Clock size={14} />
           Survey monitor · #a2964 James C.
@@ -87,12 +87,12 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           gap: '6px',
           height: '32px',
           padding: '0 12px',
-          borderRadius: '8px',
-          background: '#ffffff',
-          color: 'rgb(24,91,164)',
-          border: '1px solid rgba(0,0,0,0.1)',
+          borderRadius: 'var(--radius-md)',
+          background: 'var(--lyra-color-bg-surface-base)',
+          color: 'var(--lyra-color-fg-active-strong)',
+          border: '1px solid var(--lyra-color-border-subtle)',
           fontWeight: 600,
-          fontSize: '13px',
+          fontSize: '14px',
           cursor: 'pointer',
           fontFamily: 'inherit'
         }}>
@@ -105,12 +105,12 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           gap: '6px',
           height: '32px',
           padding: '0 12px',
-          borderRadius: '8px',
-          background: 'rgb(54,148,252)',
-          color: '#ffffff',
+          borderRadius: 'var(--radius-md)',
+          background: 'var(--lyra-color-bg-primary)',
+          color: 'var(--lyra-color-fg-on-primary)',
           border: 'none',
           fontWeight: 600,
-          fontSize: '13px',
+          fontSize: '14px',
           cursor: 'pointer',
           fontFamily: 'inherit'
         }}>
@@ -123,14 +123,14 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           gap: '8px',
           height: '32px',
           padding: '0 12px',
-          borderRadius: '999px',
-          background: '#ffffff',
-          color: 'rgba(0,0,0,0.85)',
-          border: '1px solid rgba(0,0,0,0.1)',
+          borderRadius: 'var(--radius-full)',
+          background: 'var(--lyra-color-bg-surface-base)',
+          color: 'var(--lyra-color-fg-default)',
+          border: '1px solid var(--lyra-color-border-subtle)',
           fontWeight: 600,
-          fontSize: '13px'
+          fontSize: '14px'
         }}>
-          <Eye size={14} style={{ color: 'rgba(0,0,0,0.6)' }} />
+          <Eye size={14} style={{ color: 'var(--lyra-color-fg-secondary)' }} />
           Supervisor view · Maya R.
         </div>
 
@@ -140,14 +140,14 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           gap: '8px',
           height: '32px',
           padding: '0 12px',
-          borderRadius: '999px',
-          background: '#ffffff',
-          color: 'rgba(0,0,0,0.85)',
-          border: '1px solid rgba(0,0,0,0.1)',
+          borderRadius: 'var(--radius-full)',
+          background: 'var(--lyra-color-bg-surface-base)',
+          color: 'var(--lyra-color-fg-default)',
+          border: '1px solid var(--lyra-color-border-subtle)',
           fontWeight: 600,
-          fontSize: '13px'
+          fontSize: '14px'
         }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: selectedQuestion !== null && !isAnimating ? 'rgb(39,138,51)' : 'rgb(214,57,57)' }}></span>
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: selectedQuestion !== null && !isAnimating ? 'var(--lyra-color-status-success-strong)' : 'var(--lyra-color-status-critical-strong)' }}></span>
           {selectedQuestion !== null && !isAnimating ? 'Complete' : 'Live'} · 00:14
         </div>
       </header>
@@ -159,14 +159,14 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
         gap: '16px',
         padding: '20px',
         minHeight: 0,
-        background: 'rgb(245,247,249)'
+        background: 'var(--lyra-color-bg-surface-shell)'
       }}>
         {/* Sidebar */}
         <aside style={{
-          background: '#ffffff',
-          borderRadius: '12px',
-          border: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+          background: 'var(--lyra-color-bg-surface-base)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--lyra-color-border-subtle)',
+          boxShadow: 'var(--sol-effect-shadowsm)',
           padding: '24px 16px',
           display: 'flex',
           flexDirection: 'column',
@@ -177,10 +177,10 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
             <h3 style={{
               margin: '0 8px',
               fontSize: '12px',
-              fontWeight: 700,
+              fontWeight: 600,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: 'rgba(0,0,0,0.46)'
+              color: 'var(--lyra-color-fg-secondary)'
             }}>Sessions</h3>
             <ul style={{
               listStyle: 'none',
@@ -195,14 +195,14 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 alignItems: 'center',
                 gap: '10px',
                 padding: '8px 10px',
-                color: 'rgb(24,91,164)',
-                fontSize: '13px',
+                color: 'var(--lyra-color-fg-active-strong)',
+                fontSize: '14px',
                 fontWeight: 600,
-                borderLeft: '2px solid rgb(54,148,252)',
+                borderLeft: '2px solid var(--lyra-color-border-active)',
                 borderRadius: 0,
                 paddingLeft: '8px'
               }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: selectedQuestion !== null && !isAnimating ? 'rgb(39,138,51)' : 'rgb(214,57,57)' }}></span>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: selectedQuestion !== null && !isAnimating ? 'var(--lyra-color-status-success-strong)' : 'var(--lyra-color-status-critical-strong)' }}></span>
                 #a2964 · James C.
               </li>
               <li style={{
@@ -210,12 +210,12 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 alignItems: 'center',
                 gap: '10px',
                 padding: '8px 10px',
-                borderRadius: '8px',
-                color: 'rgba(0,0,0,0.85)',
-                fontSize: '13px',
+                borderRadius: 'var(--radius-md)',
+                color: 'var(--lyra-color-fg-default)',
+                fontSize: '14px',
                 cursor: 'pointer'
               }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(0,0,0,0.25)' }}></span>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--lyra-color-fg-disabled)' }}></span>
                 #a2965 · Rachel W.
               </li>
               <li style={{
@@ -223,12 +223,12 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 alignItems: 'center',
                 gap: '10px',
                 padding: '8px 10px',
-                borderRadius: '8px',
-                color: 'rgba(0,0,0,0.85)',
-                fontSize: '13px',
+                borderRadius: 'var(--radius-md)',
+                color: 'var(--lyra-color-fg-default)',
+                fontSize: '14px',
                 cursor: 'pointer'
               }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(0,0,0,0.25)' }}></span>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--lyra-color-fg-disabled)' }}></span>
                 #a2966 · Parker W.
               </li>
             </ul>
@@ -237,10 +237,10 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
             <h3 style={{
               margin: '0 8px',
               fontSize: '12px',
-              fontWeight: 700,
+              fontWeight: 600,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: 'rgba(0,0,0,0.46)'
+              color: 'var(--lyra-color-fg-secondary)'
             }}>Channels</h3>
             <ul style={{
               listStyle: 'none',
@@ -255,26 +255,26 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 alignItems: 'center',
                 gap: '10px',
                 padding: '8px 10px',
-                borderRadius: '8px',
-                color: 'rgba(0,0,0,0.85)',
-                fontSize: '13px',
+                borderRadius: 'var(--radius-md)',
+                color: 'var(--lyra-color-fg-default)',
+                fontSize: '14px',
                 cursor: 'pointer'
               }}>
-                <Phone size={14} style={{ color: 'rgba(0,0,0,0.6)' }} />
-                Voice · <span style={{ color: 'rgba(0,0,0,0.46)' }}>6 active</span>
+                <Phone size={14} style={{ color: 'var(--lyra-color-fg-secondary)' }} />
+                Voice · <span style={{ color: 'var(--lyra-color-fg-secondary)' }}>6 active</span>
               </li>
               <li style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
                 padding: '8px 10px',
-                borderRadius: '8px',
-                color: 'rgba(0,0,0,0.85)',
-                fontSize: '13px',
+                borderRadius: 'var(--radius-md)',
+                color: 'var(--lyra-color-fg-default)',
+                fontSize: '14px',
                 cursor: 'pointer'
               }}>
-                <MessageSquare size={14} style={{ color: 'rgba(0,0,0,0.6)' }} />
-                Chat · <span style={{ color: 'rgba(0,0,0,0.46)' }}>6 active</span>
+                <MessageSquare size={14} style={{ color: 'var(--lyra-color-fg-secondary)' }} />
+                Chat · <span style={{ color: 'var(--lyra-color-fg-secondary)' }}>6 active</span>
               </li>
             </ul>
           </div>
@@ -283,38 +283,38 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
         {/* Center: Q&A monitor */}
         <section style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <div style={{
-            color: 'rgba(0,0,0,0.46)',
-            fontSize: '13px',
+            color: 'var(--lyra-color-fg-secondary)',
+            fontSize: '14px',
             padding: '4px 4px 12px',
             display: 'flex',
             alignItems: 'center',
             gap: '6px'
           }}>
             <span>Sessions</span><span>/</span>
-            <span style={{ color: 'rgba(0,0,0,0.85)', fontWeight: 600 }}>Retention Voice Q2</span><span>/</span>
-            <span style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', fontSize: '12.5px' }}>1c4fa089…a2964</span>
+            <span style={{ color: 'var(--lyra-color-fg-default)', fontWeight: 600 }}>Retention Voice Q2</span><span>/</span>
+            <span style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', fontSize: '12px' }}>1c4fa089…a2964</span>
           </div>
 
           <div style={{
-            background: '#ffffff',
-            border: '1px solid rgba(0,0,0,0.1)',
-            borderRadius: '12px',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+            background: 'var(--lyra-color-bg-surface-base)',
+            border: '1px solid var(--lyra-color-border-subtle)',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: 'var(--sol-effect-shadowsm)',
             padding: '36px 40px 40px',
             overflow: 'auto'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
               <div>
                 <h1 style={{
-                  fontFamily: 'Inter',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: '20px',
-                  fontWeight: 700,
-                  color: 'rgba(0,0,0,0.9)',
+                  fontWeight: 600,
+                  color: 'var(--lyra-color-fg-default)',
                   letterSpacing: '-0.01em',
                   margin: 0,
                   lineHeight: 1.3
                 }}>Probable list of questions based on intents identified</h1>
-                <p style={{ color: 'rgba(0,0,0,0.6)', marginTop: '4px', fontSize: '13px' }}>
+                <p style={{ color: 'var(--lyra-color-fg-secondary)', marginTop: '4px', fontSize: '14px' }}>
                   Generated from this session's detected intents. Each question is justified by the intent that triggered it.
                 </p>
               </div>
@@ -323,10 +323,10 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 alignItems: 'center',
                 gap: '6px',
                 padding: '4px 10px',
-                borderRadius: '999px',
-                background: 'rgb(243,238,253)',
-                color: 'rgb(120,86,186)',
-                fontWeight: 700,
+                borderRadius: 'var(--radius-full)',
+                background: 'var(--lyra-color-bg-ai)',
+                color: '#4E39A8',
+                fontWeight: 600,
                 fontSize: '12px',
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase'
@@ -340,29 +340,29 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#fff',
-              border: '1px solid rgba(0,0,0,0.12)',
-              borderRadius: '8px',
+              background: 'var(--lyra-color-bg-surface-base)',
+              border: '1px solid var(--lyra-color-border-soft)',
+              borderRadius: 'var(--radius-md)',
               padding: '10px 14px',
-              color: 'rgba(0,0,0,0.6)',
+              color: 'var(--lyra-color-fg-secondary)',
               margin: '18px 0 -4px',
-              fontSize: '13px'
+              fontSize: '14px'
             }}>
               <div style={{
                 width: '18px',
                 height: '18px',
-                borderRadius: '999px',
-                background: 'rgb(54,148,252)',
-                color: '#fff',
+                borderRadius: 'var(--radius-full)',
+                background: 'var(--lyra-color-bg-primary)',
+                color: 'var(--lyra-color-fg-on-primary)',
                 display: 'grid',
                 placeItems: 'center',
-                fontWeight: 700,
-                fontSize: '11px',
-                fontFamily: 'Inter',
+                fontWeight: 600,
+                fontSize: '12px',
+                fontFamily: 'var(--font-sans)',
                 flexShrink: 0
               }}>i</div>
               <div>
-                <strong style={{ color: 'rgba(0,0,0,0.9)', fontWeight: 700 }}>These are probable questions</strong> — based on detected intents. They may adapt in real time as the customer responds.
+                <strong style={{ color: 'var(--lyra-color-fg-default)', fontWeight: 600 }}>These are probable questions</strong> — based on detected intents. They may adapt in real time as the customer responds.
               </div>
             </div>
 
@@ -419,10 +419,10 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
 
         {/* Right: Session panel */}
         <aside style={{
-          background: '#ffffff',
-          border: '1px solid rgba(0,0,0,0.1)',
-          borderRadius: '12px',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+          background: 'var(--lyra-color-bg-surface-base)',
+          border: '1px solid var(--lyra-color-border-subtle)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--sol-effect-shadowsm)',
           padding: '20px 18px',
           display: 'flex',
           flexDirection: 'column',
@@ -431,13 +431,13 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
         }}>
           <h2 style={{
             margin: 0,
-            fontFamily: 'Inter',
+            fontFamily: 'var(--font-sans)',
             fontSize: '16px',
-            fontWeight: 700,
+            fontWeight: 600,
             letterSpacing: '-0.01em',
-            color: 'rgba(0,0,0,0.9)'
+            color: 'var(--lyra-color-fg-default)'
           }}>Session</h2>
-          <div style={{ color: 'rgba(0,0,0,0.46)', fontSize: '12.5px', margin: '4px 0 12px' }}>
+          <div style={{ color: 'var(--lyra-color-fg-secondary)', fontSize: '12px', margin: '4px 0 12px' }}>
             Routed in from CXone Agent · Rachel Whitman
           </div>
 
@@ -448,9 +448,9 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           <KeyValue k="Started" v="9:15:42 AM" />
           <KeyValue k="Channel" v="Voice · IVR" />
 
-          <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #eef0f3' }}>
-            <div style={{ fontWeight: 700, fontSize: '14px', color: 'rgba(0,0,0,0.9)' }}>Audio input</div>
-            <div style={{ color: 'rgba(0,0,0,0.46)', fontSize: '12.5px', marginTop: '2px' }}>Speech recognition only · no keypad input</div>
+          <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid var(--lyra-color-border-subtle)' }}>
+            <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--lyra-color-fg-default)' }}>Audio input</div>
+            <div style={{ color: 'var(--lyra-color-fg-secondary)', fontSize: '12px', marginTop: '2px' }}>Speech recognition only · no keypad input</div>
             <div style={{
               display: 'flex',
               alignItems: 'flex-end',
@@ -462,7 +462,7 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 <span key={i} style={{
                   flex: 1,
                   minWidth: '8px',
-                  background: height > 60 ? 'rgb(120,86,186)' : 'rgb(231,222,250)',
+                  background: height > 60 ? '#4E39A8' : 'var(--lyra-color-bg-ai)',
                   borderRadius: '2px',
                   height: `${height}%`
                 }}></span>
@@ -473,7 +473,7 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
 
         {/* Phone Mockup */}
         <div style={{
-          background: 'rgb(245,247,249)',
+          background: 'var(--lyra-color-bg-surface-shell)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -482,9 +482,9 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
           <div style={{
             width: '280px',
             height: '600px',
-            background: 'white',
+            background: 'var(--lyra-color-bg-surface-base)',
             borderRadius: '32px',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+            boxShadow: 'var(--sol-effect-shadowxl)',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
@@ -506,27 +506,27 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
             {/* Status Bar */}
             <div style={{
               height: '44px',
-              background: 'white',
+              background: 'var(--lyra-color-bg-surface-base)',
               display: 'flex',
               alignItems: 'flex-end',
               padding: '0 16px 8px',
               justifyContent: 'space-between',
               fontSize: '12px',
-              color: '#1f2937',
+              color: 'var(--lyra-color-fg-default)',
               fontWeight: 500
             }}>
               <div>9:14</div>
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" style={{ color: '#1f2937' }}>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" style={{ color: 'var(--lyra-color-fg-default)' }}>
                   <path d="M0 10h2v2H0v-2zm4-4h2v6H4V6zm4-4h2v10H8V2zm4 2h2v8h-2V4z"/>
                 </svg>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: '#1f2937' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--lyra-color-fg-default)' }}>
                   <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
                   <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
                   <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
                   <circle cx="12" cy="20" r="1"/>
                 </svg>
-                <svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: '#1f2937' }}>
+                <svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--lyra-color-fg-default)' }}>
                   <rect x="1" y="1" width="18" height="10" rx="2"/>
                   <path d="M20 4v4"/>
                 </svg>
@@ -535,15 +535,15 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
 
             {/* Header */}
             <div style={{
-              background: '#f9fafb',
+              background: 'var(--lyra-color-bg-surface-shell)',
               padding: '16px',
-              borderBottom: '1px solid #e5e7eb',
+              borderBottom: '1px solid var(--lyra-color-border-subtle)',
               textAlign: 'center'
             }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#1f2937', marginBottom: '2px' }}>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--lyra-color-fg-default)', marginBottom: '2px' }}>
                 NICE Customer Survey
               </div>
-              <div style={{ fontSize: '11px', color: '#6b7280' }}>
+              <div style={{ fontSize: '12px', color: 'var(--lyra-color-fg-secondary)' }}>
                 automated · adaptive flow · 00:42
               </div>
             </div>
@@ -556,48 +556,48 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '20px 20px 24px',
-              background: 'white'
+              background: 'var(--lyra-color-bg-surface-base)'
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
                 {/* Avatar */}
                 <div style={{
                   width: '100px',
                   height: '100px',
-                  background: 'linear-gradient(135deg, rgb(120,86,186), rgb(147,112,219))',
+                  background: '#4E39A8',
                   borderRadius: '50%',
                   margin: '0 auto 16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '40px',
-                  fontWeight: 700,
-                  color: 'white',
-                  boxShadow: '0 10px 40px rgba(120,86,186,0.3)'
+                  fontWeight: 600,
+                  color: 'var(--lyra-color-fg-inverse)',
+                  boxShadow: 'var(--sol-effect-shadowlg)'
                 }}>SA</div>
 
                 {/* Call Info */}
-                <div style={{ fontSize: '18px', fontWeight: 700, color: '#1f2937', marginBottom: '4px', textAlign: 'center' }}>
+                <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--lyra-color-fg-default)', marginBottom: '4px', textAlign: 'center' }}>
                   Survey Agent
                 </div>
-                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '20px', textAlign: 'center' }}>
+                <div style={{ fontSize: '14px', color: 'var(--lyra-color-fg-secondary)', marginBottom: '20px', textAlign: 'center' }}>
                   Voice Survey · IVR
                 </div>
 
                 {/* Question Display */}
                 {selectedQuestion !== null && (
                   <div style={{
-                    background: '#f3f4f6',
-                    borderRadius: '10px',
+                    background: 'var(--lyra-color-bg-surface-shell)',
+                    borderRadius: 'var(--radius-md)',
                     padding: '12px 16px',
                     marginBottom: '20px',
                     maxWidth: '220px',
                     textAlign: 'center',
                     animation: 'messageSlideIn 0.3s ease-out'
                   }}>
-                    <div style={{ fontSize: '10px', fontWeight: 700, color: '#6b7280', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--lyra-color-fg-secondary)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       {isAnimating ? 'Asking...' : 'Question ' + selectedQuestion}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#1f2937', lineHeight: 1.3 }}>
+                    <div style={{ fontSize: '12px', color: 'var(--lyra-color-fg-default)', lineHeight: 1.3 }}>
                       {selectedQuestion === 1 && 'On a scale of 1 to 5, how satisfied were you?'}
                       {selectedQuestion === 2 && 'Did the transition cause any frustration?'}
                       {selectedQuestion === 3 && 'Were you left feeling unsure?'}
@@ -606,10 +606,10 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                       <div style={{
                         marginTop: '8px',
                         paddingTop: '8px',
-                        borderTop: '1px solid #d1d5db',
-                        fontSize: '11px',
+                        borderTop: '1px solid var(--lyra-color-border-subtle)',
+                        fontSize: '12px',
                         fontWeight: 600,
-                        color: '#10b981'
+                        color: 'var(--lyra-color-status-success-strong)'
                       }}>
                         ✓ Response captured
                       </div>
@@ -629,7 +629,7 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                     {[0, 1, 2, 3, 4].map((i) => (
                       <div key={i} style={{
                         width: '4px',
-                        background: 'rgb(120,86,186)',
+                        background: '#4E39A8',
                         borderRadius: '2px',
                         animation: `waveformBounce 1s ease-in-out infinite`,
                         animationDelay: `${i * 0.1}s`
@@ -642,7 +642,7 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                 <div style={{
                   fontSize: '28px',
                   fontWeight: 300,
-                  color: '#1f2937',
+                  color: 'var(--lyra-color-fg-default)',
                   fontVariantNumeric: 'tabular-nums',
                   marginBottom: '24px',
                   letterSpacing: '0.05em'
@@ -664,13 +664,13 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                   width: '52px',
                   height: '52px',
                   borderRadius: '50%',
-                  background: '#f3f4f6',
+                  background: 'var(--lyra-color-bg-surface-shell)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#6b7280'
+                  color: 'var(--lyra-color-fg-secondary)'
                 }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
@@ -682,14 +682,14 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                   width: '60px',
                   height: '60px',
                   borderRadius: '50%',
-                  background: selectedQuestion !== null && !isAnimating ? '#10b981' : '#10b981',
+                  background: 'var(--lyra-color-status-success-strong)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: 'white',
-                  boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
+                  color: 'var(--lyra-color-fg-inverse)',
+                  boxShadow: 'var(--sol-effect-shadowmd)'
                 }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.79a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.29-1.29a2 2 0 0 1 2.11-.45c.89.35 1.83.59 2.79.72A2 2 0 0 1 22 16.92z"/>
@@ -700,13 +700,13 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
                   width: '52px',
                   height: '52px',
                   borderRadius: '50%',
-                  background: '#f3f4f6',
+                  background: 'var(--lyra-color-bg-surface-shell)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#6b7280'
+                  color: 'var(--lyra-color-fg-secondary)'
                 }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M11 5 6 9H2v6h4l5 4V5zM15 9a4 4 0 0 1 0 6"/>
@@ -717,8 +717,8 @@ export function SurveyFlowPage({ onBackToLanding }: { onBackToLanding: () => voi
               {/* Hint Text */}
               {selectedQuestion === null && (
                 <div style={{
-                  fontSize: '11px',
-                  color: '#9ca3af',
+                  fontSize: '12px',
+                  color: 'var(--lyra-color-fg-disabled)',
                   textAlign: 'center',
                   maxWidth: '200px',
                   marginTop: '8px'
@@ -745,9 +745,9 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
   answerMixed?: boolean
 }) {
   const cardStyle: React.CSSProperties = {
-    border: status === 'active' ? '1.5px solid rgba(120,86,186,.45)' : '1px solid rgba(0,0,0,0.1)',
-    background: status === 'active' ? 'rgb(243,238,253)' : '#ffffff',
-    borderRadius: '12px',
+    border: status === 'active' ? '1.5px solid rgba(78,57,168,0.45)' : '1px solid var(--lyra-color-border-subtle)',
+    background: status === 'active' ? 'var(--lyra-color-bg-ai)' : 'var(--lyra-color-bg-surface-base)',
+    borderRadius: 'var(--radius-lg)',
     padding: '20px 22px',
     display: 'grid',
     gridTemplateColumns: '32px 1fr',
@@ -757,16 +757,16 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
   const numStyle: React.CSSProperties = {
     width: '28px',
     height: '28px',
-    borderRadius: '999px',
-    background: status === 'done' ? 'rgb(39,138,51)' : (status === 'active' ? 'rgb(120,86,186)' : 'rgb(245,247,249)'),
-    color: status === 'inactive' ? 'rgba(0,0,0,0.6)' : '#fff',
-    fontWeight: 700,
+    borderRadius: 'var(--radius-full)',
+    background: status === 'done' ? 'var(--lyra-color-status-success-strong)' : (status === 'active' ? '#4E39A8' : 'var(--lyra-color-bg-surface-shell)'),
+    color: status === 'inactive' ? 'var(--lyra-color-fg-secondary)' : 'var(--lyra-color-fg-inverse)',
+    fontWeight: 600,
     fontSize: '14px',
     display: 'grid',
     placeItems: 'center',
     marginTop: '2px',
-    border: status === 'inactive' ? '1px solid rgba(0,0,0,0.1)' : 'none',
-    fontFamily: 'Inter'
+    border: status === 'inactive' ? '1px solid var(--lyra-color-border-subtle)' : 'none',
+    fontFamily: 'var(--font-sans)'
   }
 
   return (
@@ -776,7 +776,7 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
         <div style={{
           fontSize: '15px',
           lineHeight: 1.5,
-          color: status === 'active' ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.85)',
+          color: status === 'active' ? 'var(--lyra-color-fg-default)' : 'var(--lyra-color-fg-default)',
           fontWeight: status === 'active' ? 600 : 500
         }}>{text}</div>
 
@@ -786,21 +786,21 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
             flexWrap: 'wrap',
             alignItems: 'center',
             gap: '8px',
-            color: 'rgba(0,0,0,0.6)',
-            fontSize: '12.5px'
+            color: 'var(--lyra-color-fg-secondary)',
+            fontSize: '12px'
           }}>
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              color: 'rgb(120,86,186)',
+              color: '#4E39A8',
               fontWeight: 600
             }}>
               <span style={{
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: 'rgb(120,86,186)',
+                background: '#4E39A8',
                 animation: 'pulse 1.4s ease-out infinite'
               }}></span>
               Awaiting input
@@ -814,20 +814,20 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
             flexWrap: 'wrap',
             alignItems: 'center',
             gap: '10px',
-            fontSize: '13px'
+            fontSize: '14px'
           }}>
-            <span style={{ color: 'rgb(217,138,7)', fontWeight: 800, fontSize: '14px' }}>{answer.split('·')[0]}</span>
-            <span style={{ color: 'rgb(217,138,7)', fontWeight: 700 }}>· {answer.split('·')[1]}</span>
+            <span style={{ color: 'var(--lyra-color-status-warning-strong)', fontWeight: 600, fontSize: '14px' }}>{answer.split('·')[0]}</span>
+            <span style={{ color: 'var(--lyra-color-status-warning-strong)', fontWeight: 600 }}>· {answer.split('·')[1]}</span>
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgba(255,255,255,0.75)',
-              border: '1px solid rgba(0,0,0,0.1)',
-              borderRadius: '999px',
+              background: 'var(--lyra-color-bg-surface-base)',
+              border: '1px solid var(--lyra-color-border-subtle)',
+              borderRadius: 'var(--radius-full)',
               padding: '4px 10px',
-              color: 'rgba(0,0,0,0.6)',
-              fontSize: '12.5px',
+              color: 'var(--lyra-color-fg-secondary)',
+              fontSize: '12px',
               fontStyle: 'italic'
             }}>
               Speech · "I'd say three out of five"
@@ -837,17 +837,17 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
 
         {answer && answerNegative && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-            <span style={{ color: 'rgb(214,57,57)', fontWeight: 600, fontSize: '13.5px', lineHeight: 1.5 }}>{answer}</span>
+            <span style={{ color: 'var(--lyra-color-status-critical-strong)', fontWeight: 600, fontSize: '14px', lineHeight: 1.5 }}>{answer}</span>
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgba(255,255,255,0.85)',
-              border: '1px solid rgba(0,0,0,0.1)',
-              borderRadius: '999px',
+              background: 'var(--lyra-color-bg-surface-base)',
+              border: '1px solid var(--lyra-color-border-subtle)',
+              borderRadius: 'var(--radius-full)',
               padding: '4px 10px',
-              color: 'rgba(0,0,0,0.6)',
-              fontSize: '12.5px'
+              color: 'var(--lyra-color-fg-secondary)',
+              fontSize: '12px'
             }}>
               Speech
             </span>
@@ -856,27 +856,27 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
 
         {answer && answerMixed && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-            <span style={{ color: 'rgba(0,0,0,0.85)', fontWeight: 600, fontSize: '13.5px', lineHeight: 1.5 }}>{answer}</span>
+            <span style={{ color: 'var(--lyra-color-fg-default)', fontWeight: 600, fontSize: '14px', lineHeight: 1.5 }}>{answer}</span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               <span style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: '3px 10px',
-                borderRadius: '6px',
-                fontSize: '12.5px',
-                fontWeight: 700,
-                background: 'rgba(214,57,57,.1)',
-                color: 'rgb(214,57,57)'
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '12px',
+                fontWeight: 600,
+                background: 'var(--lyra-color-status-critical-subtle)',
+                color: 'var(--lyra-color-status-critical-strong)'
               }}>Issue Clarity −34</span>
               <span style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: '3px 10px',
-                borderRadius: '6px',
-                fontSize: '12.5px',
-                fontWeight: 700,
-                background: 'rgba(39,138,51,.12)',
-                color: 'rgb(39,138,51)'
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '12px',
+                fontWeight: 600,
+                background: 'var(--lyra-color-status-success-subtle)',
+                color: 'var(--lyra-color-status-success-strong)'
               }}>Agent Resolution +68</span>
             </div>
           </div>
@@ -888,16 +888,16 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
             flexWrap: 'wrap',
             alignItems: 'center',
             gap: '8px',
-            background: status === 'active' ? 'rgba(255,255,255,0.7)' : '#ffffff',
-            border: status === 'active' ? '1px solid rgba(120,86,186,.25)' : '1px solid rgba(0,0,0,0.1)',
-            borderRadius: '10px',
+            background: status === 'active' ? 'var(--lyra-color-bg-surface-base)' : 'var(--lyra-color-bg-surface-base)',
+            border: status === 'active' ? '1px solid rgba(78,57,168,0.25)' : '1px solid var(--lyra-color-border-subtle)',
+            borderRadius: 'var(--radius-md)',
             padding: '10px 14px',
-            color: 'rgba(0,0,0,0.6)',
-            fontSize: '12.5px'
+            color: 'var(--lyra-color-fg-secondary)',
+            fontSize: '12px'
           }}>
             <span style={{
-              color: 'rgba(0,0,0,0.46)',
-              fontWeight: 700,
+              color: 'var(--lyra-color-fg-secondary)',
+              fontWeight: 600,
               fontSize: '12px',
               letterSpacing: '0.06em',
               textTransform: 'uppercase'
@@ -906,13 +906,13 @@ function QuestionCard({ num, status, text, answer, intentTag, intentWhy, answerN
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgb(253,236,236)',
-              color: 'rgb(214,57,57)',
-              border: '1px solid rgba(214,57,57,.35)',
-              fontWeight: 700,
+              background: 'var(--lyra-color-status-critical-subtle)',
+              color: 'var(--lyra-color-status-critical-strong)',
+              border: '1px solid rgba(189,42,42,0.35)',
+              fontWeight: 600,
               fontSize: '12px',
               padding: '3px 8px',
-              borderRadius: '999px'
+              borderRadius: 'var(--radius-full)'
             }}>{intentTag}</span>
             <span>{intentWhy}</span>
           </div>
@@ -929,11 +929,11 @@ function KeyValue({ k, v }: { k: string; v: string }) {
       gridTemplateColumns: '1fr auto',
       gap: '10px 16px',
       padding: '12px 0',
-      borderTop: '1px solid #eef0f3',
+      borderTop: '1px solid var(--lyra-color-border-subtle)',
       alignItems: 'baseline'
     }}>
-      <span style={{ color: 'rgba(0,0,0,0.6)', fontSize: '13px' }}>{k}</span>
-      <span style={{ color: 'rgba(0,0,0,0.85)', fontSize: '13px', fontWeight: 600, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{v}</span>
+      <span style={{ color: 'var(--lyra-color-fg-secondary)', fontSize: '14px' }}>{k}</span>
+      <span style={{ color: 'var(--lyra-color-fg-default)', fontSize: '14px', fontWeight: 600, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{v}</span>
     </div>
   )
 }

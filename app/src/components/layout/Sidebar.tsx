@@ -85,7 +85,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'flex flex-shrink-0 flex-col bg-sidebar overflow-hidden transition-all duration-200 ease-in-out border-r border-[#E2E8F0]',
+        'flex flex-shrink-0 flex-col bg-sidebar overflow-hidden transition-all duration-200 ease-in-out border-r border-[--lyra-color-border-soft]',
         expanded ? 'w-[220px]' : 'w-[52px]'
       )}
     >
@@ -97,7 +97,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
             title="Expand sidebar"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors mb-1 outline-none focus:outline-none"
           >
-            <PanelLeftOpen className="h-[18px] w-[18px]" />
+            <PanelLeftOpen className="h-5 w-5" />
           </button>
           {RAIL_ITEMS.map((item, i) => {
             const Icon = item.icon
@@ -113,7 +113,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                     : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                 )}
               >
-                <Icon className="h-[18px] w-[18px]" />
+                <Icon className="h-5 w-5" />
               </button>
             )
           })}
@@ -125,7 +125,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
         <>
           {/* Header */}
           <div className="flex h-[52px] items-center justify-between pl-3 pr-2 flex-shrink-0">
-            <span className="text-[13px] font-medium text-foreground">Dashboards</span>
+            <span className="text-sm font-medium text-foreground">Dashboards</span>
             <div className="flex items-center gap-0.5">
               <button
                 title="New dashboard"
@@ -152,7 +152,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                 placeholder="Search"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="h-7 w-full rounded-md border border-[#E2E8F0] bg-card pl-8 pr-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="h-7 w-full rounded-md border border-[--lyra-color-border-soft] bg-card pl-8 pr-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
           </div>
@@ -161,7 +161,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
           <nav className="flex-1 overflow-y-auto pb-2">
             {!search && (
               <div className="flex items-center justify-between px-3 pb-1">
-                <span className="text-[11px] font-semibold tracking-wide text-muted-foreground/70">
+                <span className="text-xs font-semibold tracking-wide text-muted-foreground/70">
                   Saved
                 </span>
                 <button

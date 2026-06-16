@@ -72,8 +72,8 @@ export function SidebarPanel({ open, items, activeKey, onSelect }: SidebarPanelP
         open ? 'w-[256px]' : 'w-[60px]'
       )}
       style={{
-        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        background: 'rgb(243, 245, 246)',
+        fontFamily: 'var(--font-sans)',
+        background: 'var(--lyra-color-bg-surface-shell)',
       }}
     >
       {/* Top padding: 8px */}
@@ -95,7 +95,7 @@ export function SidebarPanel({ open, items, activeKey, onSelect }: SidebarPanelP
       {subItems.length > 0 && (
         <div
           className="mx-3 my-1 flex-shrink-0"
-          style={{ height: '1px', backgroundColor: 'rgba(0,0,0,0.08)' }}
+          style={{ height: '1px', backgroundColor: 'var(--lyra-color-border-subtle)' }}
         />
       )}
 
@@ -150,11 +150,11 @@ function NavItem({
         width: open ? '100%' : 36,
         margin: open ? undefined : '0 auto',
         backgroundColor: isSelected
-          ? '#d3e6fd'                  // color-bg-active-moderate
+          ? 'var(--lyra-color-bg-active-moderate)'
           : undefined,
       }}
       onMouseEnter={e => {
-        if (!isSelected) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(0,0,0,0.04)'
+        if (!isSelected) (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--lyra-color-state-bg-hover-opacity)'
       }}
       onMouseLeave={e => {
         if (!isSelected) (e.currentTarget as HTMLElement).style.backgroundColor = ''
@@ -170,7 +170,7 @@ function NavItem({
             top: 10,
             bottom: 10,
             width: 2,
-            background: '#185ba4',      // color-fg-active-strong = brand-700
+            background: 'var(--lyra-color-border-active)',
             borderRadius: 2,
           }}
         />
@@ -181,20 +181,20 @@ function NavItem({
           width: 16,
           height: 16,
           color: isSelected
-            ? '#185ba4'                 // color-fg-active-strong
-            : 'rgba(0,0,0,0.80)',       // color-fg-default
+            ? 'var(--lyra-color-fg-active-strong)'
+            : 'var(--lyra-color-fg-default)',
         }}
       />
       {open && (
         <span
           className="flex-1 text-left truncate"
           style={{
-            fontSize: 13,
+            fontSize: 14,
             lineHeight: '16px',
             fontWeight: isSelected ? 500 : 400,
             color: isSelected
-              ? '#185ba4'               // color-fg-active-strong
-              : 'rgba(0,0,0,0.80)',     // color-fg-default
+              ? 'var(--lyra-color-fg-active-strong)'
+              : 'var(--lyra-color-fg-default)',
           }}
         >
           {item.label}

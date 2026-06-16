@@ -17,7 +17,7 @@ import { getCampaignById, CAMPAIGNS } from './lib/campaigns'
 import { getSurveyById } from './lib/surveys'
 
 /* -------------------- Stat card -------------------- */
-function StatCard({ title, value, subtitle, borderColor = '#208337', alert }: {
+function StatCard({ title, value, subtitle, borderColor = 'var(--lyra-color-status-success-strong)', alert }: {
   title: string
   value: string
   subtitle: string
@@ -25,26 +25,24 @@ function StatCard({ title, value, subtitle, borderColor = '#208337', alert }: {
   alert?: { delta: string }
 }) {
   const isAlert = !!alert
-  const alertColor = '#e32926'
-  const alertBg = '#fdeaea'
 
   return (
     <div
       className="rounded-lg p-6 overflow-hidden relative flex flex-col min-h-[160px] justify-center"
       style={{
-        backgroundColor: '#FFFFFF',
-        border: isAlert ? `1px solid ${borderColor}` : '1px solid #e5e7eb'
+        backgroundColor: 'var(--lyra-color-bg-surface-base)',
+        border: isAlert ? `1px solid ${borderColor}` : '1px solid var(--lyra-color-border-soft)'
       }}
     >
       <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ backgroundColor: borderColor }} />
-      <div className="text-sm font-medium text-[#475569]">{title}</div>
+      <div className="text-sm font-medium" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{title}</div>
       <div className="mt-2 flex items-baseline gap-3">
-        <span className="text-5xl tracking-tight" style={{ color: isAlert ? alertColor : '#0F172A', fontWeight: isAlert ? '400' : '700' }}>{value}</span>
+        <span className="text-5xl tracking-tight" style={{ color: isAlert ? 'var(--lyra-color-status-critical-strong)' : 'var(--lyra-color-fg-default)', fontWeight: isAlert ? '400' : '600' }}>{value}</span>
         {isAlert && (
-          <span className="text-[13px] font-medium" style={{ color: alertColor }}>{alert.delta}</span>
+          <span className="text-sm font-medium" style={{ color: 'var(--lyra-color-status-critical-strong)' }}>{alert.delta}</span>
         )}
       </div>
-      <div className="mt-2 text-[13px] italic text-[#64748B]">{subtitle}</div>
+      <div className="mt-2 text-sm italic" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{subtitle}</div>
     </div>
   )
 }
@@ -52,18 +50,21 @@ function StatCard({ title, value, subtitle, borderColor = '#208337', alert }: {
 /* -------------------- Component 1: Pattern Alert Bar -------------------- */
 function PatternAlertBar({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <div className="rounded-lg bg-white border border-[#e53935] px-5 py-4 flex items-center">
+    <div className="rounded-lg border px-5 py-4 flex items-center" style={{ backgroundColor: 'var(--lyra-color-bg-surface-base)', borderColor: 'var(--lyra-color-status-critical-strong)' }}>
       <div className="flex items-start gap-2.5 flex-1">
-        <Sparkles className="h-[18px] w-[18px] text-[#e32926] flex-shrink-0 mt-0.5" />
+        <Sparkles className="h-5 w-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--lyra-color-status-critical-strong)' }} />
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#e32926]">CROSS-INTENT FRICTION DETECTED</div>
-          <div className="text-sm font-semibold text-[#1f2937] mt-1">Customers are rating agents low for friction the agents didn't cause.</div>
-          <div className="text-xs text-[#4b5563] mt-1">3 billing-flow intents · 1,343 customers affected by handoff repetition · ↑15% week-over-week</div>
+          <div className="text-xs font-semibold uppercase tracking-[0.05em]" style={{ color: 'var(--lyra-color-status-critical-strong)' }}>CROSS-INTENT FRICTION DETECTED</div>
+          <div className="text-sm font-semibold mt-1" style={{ color: 'var(--lyra-color-fg-default)' }}>Customers are rating agents low for friction the agents didn't cause.</div>
+          <div className="text-xs mt-1" style={{ color: 'var(--lyra-color-fg-secondary)' }}>3 billing-flow intents · 1,343 customers affected by handoff repetition · ↑15% week-over-week</div>
         </div>
       </div>
       <button
         onClick={onNavigate}
-        className="inline-flex items-center rounded-lg border border-[#e53935] bg-white px-3.5 py-1.5 text-xs font-medium text-[#1f2937] hover:bg-[#fdeaea] transition-colors flex-shrink-0 cursor-pointer"
+        className="inline-flex items-center rounded-lg border px-3.5 py-1.5 text-xs font-medium transition-colors flex-shrink-0 cursor-pointer"
+        style={{ borderColor: 'var(--lyra-color-status-critical-strong)', backgroundColor: 'var(--lyra-color-bg-surface-base)', color: 'var(--lyra-color-fg-default)' }}
+        onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--lyra-color-status-critical-subtle)')}
+        onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--lyra-color-bg-surface-base)')}
       >
         see analysis →
       </button>
@@ -92,7 +93,7 @@ const INTENT_ROWS: TrendRow[] = [
 
 function TrendCell({ trend, linked }: { trend: TrendRow['trend']; linked?: boolean }) {
   if (trend.type === 'up') {
-    const color = linked ? '#e32926' : '#208337'
+    const color = linked ? 'var(--lyra-color-status-critical-strong)' : 'var(--lyra-color-status-success-strong)'
     return (
       <span className="inline-flex items-center gap-1" style={{ color }}>
         <TrendingUp className="h-3.5 w-3.5" />
@@ -102,14 +103,14 @@ function TrendCell({ trend, linked }: { trend: TrendRow['trend']; linked?: boole
   }
   if (trend.type === 'sentiment') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#fdeaea] px-2.5 py-1 text-[11px] font-semibold text-[#e32926]">
+      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: 'var(--lyra-color-status-critical-subtle)', color: 'var(--lyra-color-status-critical-strong)' }}>
         <AlertTriangle className="h-3 w-3" />
         <span>FI signal {trend.value}</span>
       </span>
     )
   }
   return (
-    <span className="inline-flex items-center gap-1 text-[#94A3B8]">
+    <span className="inline-flex items-center gap-1" style={{ color: 'var(--lyra-color-fg-disabled)' }}>
       <Minus className="h-3.5 w-3.5" />
       <span className="text-sm">Flat</span>
     </span>
@@ -118,43 +119,46 @@ function TrendCell({ trend, linked }: { trend: TrendRow['trend']; linked?: boole
 
 function IntentTrendingTable() {
   return (
-    <div className="rounded-lg border border-[#E5E7EB] bg-white overflow-hidden">
+    <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--lyra-color-border-soft)', backgroundColor: 'var(--lyra-color-bg-surface-base)' }}>
       <div className="flex items-center justify-between px-5 py-4">
-        <h3 className="text-base font-semibold text-[#1E293B]">Intent trending by VU - Last 7 days</h3>
-        <span className="text-xs text-[#94A3B8]">VU ≥ 32 Trend</span>
+        <h3 className="text-base font-semibold" style={{ color: 'var(--lyra-color-fg-default)' }}>Intent trending by VU - Last 7 days</h3>
+        <span className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>VU ≥ 32 Trend</span>
       </div>
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-y border-[#F0F4F8] bg-[#F8FAFC]">
-            <th className="px-5 py-3 text-left font-medium text-[#64748B]">Intent</th>
-            <th className="px-5 py-3 text-left font-medium text-[#64748B]">Volume</th>
-            <th className="px-5 py-3 text-left font-medium text-[#64748B]">Avg VU</th>
-            <th className="px-5 py-3 text-left font-medium text-[#64748B]">Trend</th>
+          <tr style={{ borderTop: '1px solid var(--lyra-color-border-subtle)', borderBottom: '1px solid var(--lyra-color-border-subtle)', backgroundColor: 'var(--lyra-color-bg-surface-shell)' }}>
+            <th className="px-5 py-3 text-left font-medium" style={{ color: 'var(--lyra-color-fg-secondary)' }}>Intent</th>
+            <th className="px-5 py-3 text-left font-medium" style={{ color: 'var(--lyra-color-fg-secondary)' }}>Volume</th>
+            <th className="px-5 py-3 text-left font-medium" style={{ color: 'var(--lyra-color-fg-secondary)' }}>Avg VU</th>
+            <th className="px-5 py-3 text-left font-medium" style={{ color: 'var(--lyra-color-fg-secondary)' }}>Trend</th>
           </tr>
         </thead>
         <tbody>
           {INTENT_ROWS.map((row, i) => (
-            <tr key={i} className="border-b border-[#F0F4F8] last:border-b-0 hover:bg-[#F8FAFC]">
+            <tr key={i} className="last:border-b-0" style={{ borderBottom: '1px solid var(--lyra-color-border-subtle)' }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--lyra-color-bg-surface-shell)')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
+            >
               <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[#0F172A]">{row.intent}</span>
-                  <span className="text-sm text-[#94A3B8]">·</span>
-                  <span className="text-sm text-[#64748B]">{row.category}</span>
+                  <span className="text-sm font-medium" style={{ color: 'var(--lyra-color-fg-default)' }}>{row.intent}</span>
+                  <span className="text-sm" style={{ color: 'var(--lyra-color-fg-disabled)' }}>·</span>
+                  <span className="text-sm" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{row.category}</span>
                   {row.linked && (
-                    <span className="inline-flex items-center rounded-full bg-[#FEF3C7] px-2 py-0.5 text-[11px] font-semibold text-[#92400E]">linked</span>
+                    <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold" style={{ backgroundColor: 'var(--lyra-color-status-warning-subtle)', color: 'var(--lyra-color-status-warning-strong)' }}>linked</span>
                   )}
                   {row.friction && (
-                    <span className="inline-flex items-center gap-0.5 rounded-full bg-[#FEE2E2] px-2 py-0.5 text-[11px] font-semibold text-[#991B1B]">
+                    <span className="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold" style={{ backgroundColor: 'var(--lyra-color-status-critical-subtle)', color: 'var(--lyra-color-status-critical-strong)' }}>
                       <AlertTriangle className="h-2.5 w-2.5" /> friction
                     </span>
                   )}
                 </div>
               </td>
-              <td className="px-5 py-4 text-sm text-[#334155]">
+              <td className="px-5 py-4 text-sm" style={{ color: 'var(--lyra-color-fg-secondary)' }}>
                 <div>{row.volume}</div>
-                {row.volumeNote && <div className="text-[11px] text-[#94A3B8]">{row.volumeNote}</div>}
+                {row.volumeNote && <div className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>{row.volumeNote}</div>}
               </td>
-              <td className="px-5 py-4 text-sm text-[#334155]">{row.avgVU}</td>
+              <td className="px-5 py-4 text-sm" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{row.avgVU}</td>
               <td className="px-5 py-4"><TrendCell trend={row.trend} linked={row.linked} /></td>
             </tr>
           ))}
@@ -197,22 +201,22 @@ const HEAT_ROWS: { label: string; cells: HeatCell[] }[] = [
 ]
 
 function heatCellStyle(cell: HeatCell): { bg: string; fg: string } {
-  if (cell.alert) return { bg: '#FEE4E2', fg: '#DC2626' }
-  if (cell.pct === undefined) return { bg: '#EFF5FB', fg: '#94A3B8' }
-  if (cell.pct >= 70) return { bg: '#1E6BC2', fg: '#FFFFFF' }
-  if (cell.pct >= 60) return { bg: '#3D8AD9', fg: '#FFFFFF' }
-  if (cell.pct >= 50) return { bg: '#7AB0E5', fg: '#FFFFFF' }
-  if (cell.pct >= 40) return { bg: '#A8C9ED', fg: '#1E293B' }
-  if (cell.pct >= 30) return { bg: '#C7DCF4', fg: '#1E293B' }
-  return { bg: '#DDE9F8', fg: '#1E293B' }
+  if (cell.alert) return { bg: 'var(--lyra-color-status-critical-subtle)', fg: 'var(--lyra-color-status-critical-strong)' }
+  if (cell.pct === undefined) return { bg: 'var(--lyra-color-status-info-subtle)', fg: 'var(--lyra-color-fg-disabled)' }
+  if (cell.pct >= 70) return { bg: 'var(--lyra-color-fg-active-strong)', fg: 'var(--lyra-color-fg-inverse)' }
+  if (cell.pct >= 60) return { bg: 'var(--lyra-brand-500)', fg: 'var(--lyra-color-fg-inverse)' }
+  if (cell.pct >= 50) return { bg: 'var(--lyra-brand-300)', fg: 'var(--lyra-color-fg-inverse)' }
+  if (cell.pct >= 40) return { bg: 'var(--lyra-brand-200)', fg: 'var(--lyra-color-fg-default)' }
+  if (cell.pct >= 30) return { bg: 'var(--lyra-brand-100)', fg: 'var(--lyra-color-fg-default)' }
+  return { bg: 'var(--lyra-brand-50)', fg: 'var(--lyra-color-fg-default)' }
 }
 
 function HealthHeatmapCard() {
   return (
-    <div className="rounded-xl border border-[#F0F4F8] bg-white p-4">
+    <div className="rounded-xl p-4" style={{ border: '1px solid var(--lyra-color-border-subtle)', backgroundColor: 'var(--lyra-color-bg-surface-base)' }}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-[#1E293B]">Intent Intelligence Health</h3>
-        <span className="text-xs text-[#94A3B8]">Last 7 days · VU ≥ 32 confirmed</span>
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--lyra-color-fg-default)' }}>Intent Intelligence Health</h3>
+        <span className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>Last 7 days · VU ≥ 32 confirmed</span>
       </div>
       <div
         className="grid gap-1"
@@ -222,15 +226,15 @@ function HealthHeatmapCard() {
         <div />
         {HEAT_COLS.map((col, i) => (
           <div key={i} className="px-3 py-2">
-            <div className="text-sm font-medium text-[#1E293B]">{col.title}</div>
-            <div className="text-xs text-[#94A3B8] mt-0.5">{col.sub}</div>
+            <div className="text-sm font-medium" style={{ color: 'var(--lyra-color-fg-default)' }}>{col.title}</div>
+            <div className="text-xs mt-0.5" style={{ color: 'var(--lyra-color-fg-disabled)' }}>{col.sub}</div>
           </div>
         ))}
 
         {/* Rows */}
         {HEAT_ROWS.map((row, ri) => (
           <Fragment key={ri}>
-            <div className="flex items-center px-2 text-sm text-[#334155]">{row.label}</div>
+            <div className="flex items-center px-2 text-sm" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{row.label}</div>
             {row.cells.map((cell, ci) => {
               const { bg, fg } = heatCellStyle(cell)
               return (
@@ -308,47 +312,50 @@ const RECS: Rec[] = [
   },
 ]
 
-function badgeClasses(kind: BadgeKind) {
+function badgeStyles(kind: BadgeKind): { backgroundColor: string; color: string } {
   switch (kind) {
-    case 'red':    return 'bg-[#FEE4E2] text-[#B42318]'
-    case 'green':  return 'bg-[#DCFCE7] text-[#15803D]'
-    case 'orange': return 'bg-[#FFEDD5] text-[#C2410C]'
+    case 'red':    return { backgroundColor: 'var(--lyra-color-status-critical-subtle)', color: 'var(--lyra-color-status-critical-strong)' }
+    case 'green':  return { backgroundColor: 'var(--lyra-color-status-success-subtle)', color: 'var(--lyra-color-status-success-strong)' }
+    case 'orange': return { backgroundColor: 'var(--lyra-color-status-warning-subtle)', color: 'var(--lyra-color-status-warning-strong)' }
   }
 }
 
 function RecommendationCard({ rec }: { rec: Rec }) {
   return (
-    <div className="rounded-xl border border-[#F0F4F8] bg-white p-4 flex flex-col">
+    <div className="rounded-xl p-4 flex flex-col" style={{ border: '1px solid var(--lyra-color-border-subtle)', backgroundColor: 'var(--lyra-color-bg-surface-base)' }}>
       {/* Header: number + title in subtle gray panel */}
-      <div className="rounded-lg bg-[#F8FAFC] px-3 py-3 mb-3 flex items-center gap-3">
-        <div className="flex-shrink-0 w-7 h-7 rounded-full bg-white border border-[#E2E8F0] flex items-center justify-center text-sm font-medium text-[#475569]">
+      <div className="rounded-lg px-3 py-3 mb-3 flex items-center gap-3" style={{ backgroundColor: 'var(--lyra-color-bg-surface-shell)' }}>
+        <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium" style={{ backgroundColor: 'var(--lyra-color-bg-surface-base)', border: '1px solid var(--lyra-color-border-soft)', color: 'var(--lyra-color-fg-secondary)' }}>
           {rec.num}
         </div>
         <div className="leading-tight">
-          <div className="text-sm font-medium text-[#1E293B]">{rec.title}</div>
-          <div className="text-sm text-[#64748B]">{rec.subtitle}</div>
+          <div className="text-sm font-medium" style={{ color: 'var(--lyra-color-fg-default)' }}>{rec.title}</div>
+          <div className="text-sm" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{rec.subtitle}</div>
         </div>
       </div>
 
       {/* Description */}
-      <p className="text-sm text-[#475569] leading-relaxed mb-4">{rec.description}</p>
+      <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{rec.description}</p>
 
       {/* Metrics */}
       <div className="grid grid-cols-3 gap-3 mb-4">
         {rec.metrics.map((m, i) => (
           <div key={i}>
-            <div className="text-xl font-semibold text-[#1E293B]">{m.value}</div>
-            <div className="text-xs text-[#64748B] whitespace-pre-line mt-0.5">{m.label}</div>
+            <div className="text-xl font-semibold" style={{ color: 'var(--lyra-color-fg-default)' }}>{m.value}</div>
+            <div className="text-xs whitespace-pre-line mt-0.5" style={{ color: 'var(--lyra-color-fg-secondary)' }}>{m.label}</div>
           </div>
         ))}
       </div>
 
       {/* Footer: badge + CTA */}
       <div className="mt-auto flex items-center justify-between">
-        <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${badgeClasses(rec.badge.kind)}`}>
+        <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium" style={badgeStyles(rec.badge.kind)}>
           {rec.badge.text}
         </span>
-        <button className="inline-flex items-center gap-1 rounded-md border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-medium text-[#334155] hover:bg-[#F8FAFC] outline-none focus:outline-none">
+        <button className="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs font-medium outline-none focus:outline-none" style={{ borderColor: 'var(--lyra-color-border-soft)', backgroundColor: 'var(--lyra-color-bg-surface-base)', color: 'var(--lyra-color-fg-secondary)' }}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--lyra-color-bg-surface-shell)')}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--lyra-color-bg-surface-base)')}
+        >
           {rec.cta}
           <ChevronRight className="h-3 w-3" />
         </button>
@@ -361,8 +368,8 @@ function RecommendationsSection() {
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-[#1E293B]">What you should do about it</h3>
-        <span className="text-xs text-[#94A3B8]">3 recommendations · ranked by impact</span>
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--lyra-color-fg-default)' }}>What you should do about it</h3>
+        <span className="text-xs" style={{ color: 'var(--lyra-color-fg-disabled)' }}>3 recommendations · ranked by impact</span>
       </div>
       <div className="grid grid-cols-3 gap-4">
         {RECS.map(rec => (
@@ -413,7 +420,7 @@ export default function App() {
   // own left nav + screens below it (chrome stripped via ?embed=topbar).
   if (flow === 'prototype') {
     return (
-      <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#F8FAFC]">
+      <div className="flex h-screen w-screen flex-col overflow-hidden" style={{ backgroundColor: 'var(--lyra-color-bg-surface-shell)' }}>
         <TopBar
           appName="Feedback Intelligence"
           onAppSwitch={handleAppSwitch}
@@ -511,34 +518,40 @@ export default function App() {
             onBackToAdmin={() => setFlow('admin')}
           />
         ) : page === 'campaign-insight' ? (
-          <div className="p-6 lg:px-8 bg-[#F8FAFC] flex-1">
+          <div className="p-6 lg:px-8 flex-1" style={{ backgroundColor: 'var(--lyra-color-bg-surface-shell)' }}>
             {/* Breadcrumb row */}
-            <div className="flex items-center gap-1.5 text-[12px] mb-2">
+            <div className="flex items-center gap-1.5 text-xs mb-2">
               <button
                 onClick={() => setPage('campaign-portfolio')}
-                className="text-[#64748b] hover:text-[#0f172a] font-medium transition-colors outline-none focus:outline-none"
+                className="font-medium transition-colors outline-none focus:outline-none"
+                style={{ color: 'var(--lyra-color-fg-secondary)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--lyra-color-fg-default)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--lyra-color-fg-secondary)')}
               >
                 Operations Dashboard
               </button>
-              <ChevronRight className="h-3 w-3 text-[#94a3b8]" />
+              <ChevronRight className="h-3 w-3" style={{ color: 'var(--lyra-color-fg-disabled)' }} />
               <button
                 onClick={() => setPage('dashboard')}
-                className="text-[#64748b] hover:text-[#0f172a] font-medium transition-colors outline-none focus:outline-none"
+                className="font-medium transition-colors outline-none focus:outline-none"
+                style={{ color: 'var(--lyra-color-fg-secondary)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--lyra-color-fg-default)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--lyra-color-fg-secondary)')}
               >
                 {selectedCampaign ? selectedCampaign.name : 'Campaign'}
               </button>
-              <ChevronRight className="h-3 w-3 text-[#94a3b8]" />
-              <span className="text-[#0f172a] font-medium">Campaign Insight</span>
+              <ChevronRight className="h-3 w-3" style={{ color: 'var(--lyra-color-fg-disabled)' }} />
+              <span className="font-medium" style={{ color: 'var(--lyra-color-fg-default)' }}>Campaign Insight</span>
             </div>
 
             {/* Title row */}
             <div className="flex items-center justify-between mb-8 gap-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#4f46e5] mb-1">
-                  <Sparkles className="h-3 w-3" fill="#6366f1" />
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] mb-1" style={{ color: '#4E39A8' }}>
+                  <Sparkles className="h-3 w-3" fill="#4E39A8" />
                   Campaign Insight
                 </div>
-                <h1 className="text-[28px] font-semibold text-[#0f172a] leading-[1.2]">
+                <h1 className="text-[28px] font-semibold leading-[1.2]" style={{ color: 'var(--lyra-color-fg-default)' }}>
                   {selectedCampaign ? selectedCampaign.name : 'Campaign Insight'}
                 </h1>
               </div>
@@ -547,32 +560,38 @@ export default function App() {
             <CampaignInsightDashboard />
           </div>
         ) : (
-          <div className="p-6 lg:px-8 bg-[#F8FAFC] flex-1">
+          <div className="p-6 lg:px-8 flex-1" style={{ backgroundColor: 'var(--lyra-color-bg-surface-shell)' }}>
             {/* Breadcrumb row */}
-            <div className="flex items-center gap-1.5 text-[12px] mb-2">
+            <div className="flex items-center gap-1.5 text-xs mb-2">
               <button
                 onClick={() => setPage('campaign-portfolio')}
-                className="text-[#64748b] hover:text-[#0f172a] font-medium transition-colors outline-none focus:outline-none"
+                className="font-medium transition-colors outline-none focus:outline-none"
+                style={{ color: 'var(--lyra-color-fg-secondary)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--lyra-color-fg-default)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--lyra-color-fg-secondary)')}
               >
                 Operations Dashboard
               </button>
-              <ChevronRight className="h-3 w-3 text-[#94a3b8]" />
-              <span className="text-[#0f172a] font-medium">
+              <ChevronRight className="h-3 w-3" style={{ color: 'var(--lyra-color-fg-disabled)' }} />
+              <span className="font-medium" style={{ color: 'var(--lyra-color-fg-default)' }}>
                 {selectedCampaign ? selectedCampaign.name : 'Campaign'}
               </span>
             </div>
 
             {/* Title row: campaign name on the left, navigation actions on the right */}
             <div className="flex items-center justify-between mb-8 gap-4">
-              <h1 className="text-[28px] font-semibold text-[#0f172a] leading-[1.2]">
+              <h1 className="text-[28px] font-semibold leading-[1.2]" style={{ color: 'var(--lyra-color-fg-default)' }}>
                 {selectedCampaign ? selectedCampaign.name : 'Feedback Intelligence Dashboard'}
               </h1>
               <div className="flex items-center gap-4 flex-shrink-0">
                 <button
                   onClick={() => setPage('campaign-insight')}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-[#c7d2fe] bg-[#eef2ff] hover:bg-[#e0e7ff] px-3 py-1.5 text-[12px] font-semibold text-[#4f46e5] transition-colors outline-none focus:outline-none"
+                  className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors outline-none focus:outline-none"
+                  style={{ borderColor: '#4E39A8', backgroundColor: 'var(--lyra-color-bg-ai)', color: '#4E39A8' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                 >
-                  <Sparkles className="h-3.5 w-3.5" fill="#6366f1" />
+                  <Sparkles className="h-3.5 w-3.5" fill="#4E39A8" />
                   View Campaign Insight
                 </button>
               </div>
