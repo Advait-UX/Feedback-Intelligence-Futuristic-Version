@@ -1011,8 +1011,8 @@ select.fi-input {
   color: var(--color-fg-on-primary);
 }
 .wz-step.error .wz-node {
-  background: var(--lyra-red-500);
-  border-color: var(--lyra-red-500);
+  background: var(--color-status-error);
+  border-color: var(--color-status-error);
   color: var(--color-fg-on-primary);
 }
 .wz-label {
@@ -1023,7 +1023,7 @@ select.fi-input {
 }
 .wz-step.active .wz-label { font-weight: 600; color: var(--color-fg-default); }
 .wz-step.done   .wz-label { color: var(--color-fg-secondary); }
-.wz-step.error  .wz-label { color: var(--color-fg-destructive); font-weight: 500; }
+.wz-step.error  .wz-label { color: var(--color-status-error); font-weight: 500; }
 .wz-line {
   width: 56px;
   flex-shrink: 0;
@@ -1035,6 +1035,7 @@ select.fi-input {
 }
 .wz-line.done   { background: var(--lyra-green-500); }
 .wz-line.active { background: var(--color-bg-active-strong); }
+.wz-line.error  { background: var(--color-status-error); }
 
 /* wizard body: form (1fr) + summary rail (260px) */
 .wz-scroll-area {
@@ -7731,14 +7732,17 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
         <div className="wz-bar-inner">
           {ALL_STEPS.map((s, i) => {
             const st = stepState(s);
-            const prevDone = i > 0 && stepState(ALL_STEPS[i - 1]) === "done";
+            const prevSt = i > 0 ? stepState(ALL_STEPS[i - 1]) : null;
+            const lineClass = prevSt === "done" ? "done" : prevSt === "error" ? "error" : "";
             return (
               <React.Fragment key={s.n}>
-                {i > 0 && <div className={`wz-line ${prevDone ? "done" : ""}`}/>}
+                {i > 0 && <div className={`wz-line ${lineClass}`}/>}
                 <div className={`wz-step ${st}`} onClick={() => setActiveStep(s.n)}>
                   <div className="wz-node">
                     {st === "done" ? (
                       <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="2 6 5 9.5 10 2.5"/></svg>
+                    ) : st === "error" ? (
+                      <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="6" y1="2.5" x2="6" y2="6.5"/><circle cx="6" cy="9" r=".7" fill="currentColor"/></svg>
                     ) : s.n + 1}
                   </div>
                   <div className="wz-label">{s.label}</div>
@@ -7811,18 +7815,18 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
                       <div className="field-cell">
                         <label className="field-label">Start Date<span className="req">*</span></label>
                         <FiDatePicker value={c.startDate} onChange={v => set("startDate", v)} placeholder="Oct 30, 2025" error={startDateErr}/>
-                        {startDateErr && <span className="error-msg" style={{ marginTop: "var(--space-1)", display: "flex", alignItems: "center", gap: 4 }}>
+                        {startDateErr && <div className="field-control"><span className="error-msg">
                           <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8.5"/><circle cx="8" cy="11" r=".6" fill="currentColor"/></svg>
                           Start date is required
-                        </span>}
+                        </span></div>}
                       </div>
                       <div className="field-cell">
                         <label className="field-label" style={{ color: c.ongoing ? "var(--color-fg-disabled)" : undefined }}>End Date{!c.ongoing && <span className="req">*</span>}</label>
                         <FiDatePicker value={c.endDate} onChange={v => set("endDate", v)} disabled={c.ongoing} placeholder={c.ongoing ? "Ongoing" : "Oct 30, 2025"} error={endDateErr}/>
-                        {endDateErr && <span className="error-msg" style={{ marginTop: "var(--space-1)", display: "flex", alignItems: "center", gap: 4 }}>
+                        {endDateErr && <div className="field-control"><span className="error-msg">
                           <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8.5"/><circle cx="8" cy="11" r=".6" fill="currentColor"/></svg>
                           End date is required
-                        </span>}
+                        </span></div>}
                       </div>
                     </div>
                   </div>
@@ -9779,14 +9783,17 @@ function CreateSurveyDesign({ onCancel, onSave, initial }) {
         <div className="wz-bar-inner">
           {STEPS.map((s, i) => {
             const st = stepState(s);
-            const prevDone = i > 0 && stepState(STEPS[i - 1]) === "done";
+            const prevSt = i > 0 ? stepState(STEPS[i - 1]) : null;
+            const lineClass = prevSt === "done" ? "done" : prevSt === "error" ? "error" : "";
             return (
               <React.Fragment key={s.n}>
-                {i > 0 && <div className={`wz-line ${prevDone ? "done" : ""}`}/>}
+                {i > 0 && <div className={`wz-line ${lineClass}`}/>}
                 <div className={`wz-step ${st}`} onClick={() => setActiveStep(s.n)}>
                   <div className="wz-node">
                     {st === "done" ? (
                       <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="2 6 5 9.5 10 2.5"/></svg>
+                    ) : st === "error" ? (
+                      <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="6" y1="2.5" x2="6" y2="6.5"/><circle cx="6" cy="9" r=".7" fill="currentColor"/></svg>
                     ) : s.n + 1}
                   </div>
                   <div className="wz-label">{s.label}</div>
