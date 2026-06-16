@@ -7558,8 +7558,9 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
   }
 
   const SPECIAL_CHARS_RE = /[\\\/!+<>?#&,%"]/;
-  const step0Valid = !!(c.name && !SPECIAL_CHARS_RE.test(c.name) && c.startDate && (c.ongoing || c.endDate) && c.queues?.length);
-  const step2Valid = !!(c.aiModelId && c.surveyDesignId);
+  const isEditing = !!editCampaign;
+  const step0Valid = isEditing || !!(c.name && !SPECIAL_CHARS_RE.test(c.name) && c.startDate && (c.ongoing || c.endDate) && c.queues?.length);
+  const step2Valid = isEditing || !!(c.aiModelId && c.surveyDesignId);
 
   const ALL_STEPS = [
     { n: 0, label: "Campaign, Identity & Scope",        desc: "Name the campaign, set its active dates, and choose the teams and interactions it should target.", valid: step0Valid },
@@ -7683,7 +7684,7 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
   const datesValid  = !!(c.startDate && (c.ongoing || c.endDate));
   const canDraft    = !!(c.name && datesValid);
   const canActivate = !!(c.name && c.queues?.length && datesValid);
-  const reviewMissingRequired = !c.name || !c.queues?.length || !c.startDate || (!c.ongoing && !c.endDate) || !c.aiModelId || !c.surveyDesignId;
+  const reviewMissingRequired = !isEditing && (!c.name || !c.queues?.length || !c.startDate || (!c.ongoing && !c.endDate) || !c.aiModelId || !c.surveyDesignId);
 
   return (
     <div className="pane" style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -8073,7 +8074,7 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
                 <div className="sr-row-value">{children || <span style={{ color: "var(--color-fg-secondary)" }}>—</span>}</div>
               </div>
             );
-            const missingRequired = !c.name || !c.queues?.length || !c.startDate || (!c.ongoing && !c.endDate) || !c.aiModelId || !c.surveyDesignId;
+            const missingRequired = !isEditing && (!c.name || !c.queues?.length || !c.startDate || (!c.ongoing && !c.endDate) || !c.aiModelId || !c.surveyDesignId);
             return (
               <div className="wz-step-content" style={{ marginTop: "calc(-1 * var(--space-6))" }}>
                 {missingRequired && (
@@ -8111,8 +8112,8 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
 
 
                 <SRSection title="Topic AI Model &amp; Survey Template" num={3}>
-                  <SRRow label="Topic AI Model">{aiModel ? aiModel.name : <span style={{ color: "var(--color-status-error)" }}>Required — go to Step 3</span>}</SRRow>
-                  <SRRow label="Survey Template">{survey ? survey.name : <span style={{ color: "var(--color-status-error)" }}>Required — go to Step 3</span>}</SRRow>
+                  <SRRow label="Topic AI Model">{aiModel ? aiModel.name : isEditing ? <span style={{ color: "var(--color-fg-secondary)" }}>Not configured</span> : <span style={{ color: "var(--color-status-error)" }}>Required — go to Step 3</span>}</SRRow>
+                  <SRRow label="Survey Template">{survey ? survey.name : isEditing ? <span style={{ color: "var(--color-fg-secondary)" }}>Not configured</span> : <span style={{ color: "var(--color-status-error)" }}>Required — go to Step 3</span>}</SRRow>
                 </SRSection>
               </div>
             );
