@@ -11,9 +11,13 @@ node_modules/
 # Build output
 dist/
 dist-ssr/
+dist-single/
 
 # Env / local
 *.local
 .env
-Project Clone/
-Prototype Preview/
+
+# Local-only folders — not tracked in git
+archive/
+prototype-previews/
+reference/
