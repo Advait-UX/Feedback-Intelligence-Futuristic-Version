@@ -7125,6 +7125,51 @@ const SURVEY_DESIGNS = [
       { group: "Secondary", tags: ["Tone quality", "Resolution satisfaction"] },
     ],
   },
+  {
+    id: "ivr-postcall", name: "IVR Post-Call Survey", category: "Voice Channel",
+    why: "Triggers immediately after an IVR-assisted call ends. Captures in-the-moment effort and resolution signals before the customer disengages.",
+    channels: "Voice",
+    intents: [
+      { group: "Primary",   tags: ["Call resolution", "IVR ease of use"] },
+      { group: "Secondary", tags: ["Hold time satisfaction", "Agent handoff quality"] },
+    ],
+  },
+  {
+    id: "ivr-nps", name: "IVR NPS Survey", category: "Net Promoter",
+    why: "Short NPS delivered post-call via IVR keypad input. High completion rates due to low friction — single question, single keypress.",
+    channels: "Voice",
+    intents: [
+      { group: "Primary",   tags: ["Recommend likelihood", "Loyalty signal"] },
+      { group: "Secondary", tags: ["Detractor flag", "Promoter identification"] },
+    ],
+  },
+  {
+    id: "csat-list", name: "CSAT Ranked List", category: "Customer Satisfaction",
+    why: "Multi-question CSAT covering resolution, effort, and agent behaviour. Best for complex interactions where a single score misses detail.",
+    channels: "Digital · Voice",
+    intents: [
+      { group: "Primary",   tags: ["Overall satisfaction", "Issue resolution"] },
+      { group: "Secondary", tags: ["Agent effectiveness", "Process friction"] },
+    ],
+  },
+  {
+    id: "brand-pulse", name: "Brand Perception Pulse", category: "Brand Health",
+    why: "Measures brand perception beyond the single interaction. Use for loyalty programs, retention campaigns, and long-term relationship tracking.",
+    channels: "Digital · Voice",
+    intents: [
+      { group: "Primary",   tags: ["Brand trust", "Loyalty intent"] },
+      { group: "Secondary", tags: ["Perception shift", "Competitor sensitivity"] },
+    ],
+  },
+  {
+    id: "voice-coaching", name: "Voice Coaching Survey", category: "Quality Assurance",
+    why: "Purpose-built for QA and coaching workflows. Captures specific agent behaviour signals that map directly to coaching rubrics.",
+    channels: "Voice",
+    intents: [
+      { group: "Primary",   tags: ["Agent clarity", "Empathy score"] },
+      { group: "Secondary", tags: ["Script adherence", "Resolution ownership"] },
+    ],
+  },
 ];
 
 const AI_MODELS = [
