@@ -7557,8 +7557,9 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
     setDrawerOpen(false);
   }
 
+  const SPECIAL_CHARS_RE_DONE = /[\\\/!+<>?#&,%"]/;
   const ALL_STEPS = [
-    { n: 0, label: "Campaign, Identity & Scope",        desc: "Name the campaign, set its active dates, and choose the teams and interactions it should target.", done: !!c.name },
+    { n: 0, label: "Campaign, Identity & Scope",        desc: "Name the campaign, set its active dates, and choose the teams and interactions it should target.", done: !!(c.name && !SPECIAL_CHARS_RE_DONE.test(c.name) && c.startDate && (c.ongoing || c.endDate) && c.queues?.length) },
     { n: 1, label: "Suppression Rules",                 desc: "Define when not to send surveys, even if an interaction otherwise qualifies.", done: true },
     { n: 2, label: "Topic AI Model & Survey Template",  desc: "Choose the AI model and survey design for this campaign.", done: !!c.aiModelId && !!c.surveyDesignId },
     { n: 3, label: "Summary & Review",                  desc: "Review all settings before activating your campaign.", done: false },
@@ -7579,9 +7580,8 @@ function CreateCampaign({ template: initialTemplate, editCampaign, onCancel, onS
     return "default";
   }
 
-  const SPECIAL_CHARS_RE_STEP = /[\\\/!+<>?#&,%"]/;
   function stepValid(n) {
-    if (n === 0) return !!(c.name && !SPECIAL_CHARS_RE_STEP.test(c.name) && c.startDate && (c.ongoing || c.endDate) && c.queues?.length);
+    if (n === 0) return !!(c.name && !SPECIAL_CHARS_RE_DONE.test(c.name) && c.startDate && (c.ongoing || c.endDate) && c.queues?.length);
     if (n === 2) return !!(c.aiModelId && c.surveyDesignId);
     return true;
   }
